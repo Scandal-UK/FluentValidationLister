@@ -8,8 +8,8 @@ This has been designed using ASP.NET Core 2.2.7 and FluentValidation 8.5.0.
 
 - [Installation](#installation)
 - [How to use](#how-to-use)
-  - [Rules](#how-to-use-rules)
-  - [AJAX validation](#how-to-use-ajax-validation)
+  - [Rules](#how-to-use---rules)
+  - [AJAX validation](#how-to-use---ajax-validation)
 
 ## Installation
 
