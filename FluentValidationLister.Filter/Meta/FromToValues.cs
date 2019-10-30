@@ -15,7 +15,8 @@
         }
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="FromToValues"/> class.
+        /// Initialises a new instance of the <see cref="FromToValues"/> class with specified
+        /// values for the From and To properties.
         /// </summary>
         /// <param name="from">Value for the From property.</param>
         /// <param name="to">Value for the To property.</param>

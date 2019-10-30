@@ -10,7 +10,10 @@
         {
         }
 
-        /// <summary>Initialises a new instance of the <see cref="MinMaxValues"/> class.</summary>
+        /// <summary>
+        /// Initialises a new instance of the <see cref="MinMaxValues"/> class with specified
+        /// values for the Min and Max properties.
+        /// </summary>
         /// <param name="min">Value of the minimum property.</param>
         /// <param name="max">Value of the maximum property.</param>
         public MinMaxValues(int min, int max)
