@@ -84,7 +84,7 @@ The following validator rules are presented to the client:
 - MinLength
 - Length (including exactLength)
 
-The following validators are not supported:
+The following validators are presented as "remote" to the client (they can be validated using AJAX, see below):
 
 - CreditCard
   - https://github.com/dotnet/corefx/blob/master/src/System.ComponentModel.Annotations/src/System/ComponentModel/DataAnnotations/CreditCardAttribute.cs
