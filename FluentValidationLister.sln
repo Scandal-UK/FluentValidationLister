@@ -5,10 +5,11 @@ VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentValidationLister.Filter", "FluentValidationLister.Filter\FluentValidationLister.Filter.csproj", "{716EAD99-EF98-4C77-AABB-89A4F192DAC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentValidationLister.Tests", "FluentValidationLister.Tests\FluentValidationLister.Tests.csproj", "{70C01EF6-7922-4F42-AD71-A9AE08B61450}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentValidationLister.Tests", "FluentValidationLister.Tests\FluentValidationLister.Tests.csproj", "{70C01EF6-7922-4F42-AD71-A9AE08B61450}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6B6DC861-3289-4334-9595-16E392C542B0}"
 	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
