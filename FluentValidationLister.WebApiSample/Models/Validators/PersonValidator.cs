@@ -7,9 +7,11 @@
     {
         public PersonValidator()
         {
-            this.RuleFor(p => p.Surname).NotEmpty();
+            this.RuleFor(p => p.Surname)
+                .NotEmpty();
 
-            this.RuleFor(p => p.Forename).NotEmpty();
+            this.RuleFor(p => p.Forename)
+                .NotEmpty();
 
             this.RuleFor(p => p.Email)
                 .NotEmpty()
