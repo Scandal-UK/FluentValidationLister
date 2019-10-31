@@ -7,9 +7,20 @@ This has been designed using ASP.NET Core 2.2.7 and FluentValidation 8.5.0. It i
 ## Table of Contents
 
 - [Installation](#installation)
+- [Purpose](#purpose)
 - [How to use](#how-to-use)
   - [Rules](#how-to-use---rules)
   - [AJAX validation](#how-to-use---ajax-validation)
+
+## Purpose
+
+If you want to use clientside validation with the FluentValidation library (you really should), then the recommended way is to use the FluentValidation.AspNetCore extension with ASP.NET Core MVC. It integrates perfectly and there's no need for this filter at all.
+
+However, _sometimes_ you may not be using MVC - you might be using an SPA application, such as React or Angular, or maybe a mobile application front-end. In this case you should probably want your clientside validators to match your server-side FluentValidtion validators, without having to duplicate the effort.
+
+You still need to implement this - it just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by FluentValidation.
+
+I have provided an example ASP.NET Core 3 web API application showing a very basic example of showing the validator information for a given endpoint.
 
 ## Installation
 
