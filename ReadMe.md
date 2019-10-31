@@ -2,7 +2,7 @@
 
 This project adds an Action Filter which will describe the rules and messages defined in a particular FluentValidation validator.
 
-This has been designed using ASP.NET Core 2.2.7 and FluentValidation 8.5.0.
+This has been designed using ASP.NET Core 2.2.7 and FluentValidation 8.5.0. It is also fully compatible with ASP.NET Core 3.
 
 ## Table of Contents
 
