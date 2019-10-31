@@ -34,6 +34,8 @@ namespace FluentValidationLister.WebApiSample
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
