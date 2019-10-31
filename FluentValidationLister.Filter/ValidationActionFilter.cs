@@ -46,7 +46,7 @@
                 }
                 else
                 {
-                    context.Result = new JsonResult(new ValidationLister(validator).GetValidatorRules());
+                    context.Result = new OkObjectResult(new ValidationLister(validator).GetValidatorRules());
                 }
 
                 return;
