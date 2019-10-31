@@ -18,9 +18,10 @@ If you want to use clientside validation with the FluentValidation library (you 
 
 However, _sometimes_ you may not be using MVC - you might be using an SPA application, such as React or Angular, or maybe a mobile application front-end. In this case you should probably want your clientside validators to match your server-side FluentValidtion validators, without having to duplicate the effort.
 
-You still need to implement this - it just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by FluentValidation.
+You still need to implement this - it just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by the FluentValidation library.
 
-I have provided an example ASP.NET Core 3 web API application showing a very basic example of showing the validator information for a given endpoint.
+This solution includes an ASP.NET Core 3 Web API application which provides a very basic (jQuery-based) AJAX example of revealing the validator information for any given endpoint, although it is probably easier to test it using a tool such as Postman.
+
 
 ## Installation
 
@@ -31,9 +32,7 @@ I have provided an example ASP.NET Core 3 web API application showing a very bas
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddMvc(setup => {
-      //...mvc setup...
-    });
+    ...
 
     services.AddFluentValidationFilter();
 }
