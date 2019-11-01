@@ -8,9 +8,6 @@
             font-family: Arial, Arial, Helvetica, sans-serif;
             font-size: 10pt;
         }
-        .pre {
-            font-family: Courier New, Courier, monospace;
-        }
     </style>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -28,8 +25,8 @@
                     dataType: "json",
                     cache: false,
                     success: function (data) {
-                        var formatted = JSON.stringify(data, null, 4);
-                        var result = $("<div />").attr("id", "result").addClass("pre").text(formatted);
+                        var result = $("<div />").attr("id", "result");
+                        result.append($("<pre />").text(JSON.stringify(data, null, 4)));
                         $("body").append(result);
                     }
                 });
@@ -38,9 +35,9 @@
     </script>
 </head>
 <body>
-    <h1>Test FluentValidationLister</h1>
+    <h1>FluentValidationLister</h1>
     <p>Source: <a href="https://github.com/Scandal-UK/FluentValidationLister">https://github.com/Scandal-UK/FluentValidationLister</a></p>
-    <h2>Demo</h2>
+    <h2>Basic demo</h2>
     <p><button>Click here</button> to view validator details for the <strong>Person</strong> model.</p>
 </body>
 </html>
