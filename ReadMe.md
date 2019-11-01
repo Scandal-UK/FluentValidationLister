@@ -2,7 +2,9 @@
 
 This project adds an Action Filter which will describe the rules and messages defined in a particular FluentValidation validator.
 
-This has been designed using ASP.NET Core 2.2.7 and FluentValidation 8.5.0. It is also fully compatible with ASP.NET Core 3.
+This has been designed using FluentValidation 8.5.0.
+
+It is fully compatible with ASP.NET Core 2.x and 3.x.
 
 ## Table of Contents
 
@@ -22,7 +24,6 @@ You still need to implement this - it just provides a nice way to access the val
 
 This solution includes an ASP.NET Core 3 Web API application which provides a very basic (jQuery-based) AJAX example of revealing the validator information for any given endpoint, although it is probably easier to test it using a tool such as Postman.
 
-
 ## Installation
 
 1. Install the [NuGet package](https://www.nuget.org/packages/FluentValidationLister.Filter/)
@@ -40,7 +41,6 @@ public void ConfigureServices(IServiceCollection services)
 
 3. In order for ASP.NET to discover your validators, they must be registered with the services collection. You must do this by calling the `AddTransient` method for each of your validators. Adding all validators in a specified assembly is not supported.
 
-
 ```csharp
     services.AddFluentValidationFilter();
 
@@ -50,7 +50,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ## How to use
 
-For any given endpoint, add the query string _validation=1_ in order to view the validator details for that endpoint.
+For any given endpoint, add the query-string `?validation=1` to the endpoint URL in order to view the validator details, if applicable.
 
 Example output for JSON;
 
@@ -79,6 +79,8 @@ Example output for JSON;
   }
 }
 ```
+
+> **Note:** You will need to put something in the body for POST/PUT requests, but if you add the `validation=1` query-string parameter then the posted body will be ignored - in the demo we simply post `{foo=bar}`.
 
 ### How to use - Rules
 
