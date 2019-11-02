@@ -19,7 +19,6 @@
                 .PostcodeUk();
 
             this.RuleFor(a => a.Country)
-                .NotNull()
                 .SetValidator(new CountryValidator());
         }
     }

@@ -18,7 +18,6 @@
                 .EmailAddress(EmailValidationMode.AspNetCoreCompatible);
 
             this.RuleFor(p => p.Address)
-                .NotNull()
                 .SetValidator(new AddressValidator());
         }
     }
