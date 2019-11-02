@@ -1,10 +1,8 @@
 # FluentValidationLister
 
-This project adds an Action Filter which will describe the rules and messages defined in a particular FluentValidation validator.
+This project adds an ActionFilter which will describe the rules and messages defined in a particular FluentValidation validator. It has been designed using FluentValidation v8.5.0.
 
-This has been designed using FluentValidation 8.5.0.
-
-It is fully compatible with ASP.NET Core 2.x and 3.x.
+It is fully compatible with ASP.NET Core 2.x and 3.x and was developed using TDD principles.
 
 ## Table of Contents
 
@@ -13,6 +11,8 @@ It is fully compatible with ASP.NET Core 2.x and 3.x.
 - [How to use](#how-to-use)
   - [Rules](#how-to-use---rules)
   - [AJAX validation](#how-to-use---ajax-validation)
+  - [Advanced customisation](#how-to-use---advanced-customisation)
+- [ASP.NET Core 3 Web API Sample](#web-api-sample)
 
 ## Purpose
 
@@ -22,7 +22,7 @@ However, _sometimes_ you may not be using MVC - you might be using an SPA applic
 
 You still need to implement this - it just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by the FluentValidation library.
 
-This solution includes an ASP.NET Core 3 Web API application which provides a very basic (jQuery-based) AJAX example of revealing the validator information for any given endpoint, although it is probably easier to test it using a tool such as Postman.
+I will be adding implementation examples (please contribute if you're able) if there's any interest in this project.
 
 ## Installation
 
@@ -112,3 +112,27 @@ The following validators are presented as "remote" to the client (they can be va
 For unsupported validators or validators with custom server-side logic, the rule will be presented as "remote" - the field can be validated using an AJAX call to the back-end.
 
 You can validate any particular field by adding the query string _validate=fieldName_ and if the field is not valid, a problem details will be returned including only the specified field.
+
+### How to use - Advanced customisation
+
+Of course the SOLID principles have been adhered to where possible - you should find all customisation requirements are encapsulated in the `ValidationLister` class.
+
+If you want to customise this package (such as the returned names for rules), I would advise that you copy/alter this class. Doing so will invalidate the unit tests but you can maintain those in your own fork.
+
+## Web API Sample
+
+The included ASP.NET Core 3 Web API Sample application is designed to be a minimal demonstration of how this package works.
+
+Aside from the default template; it includes one controller, three models and three validators. The startup class includes the minimum setup detailed above.
+
+The application runs a very basic (and fully-commented) snippet of JavaScript to return and display the validation metadata for an endpoint.
+
+The validators in the project demonstrate these features of the filter;
+
+- Child records are returned with a dot delimiter (e.g. Address.Line1 and Address.Country.Name)
+- Custom regular expressions are returned (e.g. postcode)
+- Custom error messages are returned where defined (e.g. country name)
+- `.WithName()` is respected in the returned messages (e.g. address line 1)
+
+> The sample application is designed for you to download and "prototype" or test this package. Feel free to contribute through pull-requests on GitHub!
+

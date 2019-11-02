@@ -8,7 +8,8 @@
         public AddressValidator()
         {
             this.RuleFor(a => a.Line1)
-                .NotEmpty();
+                .NotEmpty()
+                .WithName("Address line 1");
 
             this.RuleFor(a => a.Town)
                 .MaximumLength(20)
