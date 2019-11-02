@@ -8,13 +8,11 @@
     [ApiController]
     public class PersonController : ControllerBase
     {
-        /// <summary>
-        /// Add a person.
-        /// </summary>
+        /// <summary>Add a person.</summary>
         /// <param name="person">Input parameters.</param>
         /// <response code="200">Successful post.</response>
         /// <response code="400">Invalid payload.</response>
-        /// <returns>Instance of <see cref="OkResult"/>.</returns>
+        /// <returns>Instance of <see cref="OkResult"/> with a Message property.</returns>
         [HttpPost]
         [ProducesResponseType(typeof(OkResult), 200)]
         [ProducesResponseType(typeof(ProblemDetails), 400)]
