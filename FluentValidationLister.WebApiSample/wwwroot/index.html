@@ -3,41 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <title>Test FluentValidationLister</title>
-    <style type="text/css">
-        body, button {
-            font-family: Arial, Arial, Helvetica, sans-serif;
-            font-size: 10pt;
-        }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-            crossorigin="anonymous"></script>
-    <script>
-        $(function () {
-            $("button").click(function () {
-                $("#result").remove();
-
-                $.ajax({
-                    url: "api/Person?validation=true",
-                    type: "POST",
-                    data: JSON.stringify({foo: "bar"}), // (any old body to allow POST)
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    cache: false,
-                    success: function (data) {
-                        var result = $("<div />").attr("id", "result");
-                        result.append($("<pre />").text(JSON.stringify(data, null, 4)));
-                        $("body").append(result);
-                    }
-                });
-            });
-        });
-    </script>
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="js/person.js"></script>
 </head>
 <body>
     <h1>FluentValidationLister</h1>
     <p>Source: <a href="https://github.com/Scandal-UK/FluentValidationLister">https://github.com/Scandal-UK/FluentValidationLister</a></p>
     <h2>Basic demo</h2>
-    <p><button>Click here</button> to view validator details for the <strong>Person</strong> model.</p>
+    <p><button id="get-validation">Click here</button> to view validator details for the <strong>Person</strong> model.</p>
+    <div id="result-panel"></div>
 </body>
 </html>

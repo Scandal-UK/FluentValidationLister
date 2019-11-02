@@ -1,0 +1,8 @@
+﻿body, button {
+    font-family: Arial, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+}
+.error {
+    background-color: inherit;
+    color: #d00;
+}
