@@ -6,7 +6,7 @@
     {
         public CountryValidator()
         {
-            this.RuleFor(c => c.Name).NotEmpty().WithMessage("Country name must be specified.");
+            this.RuleFor(c => c.Name).NotEmpty().WithMessage("Country name must be specified (custom message).");
         }
     }
 }
