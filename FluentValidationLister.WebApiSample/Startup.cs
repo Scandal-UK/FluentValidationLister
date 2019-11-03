@@ -18,7 +18,8 @@ namespace FluentValidationLister.WebApiSample
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddXmlSerializerFormatters();
 
             services
                 .AddFluentValidationLister()

@@ -51,8 +51,10 @@
 
             // Request the validation information for the endpoint "POST:api/Person"
             xhr.open("POST", "api/Person?validation=true", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(JSON.stringify({ foo: "bar" })); // (any old body; it's ignored anyway)
+            xhr.setRequestHeader("Content-Type", "text/xml");
+            xhr.setRequestHeader("Accepts", "text/xml");
+            xhr.send("<Person>1</Person>");
+            //xhr.send(JSON.stringify({ person: 1 })); // (any old body; it's ignored anyway)
         });
     });
 })(window, document);
