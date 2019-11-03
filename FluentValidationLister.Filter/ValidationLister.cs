@@ -23,6 +23,13 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="ValidationLister"/> class.
         /// </summary>
+        public ValidationLister()
+        {
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ValidationLister"/> class with a specified <see cref="IValidator"/>.
+        /// </summary>
         /// <param name="validator">An instance of <see cref="IValidator"/>.</param>
         public ValidationLister(IValidator validator)
             : base(validator)

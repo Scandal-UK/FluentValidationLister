@@ -20,6 +20,13 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="ValidationListerBase"/> class.
         /// </summary>
+        public ValidationListerBase()
+        {
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ValidationListerBase"/> class with a specified <see cref="IValidator"/>.
+        /// </summary>
         /// <param name="validator">An instance of a FluentValidation <see cref="IValidator"/>.</param>
         protected ValidationListerBase(IValidator validator) =>
             this.validatorDescriptor = validator?.CreateDescriptor() ?? throw new ArgumentNullException(nameof(validator));
