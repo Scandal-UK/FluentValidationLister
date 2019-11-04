@@ -15,20 +15,23 @@
         }
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="FromToValues"/> class.
+        /// Initialises a new instance of the <see cref="FromToValues"/> class with specified
+        /// values for the From and To properties.
         /// </summary>
         /// <param name="from">Value for the From property.</param>
         /// <param name="to">Value for the To property.</param>
         public FromToValues(IComparable from, IComparable to)
         {
-            this.From = from;
-            this.To = to;
+            // Note: IComparable was switched to Int for XML serialisation support
+            // todo: Re-implement to allow date ranges again; may need a new class
+            this.From = from is int ? (int)from : throw new InvalidOperationException($"Cannot set range for type {from.GetType()}");
+            this.To = to is int ? (int)to : throw new InvalidOperationException($"Cannot set range for type {to.GetType()}");
         }
 
         /// <summary>Gets or sets the From value.</summary>
-        public IComparable From { get; set; }
+        public int From { get; set; }
 
         /// <summary>Gets or sets the To value.</summary>
-        public IComparable To { get; set; }
+        public int To { get; set; }
     }
 }

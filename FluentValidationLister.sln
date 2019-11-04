@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentValidationLister.WebApiSample", "FluentValidationLister.WebApiSample\FluentValidationLister.WebApiSample.csproj", "{BBC18443-922F-48B8-A5B9-E39D0B49FBBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{70C01EF6-7922-4F42-AD71-A9AE08B61450}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70C01EF6-7922-4F42-AD71-A9AE08B61450}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70C01EF6-7922-4F42-AD71-A9AE08B61450}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBC18443-922F-48B8-A5B9-E39D0B49FBBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBC18443-922F-48B8-A5B9-E39D0B49FBBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBC18443-922F-48B8-A5B9-E39D0B49FBBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBC18443-922F-48B8-A5B9-E39D0B49FBBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

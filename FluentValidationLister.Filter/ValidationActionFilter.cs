@@ -46,7 +46,7 @@
                 }
                 else
                 {
-                    context.Result = new JsonResult(new ValidationLister(validator).GetValidatorRules());
+                    context.Result = new OkObjectResult(new ValidationLister(validator).GetValidatorRules());
                 }
 
                 return;
@@ -62,12 +62,14 @@
 
             if (!context.ModelState.IsValid)
             {
-                // Force camel cased keys (if the model was attributed with [FromForm], the keys won't be camel-cased)
+                bool useJson = context.HttpContext.Request.ContentType.ToLowerInvariant().Contains("json");
+
+                // Force camel-cased keys for JSON responses (if the model was attributed with [FromForm], the keys won't be camel-cased)
                 var modelState = context.ModelState.ToDictionary(
-                    p => p.Key.ToCamelCase(),
+                    p => useJson ? p.Key.ToCamelCase() : p.Key,
                     p => p.Value.Errors.Select(x => x.ErrorMessage).ToArray());
 
-                // Check if single-field validation is being requested
+                // Check if single-field AJAX validation is being requested
                 if (context.HttpContext.Request.Query.TryGetValue("validate", out var validateField))
                 {
                     // Remove all the other fields from the result
@@ -93,7 +95,7 @@
                 }
 
                 // Return a problem details response
-                context.HttpContext.Response.ContentType = "application/problem+json";
+                context.HttpContext.Response.ContentType = string.Format("application/problem+{0}", useJson ? "json" : "xml");
                 context.Result = new BadRequestObjectResult(new ValidationProblemDetails(modelState)
                 {
                     Detail = "Model validation error",

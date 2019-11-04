@@ -12,9 +12,10 @@
         /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
         /// <returns>The <see cref="IServiceCollection"/> for further customisation.</returns>
         public static IServiceCollection AddFluentValidationLister(this IServiceCollection services) =>
-            services.Configure<MvcOptions>(o =>
-            {
-                o.Filters.Add(typeof(ValidationActionFilter));
-            });
+            services
+                .Configure<MvcOptions>(o =>
+                {
+                    o.Filters.Add(typeof(ValidationActionFilter));
+                });
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace FluentValidationLister.Filter.Meta
 {
-    using System.Collections.Generic;
+    using FluentValidationLister.Filter.Internal;
 
     /// <summary>
     /// A class to hold lists of rules and messages, with the intention of being serialised.
@@ -8,9 +8,9 @@
     public class ValidatorRules
     {
         /// <summary>Gets or sets a list of validator rules indexed by property name.</summary>
-        public IDictionary<string, Dictionary<string, object>> ValidatorList { get; set; } = new Dictionary<string, Dictionary<string, object>>();
+        public SerialisableDictionary<string, SerialisableDictionary<string, object>> ValidatorList { get; set; } = new SerialisableDictionary<string, SerialisableDictionary<string, object>>();
 
         /// <summary>Gets or sets a list of error messages indexed by property name.</summary>
-        public IDictionary<string, Dictionary<string, string>> ErrorList { get; set; } = new Dictionary<string, Dictionary<string, string>>();
+        public SerialisableDictionary<string, SerialisableDictionary<string, string>> ErrorList { get; set; } = new SerialisableDictionary<string, SerialisableDictionary<string, string>>();
     }
 }
