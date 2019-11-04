@@ -7,6 +7,11 @@
     /// </summary>
     public class ValidatorRules
     {
+        /// <summary>Instantiates a new instance of the <see cref="ValidatorRules"/> class.</summary>
+        public ValidatorRules()
+        {
+        }
+
         /// <summary>Gets or sets a list of validator rules indexed by property name.</summary>
         public IDictionary<string, Dictionary<string, object>> ValidatorList { get; set; } = new Dictionary<string, Dictionary<string, object>>();
 

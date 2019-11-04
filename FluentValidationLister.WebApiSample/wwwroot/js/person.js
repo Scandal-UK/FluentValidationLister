@@ -12,7 +12,7 @@
 
                 // Format the response in a code element
                 var code = document.createElement("code");
-                code.classList.add("language-json");
+                code.classList.add("language-json"); // prismjs?
                 code.innerHTML = JSON.stringify(validationResponse, null, 2);
 
                 // Display the code block in the result element
@@ -51,10 +51,12 @@
 
             // Request the validation information for the endpoint "POST:api/Person"
             xhr.open("POST", "api/Person?validation=true", true);
-            xhr.setRequestHeader("Content-Type", "text/xml");
-            xhr.setRequestHeader("Accepts", "text/xml");
-            xhr.send("<Person>1</Person>");
-            //xhr.send(JSON.stringify({ person: 1 })); // (any old body; it's ignored anyway)
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({ person: 1 })); // (any old body; it's ignored anyway)
+
+            //xhr.setRequestHeader("Content-Type", "application/xml");
+            //xhr.setRequestHeader("Accepts", "application/xml");
+            //xhr.send("<Person>1</Person>");
         });
     });
 })(window, document);
