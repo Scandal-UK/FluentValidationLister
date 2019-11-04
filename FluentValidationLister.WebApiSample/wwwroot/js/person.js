@@ -1,5 +1,5 @@
 ﻿(function (window, document, vkbeautify) {
-    var getValidation, resultPanel;
+    var contentTypeSelector, getValidation, resultPanel;
 
     var displayValidationResponse = function () {
         if (this.readyState === 4) {
@@ -40,7 +40,8 @@
     };
 
     window.addEventListener("load", function () {
-        // Define the button and the result elements
+        // Define the elements that we're interested in manipulating
+        contentTypeSelector = document.getElementById("content-type-selector");
         getValidation = document.getElementById("get-validation");
         resultPanel = document.getElementById("result-panel");
 
@@ -55,20 +56,17 @@
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = displayValidationResponse;
 
-            //// Request the validation information for the endpoint "POST:api/Person"
-            //xhr.open("POST", "api/Person?validation=true", true);
-            //xhr.setRequestHeader("Content-Type", "application/json");
-            //xhr.send(JSON.stringify({ person: 1 })); // (any old body; it's ignored anyway)
-
-            //// Get a Person serialised as XML
-            //xhr.open("GET", "api/Person/1", true);
-            //xhr.setRequestHeader("Accept", "text/xml");
-            //xhr.send();
-
+            // Request the validation information for the endpoint "POST:api/Person"
             xhr.open("POST", "api/Person?validation=true", true);
-            xhr.setRequestHeader("Content-Type", "text/xml");
-            xhr.setRequestHeader("Accept", "text/xml");
-            xhr.send("<Person>1</Person>");
+
+            if (contentTypeSelector.value === "JSON") {
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send(JSON.stringify({ person: 1 })); // (any old body; it's ignored anyway)
+            } else {
+                xhr.setRequestHeader("Content-Type", "text/xml");
+                xhr.setRequestHeader("Accept", "text/xml");
+                xhr.send("<Person>1</Person>");
+            }
         });
     });
 })(window, document, vkbeautify);
