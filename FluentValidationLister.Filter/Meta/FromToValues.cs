@@ -29,9 +29,9 @@
         }
 
         /// <summary>Gets or sets the From value.</summary>
-        public IComparable From { get; set; }
+        public int From { get; set; }
 
         /// <summary>Gets or sets the To value.</summary>
-        public IComparable To { get; set; }
+        public int To { get; set; }
     }
 }
