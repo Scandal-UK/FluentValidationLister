@@ -18,7 +18,10 @@ namespace FluentValidationLister.WebApiSample
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
+            services.AddControllers(options =>
+            {
+                options.RespectBrowserAcceptHeader = true;
+            })
                 .AddXmlSerializerFormatters();
 
             services

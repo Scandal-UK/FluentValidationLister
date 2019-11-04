@@ -1,4 +1,4 @@
-﻿(function (window, document) {
+﻿(function (window, document, vkbeautify) {
     var getValidation, resultPanel;
 
     var displayValidationResponse = function () {
@@ -6,14 +6,20 @@
             getValidation.disabled = false;
 
             if (this.status === 200) {
-                // Show the response in the console
-                var validationResponse = JSON.parse(this.responseText);
-                console.log(validationResponse);
 
                 // Format the response in a code element
                 var code = document.createElement("code");
-                code.classList.add("language-json"); // prismjs?
-                code.innerHTML = JSON.stringify(validationResponse, null, 2);
+                if (this.getResponseHeader('content-type') === "text/xml; charset=utf-8")
+                {
+                    code.classList.add("language-xml");
+                    code.appendChild(document.createTextNode(vkbeautify.xml(this.responseText)));
+                }
+                else
+                {
+                    var validationResponse = JSON.parse(this.responseText);
+                    code.classList.add("language-json"); // prismjs?
+                    code.innerHTML = JSON.stringify(validationResponse, null, 2);
+                }
 
                 // Display the code block in the result element
                 var output = document.createElement("pre");
@@ -49,14 +55,21 @@
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = displayValidationResponse;
 
-            // Request the validation information for the endpoint "POST:api/Person"
-            xhr.open("POST", "api/Person?validation=true", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(JSON.stringify({ person: 1 })); // (any old body; it's ignored anyway)
+            //// Request the validation information for the endpoint "POST:api/Person"
+            //xhr.open("POST", "api/Person?validation=true", true);
+            //xhr.setRequestHeader("Content-Type", "application/json");
+            //xhr.send(JSON.stringify({ person: 1 })); // (any old body; it's ignored anyway)
 
-            //xhr.setRequestHeader("Content-Type", "application/xml");
-            //xhr.setRequestHeader("Accepts", "application/xml");
-            //xhr.send("<Person>1</Person>");
+            //// Get a Person serialised as XML
+            //xhr.open("GET", "api/Person/1", true);
+            //xhr.setRequestHeader("Accept", "text/xml");
+            //xhr.send();
+
+            xhr.open("POST", "api/Person?validation=true", true);
+            xhr.setRequestHeader("Content-Type", "text/xml");
+            xhr.setRequestHeader("Accept", "text/xml");
+            xhr.send("<Person>1</Person>");
         });
     });
-})(window, document);
+})(window, document, vkbeautify);
+
