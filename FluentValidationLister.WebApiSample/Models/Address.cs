@@ -8,6 +8,5 @@
         public string County { get; set; }
         public string Postcode { get; set; }
         public Country Country { get; set; }
-        public int Id { get; set; }
     }
 }
