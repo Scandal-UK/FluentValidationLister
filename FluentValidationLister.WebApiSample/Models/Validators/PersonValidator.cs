@@ -13,6 +13,9 @@
             this.RuleFor(p => p.Forename)
                 .NotEmpty();
 
+            this.RuleFor(p => p.Age)
+                .InclusiveBetween(16, 60);
+
             this.RuleFor(p => p.Email)
                 .NotEmpty()
                 .EmailAddress(EmailValidationMode.AspNetCoreCompatible);
