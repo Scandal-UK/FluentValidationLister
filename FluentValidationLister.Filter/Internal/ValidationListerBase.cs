@@ -1,7 +1,6 @@
 ﻿namespace FluentValidationLister.Filter.Internal
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using FluentValidation;
     using FluentValidation.Internal;
@@ -16,13 +15,6 @@
     {
         private readonly IValidatorDescriptor validatorDescriptor;
         private ValidatorRules rules;
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="ValidationListerBase"/> class.
-        /// </summary>
-        public ValidationListerBase()
-        {
-        }
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ValidationListerBase"/> class with a specified <see cref="IValidator"/>.
@@ -92,7 +84,7 @@
         {
             if (!this.rules.ValidatorList.ContainsKey(propertyName))
             {
-                this.rules.ValidatorList.Add(propertyName, new Dictionary<string, object>());
+                this.rules.ValidatorList.Add(propertyName, new SerialisableDictionary<string, object>());
             }
 
             this.rules.ValidatorList[propertyName].Add(validatorType, validatorValue);
@@ -102,7 +94,7 @@
         {
             if (!this.rules.ErrorList.ContainsKey(propertyName))
             {
-                this.rules.ErrorList.Add(propertyName, new Dictionary<string, string>());
+                this.rules.ErrorList.Add(propertyName, new SerialisableDictionary<string, string>());
             }
 
             this.rules.ErrorList[propertyName].Add(validatorType, this.BuildErrorMessage(displayName, errorMessageTemplate, additionalArguments));
