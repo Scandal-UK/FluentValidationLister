@@ -18,11 +18,12 @@
         <PackageReleaseNotes>Bug fixes for XML support</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2019</Copyright>
+        <PackageProjectUrl>https://github.com/scandal-uk/fluentvalidationlister</PackageProjectUrl>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="8.5.0" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.0" />
+        <PackageReference Include="FluentValidation" Version="8.5.1" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="8.5.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
     </ItemGroup>
