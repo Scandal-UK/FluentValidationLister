@@ -3,10 +3,10 @@
     using System;
     using System.Linq;
     using FluentValidation;
-    using FluentValidation.AspNetCore;
     using FluentValidationLister.Filter.Internal;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
 
     public sealed partial class ValidationActionFilter
         : IActionFilter
@@ -57,9 +57,7 @@
             }
 
             // Validate the model
-            var validationResult = validator.Validate(new ValidationContext(model));
-            validationResult.AddToModelState(context.ModelState, null);
-
+            this.ValidateModel(validator, model, context.ModelState);
             if (!context.ModelState.IsValid)
             {
                 bool useJson = context.HttpContext.Request.ContentType.ToLowerInvariant().Contains("json");
@@ -100,6 +98,25 @@
                 {
                     Detail = "Model validation error",
                 });
+            }
+        }
+
+        private void ValidateModel(IValidator validator, object model, ModelStateDictionary modelState)
+        {
+            var result = validator.Validate(new ValidationContext(model));
+            if (!result.IsValid)
+            {
+                foreach (var error in result.Errors)
+                {
+                    if (modelState.ContainsKey(error.PropertyName))
+                    {
+                        modelState[error.PropertyName].Errors.Add(error.ErrorMessage);
+                    }
+                    else
+                    {
+                        modelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                    }
+                }
             }
         }
 
