@@ -138,7 +138,7 @@ The validators in the project demonstrate these features of the filter;
 - Child records are returned with a dot delimiter _(e.g. Address.Line1 and Address.Country.Name)_
 - Custom regular expressions are returned _(e.g. Address.Postcode)_
 - `.WithName()` is respected in the returned messages _(e.g. Address.Line1)_
-- Custom error messages are returned where defined _(e.g. Address.Country.Name)_
+- Custom error messages are returned where defined _(e.g. Address.County)_
 
 > The sample application is designed for you to download and "prototype" or test this package. Feel free to contribute through pull-requests on GitHub!
 

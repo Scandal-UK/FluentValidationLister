@@ -1,8 +1,118 @@
-﻿body, button {
+﻿/** html5doctor.com/html-5-reset-stylesheet/ **/
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,time,mark,audio,video { margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent; } 
+body { line-height:1; }
+ol,ul { list-style:none; }
+blockquote,q { quotes:none; }
+blockquote:before,blockquote:after,q:before,q:after { content:'';content:none; }
+ins { text-decoration:none; }
+del { text-decoration:line-through; }
+table { border-collapse:collapse;border-spacing:0; }
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body, button {
     font-family: Arial, Arial, Helvetica, sans-serif;
     font-size: 10pt;
 }
+
+h1, h2, h3, h4 {
+    font-weight: bold;
+    margin: 0 5px 5px;
+    color: #006;
+    text-shadow: 0 1px 1px #ccc;
+    line-height: 1.5em;
+    clear: left;
+}
+
+h1 {
+    margin-top: 5px;
+    font-size: 20pt;
+    padding-bottom: 20px;
+}
+
+h2 {
+    font-size: 18pt;
+    padding-bottom: 10px;
+}
+
+p {
+    margin: 0px 15px 20px 15px
+}
+
+a {
+    transition: color 0.5s linear;
+    background-color: inherit;
+    color: #00f;
+    text-decoration: none
+}
+
+    a:hover {
+        background-color: inherit;
+        color: #f00
+    }
+
+    .disabled, a.disabled:hover {
+        background-color: inherit;
+        color: #666
+    }
+
 .error {
     background-color: inherit;
     color: #d00;
 }
+
+#result-panel {
+    margin: 0 20px;
+    overflow: auto;
+}
+
+form {
+    padding: 20px 7%;
+    box-sizing: border-box;
+}
+
+    form > div {
+        clear: both;
+        overflow: hidden;
+        padding: 1px;
+        margin: 0 0 10px 0;
+    }
+
+        form > div > label {
+            width: 25%;
+            float: left;
+            padding-right: 10px;
+        }
+
+        form > div > div {
+            width: 75%;
+            float: right;
+        }
+
+input[type=text],
+input[type=email],
+input[type=url],
+input[type=password],
+input[type=number] {
+    width: 50%;
+    border: 1px solid #7C7C7C;
+    border-color: #7C7C7C #7C7C7C #C3C3C3 #C3C3C3;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+    transition: border 0.15s linear 0s, box-shadow 0.15s linear 0s, color 0.15s linear 0s;
+}
+
+    input[type=text]:focus,
+    input[type=email]:focus,
+    input[type=url]:focus,
+    input[type=password]:focus,
+    input[type=number]:focus {
+        border-color: #4697e4;
+        border-color: rgba(41, 92, 161, 0.4);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(41, 92, 161, 0.6);
+        outline: 0 none;
+    }
+

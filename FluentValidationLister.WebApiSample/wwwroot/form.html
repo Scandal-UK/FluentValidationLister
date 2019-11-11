@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Test FluentValidationLister - form submission</title>
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <script src="js/test-validation.js"></script>
+</head>
+<body>
+    <h1>FluentValidationLister</h1>
+    <p>Source: <a href="https://github.com/Scandal-UK/FluentValidationLister">https://github.com/Scandal-UK/FluentValidationLister</a></p>
+    <h2>Test validation demo</h2>
+    <p><a href="index.html">View validation</a> | <a href="#" onclick="return false" disabled>Test validation</a></p>
+    <p><button id="populate-form">Populate form</button></p>
+    <div id="result-panel"></div>
+    <form id="person-form">
+        <div>
+            <label for="surname">Surname</label>
+            <div><input name="surname" type="text" /></div>
+        </div>
+        <div>
+            <label for="forename">Forename</label>
+            <div><input name="forename" type="text" /></div>
+        </div>
+        <div>
+            <label for="age">Age</label>
+            <div><input name="age" type="number" /></div>
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <div><input name="email" type="email" /></div>
+        </div>
+        <div>
+            <label for="address.line1">Address line 1</label>
+            <div><input name="address.line1" type="text" /></div>
+        </div>
+        <div>
+            <label for="address.line2">Address line 2</label>
+            <div><input name="address.line2" type="text" /></div>
+        </div>
+        <div>
+            <label for="address.town">Town</label>
+            <div><input name="address.town" type="text" /></div>
+        </div>
+        <div>
+            <label for="address.county">County</label>
+            <div><input name="address.county" type="text" /></div>
+        </div>
+        <div>
+            <label for="address.postcode">Postcode</label>
+            <div><input name="address.postcode" type="text" /></div>
+        </div>
+        <div>
+            <input type="submit" value="Submit" />&nbsp;
+            <input type="reset" value="Reset" />&nbsp;
+        </div>
+    </form>
+</body>
+</html>
