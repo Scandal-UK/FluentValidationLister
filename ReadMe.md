@@ -1,6 +1,6 @@
 # FluentValidationLister
 
-This project adds an ActionFilter which will describe the rules and messages defined in a particular FluentValidation validator. It has been designed using FluentValidation v8.5.0.
+This project adds an ActionFilter which will describe the rules and messages defined in a particular FluentValidation validator. It has been designed using FluentValidation v8.5.1.
 
 It is fully compatible with ASP.NET Core 2.x and 3.x.
 
@@ -16,11 +16,11 @@ It is fully compatible with ASP.NET Core 2.x and 3.x.
 
 ## Purpose
 
-If you want to use clientside validation with the FluentValidation library (you really should), then the recommended way is to use the FluentValidation.AspNetCore extension with ASP.NET Core MVC. It integrates perfectly and there's no need for this filter at all.
+If you want to use clientside validation with the FluentValidation library (you really should), then the recommended way is to use the [FluentValidation.AspNetCore](https://www.nuget.org/packages/FluentValidation.AspNetCore/) package with ASP.NET Core MVC. It integrates perfectly and there's no need for this filter at all.
 
 However, _sometimes_ you may not be using MVC - you might be using an SPA application, such as React or Angular, or maybe a mobile application front-end. In this case you should probably want your clientside validators to match your server-side FluentValidtion validators, without having to duplicate the effort.
 
-You still need to implement this in your fron-end validation - it just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by the FluentValidation library.
+You still need to implement this in your front-end validation - this just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by the FluentValidation library.
 
 If there's any interest in this project/package I will be adding implementation examples (please contribute if you're able - particularly if you have an implementation with a specific front-end form library/generator).
 
@@ -142,4 +142,4 @@ The validators in the project demonstrate these features of the filter;
 
 > The sample application is designed for you to download and "prototype" or test this package. Feel free to contribute through pull-requests on GitHub!
 
-There is a second page and JavaScript which tests the actual validation. It does not demonstrate anything that that this package does but it might be useful to test custom validators or other customisations.
+There is a second page and JavaScript which tests the actual validation. It might be useful to test custom validators or other customisations.
