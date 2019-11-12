@@ -129,16 +129,17 @@ The included ASP.NET Core 3 Web API Sample application is designed to be a minim
 
 > There is no Razor/MVC example because this package is unnecessary for those projects. This package is for other front-ends that need access to the validation metadata.
 
-Aside from the default Visual Studio template; it includes one controller, three models and three validators. The startup class includes the minimum setup detailed above.
+Aside from the default Visual Studio template; it includes one controller, two models and two validators. The startup class includes the minimum setup detailed above.
 
 The application runs a very basic (and fully-commented) snippet of JavaScript to return and display the validation metadata for an endpoint.
 
 The validators in the project demonstrate these features of the filter;
 
-- Child records are returned with a dot delimiter _(e.g. Address.Line1 and Address.Country.Name)_
+- Child records are returned with a dot delimiter _(e.g. Address.Line1)_
 - Custom regular expressions are returned _(e.g. Address.Postcode)_
 - `.WithName()` is respected in the returned messages _(e.g. Address.Line1)_
 - Custom error messages are returned where defined _(e.g. Address.County)_
 
 > The sample application is designed for you to download and "prototype" or test this package. Feel free to contribute through pull-requests on GitHub!
 
+There is a second page and JavaScript which tests the actual validation. It does not demonstrate anything that that this package does but it might be useful to test custom validators or other customisations.
