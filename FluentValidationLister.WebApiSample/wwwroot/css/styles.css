@@ -116,3 +116,49 @@ input[type=number] {
         outline: 0 none;
     }
 
+
+/** narrow screens (mobile/tablet) **/
+@media screen and (max-width: 600px) {
+    form > div {
+        margin: 0 0 15px 0;
+    }
+
+        form > div > label {
+            width: 100%;
+            float: none;
+            margin: 0 0 5px 0;
+        }
+
+        form > div > div {
+            width: 100%;
+            float: none;
+        }
+
+    input[type=text],
+    input[type=email],
+    input[type=url],
+    input[type=password],
+    input[type=number],
+    textarea,
+    select {
+        width: 100%;
+    }
+
+    form {
+        padding: 20px 3%;
+    }
+}
+
+/** medium to wide screens **/
+@media screen and (min-width: 800px) {
+    form {
+        padding: 20px 15%;
+    }
+}
+
+/** wider screens **/
+@media screen and (min-width: 1000px) {
+    form > div > label {
+        text-align: right;
+    }
+}

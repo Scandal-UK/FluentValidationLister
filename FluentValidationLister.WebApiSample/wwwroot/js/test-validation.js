@@ -11,8 +11,8 @@
             code.classList.add("language-json");
             code.innerHTML = JSON.stringify(validationResponse, null, 2);
 
-            // Display the code block in the result element
             var output = document.createElement("pre");
+            if (this.status >= 400) output.classList.add("error");
             output.appendChild(code);
             resultPanel.appendChild(output);
         }
@@ -20,7 +20,6 @@
 
     var populateFormFromServerResponse = function () {
         if (this.readyState === 4) {
-            // Populate the form based on the server response
             var form = $(personForm);
             var json = JSON.parse(this.responseText);
 
@@ -37,13 +36,11 @@
     };
 
     window.addEventListener("load", function () {
-        // Assign some elements to some variables
         populateForm = document.getElementById("populate-form");
         personForm = document.getElementById("person-form");
         resultPanel = document.getElementById("result-panel");
 
         populateForm.addEventListener("click", function () {
-            // Submit a simple async GET request to the server
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = populateFormFromServerResponse;
             xhr.open("GET", "api/Person/1", true);
@@ -72,7 +69,7 @@
                 }
             });
 
-            // Correct the string-type that should be numeric
+            // Correct any string-types that should be numeric or Boolean
             if (data.age === "") data.age = null; else data.age = parseInt(data.age);
 
             var xhr = new XMLHttpRequest();
@@ -80,7 +77,6 @@
             xhr.open("POST", "api/Person", true);
             xhr.setRequestHeader("Content-Type", "application/json");
 
-            // Convert array to JSON and submit to the server
             xhr.send(JSON.stringify(data));
         });
     });
