@@ -58,6 +58,7 @@
                 });
 
                 $(resultPanel).append(list);
+
             } else {
                 var result = $("<p />");
                 if (this.status > 400) result.addClass("error");
