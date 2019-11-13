@@ -7,8 +7,7 @@
         if (personForm.disabled === true) return;
 
         personForm.disabled = true;
-        $(".error").removeClass("error");
-        if (resultPanel.hasChildNodes()) resultPanel.removeChild(resultPanel.childNodes[0]);
+        resetResult();
 
         var data = {};
         $(personForm).serializeArray().map(function (field) {
@@ -70,8 +69,7 @@
     };
 
     var populateFormFromServerRequest = function () {
-        $(".error").removeClass("error");
-        if (resultPanel.hasChildNodes()) resultPanel.removeChild(resultPanel.childNodes[0]);
+        resetResult();
 
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = populateFormFromServerResponse;
@@ -97,6 +95,11 @@
         }
     };
 
+    var resetResult = function () {
+        $(".error").removeClass("error");
+        if (resultPanel.hasChildNodes()) resultPanel.removeChild(resultPanel.childNodes[0]);
+    };
+
     window.addEventListener("load", function () {
         populateForm = document.getElementById("populate-form"); // Button
         personForm = document.getElementById("person-form"); // Form
@@ -104,5 +107,6 @@
 
         populateForm.addEventListener("click", populateFormFromServerRequest);
         personForm.addEventListener("submit", submitForm);
+        personForm.addEventListener("reset", resetResult);
     });
 })(window, document, $);
