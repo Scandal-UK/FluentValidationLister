@@ -42,6 +42,8 @@
 
             var validationResponse = JSON.parse(this.responseText);
             if (this.status === 400) {
+                if (console.error) console.error(validationResponse);
+
                 var form = $(personForm);
                 var errorList = [];
 
