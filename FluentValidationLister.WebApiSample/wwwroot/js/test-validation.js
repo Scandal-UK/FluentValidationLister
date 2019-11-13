@@ -3,38 +3,29 @@
     var populateForm, personForm, resultPanel;
 
     var submitForm = function (e) {
-        // Forget the form's usual submit behaviour and ignore concurrent submits
         e.preventDefault();
         if (personForm.disabled === true) return;
 
-        // Disable the submit button and remove any previous results
         personForm.disabled = true;
+        $(".error").removeClass("error");
         if (resultPanel.hasChildNodes()) resultPanel.removeChild(resultPanel.childNodes[0]);
 
-        // Gather the form fields into an array (I'm cheating here and using jQuery)
         var data = {};
         $(personForm).serializeArray().map(function (field) {
-            // Hint: Here we're only looking for one level of children (address); to make this
-            // re-usable you would need to implement something more recursive!
             if (field.value !== "") {
                 if (field.name.includes(".")) {
-                    // Split from [ChildArrayName].[FieldName]
                     var split = field.name.split(".");
-
-                    // Create the child array if it does not exist
                     if (!data[split[0]]) data[split[0]] = {};
 
-                    // Add the value to the child array
                     data[split[0]][split[1]] = field.value;
 
                 } else {
-                    // Add the field value to the array
                     data[field.name] = field.value;
                 }
             }
         });
 
-        // Correct any string-types that should be numeric or Boolean
+        // Correct any string-types that should be numeric or Boolean (only one in this example)
         if (data.age === "") data.age = null; else data.age = parseInt(data.age);
 
         var xhr = new XMLHttpRequest();
@@ -50,20 +41,35 @@
             personForm.disabled = false;
 
             var validationResponse = JSON.parse(this.responseText);
+            if (this.status === 400) {
+                var form = $(personForm);
+                var errorList = [];
 
-            var code = document.createElement("code");
-            code.classList.add("language-json");
-            code.innerHTML = JSON.stringify(validationResponse, null, 2);
+                for (var key in validationResponse.errors) {
+                    $('[name="' + key + '"]', form).addClass("error");
+                    errorList.push(validationResponse.errors[key]);
+                }
 
-            var output = document.createElement("pre");
-            if (this.status >= 400) output.classList.add("error");
-            output.appendChild(code);
-            resultPanel.appendChild(output);
+                var list = $("<ul />").addClass("error");
+                $.each(errorList, function (i, val) {
+                    list.append($("<li />").text(val));
+                });
+
+                $(resultPanel).append(list);
+            } else {
+                var result = $("<p />");
+                if (this.status > 400) result.addClass("error");
+                result.text(validationResponse.message);
+
+                $(resultPanel).append(result);
+            }
         }
     };
 
     var populateFormFromServerRequest = function () {
-        // Perform a GET request
+        $(".error").removeClass("error");
+        if (resultPanel.hasChildNodes()) resultPanel.removeChild(resultPanel.childNodes[0]);
+
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = populateFormFromServerResponse;
         xhr.open("GET", "api/Person/1", true);
@@ -76,7 +82,6 @@
             var form = $(personForm);
             var json = JSON.parse(this.responseText);
 
-            // As I'm already using jQuery in this file, I use it here to make this code shorter ;)
             $.each(json, function (key, val) {
                 if (key === "address") {
                     $.each(val, function (addrKey, addrVal) {
@@ -90,9 +95,9 @@
     };
 
     window.addEventListener("load", function () {
-        populateForm = document.getElementById("populate-form");
-        personForm = document.getElementById("person-form");
-        resultPanel = document.getElementById("result-panel");
+        populateForm = document.getElementById("populate-form"); // Button
+        personForm = document.getElementById("person-form"); // Form
+        resultPanel = document.getElementById("result-panel"); // Div
 
         populateForm.addEventListener("click", populateFormFromServerRequest);
         personForm.addEventListener("submit", submitForm);

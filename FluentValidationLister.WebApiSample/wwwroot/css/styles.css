@@ -116,6 +116,25 @@ input[type=number] {
         outline: 0 none;
     }
 
+input[type=text].error,
+input[type=email].error,
+input[type=url].error,
+input[type=password].error,
+input[type=number].error {
+    border: 1px solid #7C7C7C;
+    border-color: #FF6666 #FF6666 #E60000 #E60000;
+}
+
+ul.error {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    list-style: disc;
+}
+li {
+    margin: 5px 10px;
+}
 
 /** narrow screens (mobile/tablet) **/
 @media screen and (max-width: 600px) {

@@ -23,6 +23,7 @@
 
             this.RuleFor(p => p.Address)
                 .NotNull()
+                .WithMessage($"'{nameof(Address)}' is required.")
                 .SetValidator(new AddressValidator());
         }
     }
