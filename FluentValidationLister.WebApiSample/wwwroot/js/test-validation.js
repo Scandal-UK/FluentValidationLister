@@ -2,6 +2,44 @@
     // Button, Form, Div
     var populateForm, personForm, resultPanel;
 
+    var ruleList, messageList;
+
+    var validateForm = function () {
+        var data = getFormValues();
+        var form = $(personForm);
+        var errorList = [];
+
+        for (var fieldName in ruleList)
+        {
+            for (var ruleName in ruleList[fieldName])
+            {
+                var valid = true;
+                switch (ruleName)
+                {
+                    case "required":
+                        console.log(fieldName + ".required");
+                        console.log(data);
+                        if (!data[fieldName] || data[fieldName] === "") {
+                            valid = false;
+                            errorList.push(messageList[fieldName][ruleName]);
+                        }
+                        break;
+                }
+
+                if (!valid) {
+                    $('[name="' + fieldName + '"]', form).addClass("error");
+
+                    var list = $("<ul />").addClass("error");
+                    $.each(errorList, function (i, val) {
+                        list.append($("<li />").text(val));
+                    });
+
+                    $(resultPanel).append(list);
+                }
+            }
+        }
+    };
+
     var submitForm = function (e) {
         e.preventDefault();
         if (personForm.disabled === true) return;
@@ -9,30 +47,14 @@
         personForm.disabled = true;
         resetResult();
 
-        var data = {};
-        $(personForm).serializeArray().map(function (field) {
-            if (field.value !== "") {
-                if (field.name.includes(".")) {
-                    var split = field.name.split(".");
-                    if (!data[split[0]]) data[split[0]] = {};
+        validateForm();
 
-                    data[split[0]][split[1]] = field.value;
+        //var xhr = new XMLHttpRequest();
+        //xhr.onreadystatechange = displayFormResult;
+        //xhr.open("POST", "api/Person", true);
+        //xhr.setRequestHeader("Content-Type", "application/json");
 
-                } else {
-                    data[field.name] = field.value;
-                }
-            }
-        });
-
-        // Correct any string-types that should be numeric or Boolean (only one in this example)
-        if (data.age === "") data.age = null; else data.age = parseInt(data.age);
-
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = displayFormResult;
-        xhr.open("POST", "api/Person", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-
-        xhr.send(JSON.stringify(data));
+        //xhr.send(JSON.stringify(getFormValues()));
     };
 
     var displayFormResult = function () {
@@ -41,8 +63,6 @@
 
             var validationResponse = JSON.parse(this.responseText);
             if (this.status === 400) {
-                if (console.error) console.error(validationResponse);
-
                 var form = $(personForm);
                 var errorList = [];
 
@@ -66,6 +86,28 @@
                 $(resultPanel).append(result);
             }
         }
+    };
+
+    var getFormValues = function () {
+        var data = {};
+        $(personForm).serializeArray().map(function (field) {
+            if (field.value !== "") {
+                if (field.name.includes(".")) {
+                    var split = field.name.split(".");
+                    if (!data[split[0]]) data[split[0]] = {};
+
+                    data[split[0]][split[1]] = field.value;
+
+                } else {
+                    data[field.name] = field.value;
+                }
+            }
+        });
+
+        // Correct any string-types that should be numeric or Boolean (only one in this example)
+        if (data.age === "") data.age = null; else if (data.age) data.age = parseInt(data.age);
+
+        return data;
     };
 
     var populateFormFromServerRequest = function () {
@@ -100,7 +142,25 @@
         if (resultPanel.hasChildNodes()) resultPanel.removeChild(resultPanel.childNodes[0]);
     };
 
+    var getValidationRules = function () {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = setValidationRules;
+        xhr.open("POST", "api/Person?validation=true", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify({ person: 1 }));
+    };
+
+    var setValidationRules = function () {
+        if (this.readyState === 4) {
+            var validationResponse = JSON.parse(this.responseText);
+            ruleList = validationResponse.validatorList;
+            messageList = validationResponse.errorList;
+        }
+    };
+
     window.addEventListener("load", function () {
+        getValidationRules();
+
         populateForm = document.getElementById("populate-form"); // Button
         personForm = document.getElementById("person-form"); // Form
         resultPanel = document.getElementById("result-panel"); // Div
