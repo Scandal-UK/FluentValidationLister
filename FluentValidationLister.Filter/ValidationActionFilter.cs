@@ -1,12 +1,15 @@
 ﻿namespace FluentValidationLister.Filter
 {
     using System;
+    using System.Buffers;
     using System.Linq;
     using FluentValidation;
     using FluentValidationLister.Filter.Internal;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.AspNetCore.Mvc.Formatters;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
+    using Newtonsoft.Json.Serialization;
 
     public sealed partial class ValidationActionFilter
         : IActionFilter
@@ -46,7 +49,12 @@
                 }
                 else
                 {
-                    context.Result = new OkObjectResult(new ValidationLister(validator).GetValidatorRules());
+                    var rules = new ValidationLister(validator).GetValidatorRules();
+
+                    // todo: determine if user has chosen Pascal case!
+                    rules.ConvertPropertyNamesToCamelCase();
+
+                    context.Result = new OkObjectResult(rules);
                 }
 
                 return;
@@ -60,6 +68,7 @@
             this.ValidateModel(validator, model, context.ModelState);
             if (!context.ModelState.IsValid)
             {
+                // todo: determine if user has chosen Pascal case!
                 bool useJson = context.HttpContext.Request.ContentType.ToLowerInvariant().Contains("json");
 
                 // Force camel-cased keys for JSON responses (if the model was attributed with [FromForm], the keys won't be camel-cased)
