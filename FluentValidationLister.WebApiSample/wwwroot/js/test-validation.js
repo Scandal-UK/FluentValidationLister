@@ -11,50 +11,53 @@
 
         for (var fieldName in ruleList)
         {
+            var valid = true;
             for (var ruleName in ruleList[fieldName])
             {
-                var valid = true;
                 switch (ruleName)
                 {
                     case "required":
-                        console.log(fieldName + ".required");
-                        console.log(data);
                         if (!data[fieldName] || data[fieldName] === "") {
                             valid = false;
                             errorList.push(messageList[fieldName][ruleName]);
                         }
                         break;
                 }
-
-                if (!valid) {
-                    $('[name="' + fieldName + '"]', form).addClass("error");
-
-                    var list = $("<ul />").addClass("error");
-                    $.each(errorList, function (i, val) {
-                        list.append($("<li />").text(val));
-                    });
-
-                    $(resultPanel).append(list);
-                }
             }
+
+            if (valid === false) $('[name="' + fieldName + '"]', form).addClass("error");
         }
+
+        if (errorList.length > 0)
+        {
+            var list = $("<ul />").addClass("error");
+            $.each(errorList, function (i, val) {
+                list.append($("<li />").text(val));
+            });
+
+            $(resultPanel).append(list);
+        }
+
+        return errorList.length === 0;
     };
 
     var submitForm = function (e) {
         e.preventDefault();
-        if (personForm.disabled === true) return;
 
-        personForm.disabled = true;
+        if (personForm.disabled === true) return;
         resetResult();
 
-        validateForm();
+        if (validateForm() === true)
+        {
+            personForm.disabled = true;
 
-        //var xhr = new XMLHttpRequest();
-        //xhr.onreadystatechange = displayFormResult;
-        //xhr.open("POST", "api/Person", true);
-        //xhr.setRequestHeader("Content-Type", "application/json");
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = displayFormResult;
+            xhr.open("POST", "api/Person", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
 
-        //xhr.send(JSON.stringify(getFormValues()));
+            xhr.send(JSON.stringify(getFormValues()));
+        }
     };
 
     var displayFormResult = function () {
