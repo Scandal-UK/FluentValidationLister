@@ -5,11 +5,10 @@
     using System.Linq;
     using FluentValidation;
     using FluentValidationLister.Filter.Internal;
+    using FluentValidationLister.Filter.Meta;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
-    using Microsoft.AspNetCore.Mvc.Formatters;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
-    using Newtonsoft.Json.Serialization;
 
     public sealed partial class ValidationActionFilter
         : IActionFilter
@@ -40,6 +39,9 @@
                 .GetService(typeof(IValidator<>)
                 .MakeGenericType(GetModelType(model))) as IValidator;
 
+            // todo: Determine if user has chosen Pascal case! Tricky as its different between ASPNETCore 2 & 3
+            bool useJson = context.HttpContext.Request.ContentType.ToLowerInvariant().Contains("json");
+
             // Return validation rules if requested
             if (context.HttpContext.Request.Query.Keys.Any(val => val == "validation"))
             {
@@ -50,9 +52,10 @@
                 else
                 {
                     var rules = new ValidationLister(validator).GetValidatorRules();
-
-                    // todo: determine if user has chosen Pascal case!
-                    rules.ConvertPropertyNamesToCamelCase();
+                    if (useJson)
+                    {
+                        this.ConvertPropertyNamesToCamelCase(rules);
+                    }
 
                     context.Result = new OkObjectResult(rules);
                 }
@@ -68,9 +71,6 @@
             this.ValidateModel(validator, model, context.ModelState);
             if (!context.ModelState.IsValid)
             {
-                // todo: determine if user has chosen Pascal case!
-                bool useJson = context.HttpContext.Request.ContentType.ToLowerInvariant().Contains("json");
-
                 // Force camel-cased keys for JSON responses (if the model was attributed with [FromForm], the keys won't be camel-cased)
                 var modelState = context.ModelState.ToDictionary(
                     p => useJson ? p.Key.ToCamelCase() : p.Key,
@@ -108,6 +108,22 @@
                     Detail = "Model validation error",
                 });
             }
+        }
+
+        private void ConvertPropertyNamesToCamelCase(ValidatorRules validatorRules)
+        {
+            // Workaround as System.Text.Json in ASP.NET 3 cannot serialise property keys.
+            // Although unnecessary for ASP.NET Core 2.2, it's too expensive to check!
+            var newValidatorList = new SerialisableDictionary<string, SerialisableDictionary<string, object>>();
+            foreach (var item in validatorRules.ValidatorList)
+                newValidatorList.Add(item.Key.ToCamelCase(), validatorRules.ValidatorList[item.Key]);
+
+            var newErrorList = new SerialisableDictionary<string, SerialisableDictionary<string, string>>();
+            foreach (var item in validatorRules.ErrorList)
+                newErrorList.Add(item.Key.ToCamelCase(), validatorRules.ErrorList[item.Key]);
+
+            validatorRules.ValidatorList = newValidatorList;
+            validatorRules.ErrorList = newErrorList;
         }
 
         private void ValidateModel(IValidator validator, object model, ModelStateDictionary modelState)
