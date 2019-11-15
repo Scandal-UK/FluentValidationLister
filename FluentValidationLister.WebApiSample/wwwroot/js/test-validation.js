@@ -81,9 +81,7 @@
 
         personForm.prop("disabled", true);
 
-        $.post("api/Person", JSON.stringify(getFormValues(true)), function (data) {
-            validationList = data;
-        })
+        $.post("api/Person", JSON.stringify(getFormValues(true)))
             .always(function () {
                 personForm.prop("disabled", false);
             })
