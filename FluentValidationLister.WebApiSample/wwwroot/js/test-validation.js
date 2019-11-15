@@ -1,6 +1,6 @@
 ﻿(function (window, document, $) {
     // Checkbox, Button, Form, Div
-    var performClientsideValidation, populateForm, personForm, resultPanel;
+    var populateForm, personForm, resultPanel;
 
     // Response from FluentValidationLister
     var validationList;
@@ -8,7 +8,6 @@
     // todo: rewrite script for jQuery
     var validateForm = function () {
         var data = getFormValues();
-        var form = $(personForm);
         var errorList = [];
 
         $.each(data, function (fieldName, fieldValue) {
@@ -25,7 +24,7 @@
                 }
             }
 
-            if (valid === false) $('[name="' + fieldName + '"]', form).addClass("error");
+            if (valid === false) $('[name="' + fieldName + '"]', personForm).addClass("error");
         });
 
         if (errorList.length > 0)
@@ -46,36 +45,32 @@
     var submitForm = function (e) {
         e.preventDefault();
 
-        if (personForm.disabled === true) return;
+        if (personForm.prop("disabled") === true) return;
         resetResult();
 
-        if ($(performClientsideValidation).is(":checked")) {
+        if ($("#performClientsideValidation").is(":checked")) {
             if (validateForm() === false) return;
         }
 
-        personForm.disabled = true;
+        personForm.prop("disabled", true);
 
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = displayFormResult;
-        xhr.open("POST", "api/Person", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-
-        xhr.send(JSON.stringify(getFormValues(true)));
-    };
-
-    var displayFormResult = function () {
-        if (this.readyState === 4) {
-            personForm.disabled = false;
-
-            var validationResponse = JSON.parse(this.responseText);
-            if (this.status === 400) {
+        $.post("api/Person", JSON.stringify(getFormValues(true)), function (data) {
+            validationList = data;
+        })
+            .always(function () {
+                personForm.prop("disabled", false);
+            })
+            .done(function (data) {
+                $(resultPanel).append($("<p />").text(data.message));
+            })
+            .fail(function (data) {
                 if (console.error) console.error("Server-side validation failed!");
 
-                var form = $(personForm);
+                var validationResponse = data.responseJSON;
                 var errorList = [];
 
                 for (var key in validationResponse.errors) {
-                    $('[name="' + key + '"]', form).addClass("error");
+                    $('[name="' + key + '"]', personForm).addClass("error");
                     errorList.push(validationResponse.errors[key]);
                 }
 
@@ -85,20 +80,12 @@
                 });
 
                 $(resultPanel).append(list);
-
-            } else {
-                var result = $("<p />");
-                if (this.status > 400) result.addClass("error");
-                result.text(validationResponse.message);
-
-                $(resultPanel).append(result);
-            }
-        }
+            });
     };
 
     var getFormValues = function (splitField) {
         var data = {};
-        $(personForm).serializeArray().map(function (field) {
+        personForm.serializeArray().map(function (field) {
             if (splitField === true && field.name.includes(".")) {
                 var split = field.name.split(".");
                 if (!data[split[0]]) data[split[0]] = {};
@@ -119,27 +106,17 @@
     var populateFormFromServer = function () {
         resetResult();
 
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var form = $(personForm);
-                var json = JSON.parse(this.responseText);
-
-                $.each(json, function (key, val) {
-                    if (key === "address") {
-                        $.each(val, function (addrKey, addrVal) {
-                            $('[name="address.' + addrKey + '"]', form).val(addrVal);
-                        });
-                    } else {
-                        $('[name="' + key + '"]', form).val(val);
-                    }
-                });
-            }
-        };
-
-        xhr.open("GET", "api/Person/1", true);
-        xhr.setRequestHeader("Accepts", "application/json");
-        xhr.send();
+        $.getJSON("api/Person/1", function (json) {
+            $.each(json, function (key, val) {
+                if (key === "address") {
+                    $.each(val, function (addrKey, addrVal) {
+                        $('[name="address.' + addrKey + '"]', personForm).val(addrVal);
+                    });
+                } else {
+                    $('[name="' + key + '"]', personForm).val(val);
+                }
+            });
+        });
     };
 
     var resetResult = function () {
@@ -148,26 +125,28 @@
     };
 
     var getValidationRules = function () {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (this.readyState === 4) validationList = JSON.parse(this.responseText);
-        };
-
-        xhr.open("POST", "api/Person?validation=true", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(JSON.stringify({ person: 1 }));
+        $.post("api/Person?validation=true", "{}", function (data) {
+            validationList = data;
+        });
     };
 
     window.addEventListener("load", function () {
+        $.ajaxSetup({
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            type: "GET",
+            data: {},
+            cache: false
+        });
+
         getValidationRules();
 
-        performClientsideValidation = document.getElementById("performClientsideValidation"); // Checkbox
         populateForm = document.getElementById("populateFormButton"); // Button
-        personForm = document.getElementById("personForm"); // Form
         resultPanel = document.getElementById("resultPanel"); // Div
 
+        personForm = $("#personForm"); // Form
+        personForm.submit(submitForm);
+
         populateForm.addEventListener("click", populateFormFromServer);
-        personForm.addEventListener("submit", submitForm);
-        personForm.addEventListener("reset", resetResult);
     });
 })(window, document, $);
