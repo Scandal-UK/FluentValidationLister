@@ -1,4 +1,5 @@
 # FluentValidationLister
+#### v1.0.4
 
 This project adds an ActionFilter which will describe the rules and messages defined in a particular FluentValidation validator. It has been designed using FluentValidation v8.5.1.
 
@@ -22,7 +23,7 @@ However, _sometimes_ you may not be using MVC - you might be using an SPA applic
 
 You still need to implement this in your front-end validation - this just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by the FluentValidation library.
 
-If there's any interest in this project/package I will be adding implementation examples (please contribute if you're able - particularly if you have an implementation with a specific front-end form library/generator).
+I have provided a working demonstration using jQuery, but it is very basic and will require some extension for your own use!
 
 ## Installation
 
@@ -131,7 +132,7 @@ The included ASP.NET Core 3 Web API Sample application is designed to be a minim
 
 Aside from the default Visual Studio template; it includes one controller, two models and two validators. The startup class includes the minimum setup detailed above.
 
-The application runs a very basic (and fully-commented) snippet of JavaScript to return and display the validation metadata for an endpoint.
+The first screen runs a very basic (and fully-commented) snippet of JavaScript to return and display the validation metadata for an endpoint. The second screen shows an implementation with a web form, this time using the jQuery library.
 
 The validators in the project demonstrate these features of the filter;
 
@@ -141,5 +142,3 @@ The validators in the project demonstrate these features of the filter;
 - Custom error messages are returned where defined _(e.g. Address.County)_
 
 > The sample application is designed for you to download and "prototype" or test this package. Feel free to contribute through pull-requests on GitHub!
-
-There is a second page and JavaScript which tests the actual validation. It might be useful to test custom validators or other customisations.
