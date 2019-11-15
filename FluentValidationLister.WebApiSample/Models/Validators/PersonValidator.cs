@@ -14,6 +14,7 @@
                 .NotEmpty();
 
             this.RuleFor(p => p.Age)
+                .NotNull()
                 .InclusiveBetween(16, 60);
 
             this.RuleFor(p => p.Email)
@@ -21,6 +22,8 @@
                 .EmailAddress(EmailValidationMode.AspNetCoreCompatible);
 
             this.RuleFor(p => p.Address)
+                .NotNull()
+                .WithMessage($"'{nameof(Address)}' is required.")
                 .SetValidator(new AddressValidator());
         }
     }

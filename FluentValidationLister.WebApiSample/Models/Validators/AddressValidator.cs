@@ -15,12 +15,13 @@
                 .MaximumLength(20)
                 .NotEmpty();
 
+            this.RuleFor(a => a.County)
+                .NotEmpty()
+                .WithMessage("County/province must be specified.");
+
             this.RuleFor(a => a.Postcode)
                 .NotEmpty()
                 .PostcodeUk();
-
-            this.RuleFor(a => a.Country)
-                .SetValidator(new CountryValidator());
         }
     }
 }

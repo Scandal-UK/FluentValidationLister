@@ -1,5 +1,6 @@
 ﻿namespace FluentValidationLister.Filter.Internal
 {
+    using System.Collections.Generic;
     using System.Globalization;
 
     /// <summary>
@@ -19,6 +20,23 @@
                 return input;
             }
 
+            if (input.Contains("."))
+            {
+                var parts = input.Split('.');
+                var camelCasedParts = new List<string>();
+                foreach (var part in parts)
+                {
+                    camelCasedParts.Add(StringToCamelCase(part));
+                }
+
+                return string.Join(".", camelCasedParts);
+            }
+
+            return StringToCamelCase(input);
+        }
+
+        private static string StringToCamelCase(string input)
+        {
             var chars = input.ToCharArray();
 
             for (var i = 0; i < chars.Length; i++)

@@ -24,8 +24,7 @@ namespace FluentValidationLister.WebApiSample
             services
                 .AddFluentValidationLister()
                 .AddTransient<IValidator<Person>, PersonValidator>()
-                .AddTransient<IValidator<Address>, AddressValidator>()
-                .AddTransient<IValidator<Country>, CountryValidator>();
+                .AddTransient<IValidator<Address>, AddressValidator>();
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)

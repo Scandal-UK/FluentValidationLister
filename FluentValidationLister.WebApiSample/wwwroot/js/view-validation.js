@@ -9,7 +9,7 @@
 
                 // Format the response in a code element
                 var code = document.createElement("code");
-                if (this.getResponseHeader('content-type') === "text/xml; charset=utf-8")
+                if (this.getResponseHeader("content-type") === "text/xml; charset=utf-8")
                 {
                     code.classList.add("language-xml");
                     code.appendChild(document.createTextNode(vkbeautify.xml(this.responseText)));

@@ -52,13 +52,13 @@
                 Surname = "Sample",
                 Forename = "Bob",
                 Email = "bob.sample@email.com",
+                Age = 21,
                 Address = new Address
                 {
                     Line1 = "123 Sample Street",
                     Town = "Sample Town",
                     County = "Sampleshire",
                     Postcode = "SA1 4PL",
-                    Country = new Country { Name = "England" },
                 },
             });
         }
