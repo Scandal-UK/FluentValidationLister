@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <Authors>Dan Ware</Authors>
         <Product>FluentValidationLister</Product>
-        <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralized</PackageTags>
+        <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralized;dynamic</PackageTags>
         <Description>A global action filter that provides serialised meta-data for a FluentValidation validator for any given endpoint. This allows for centralised validation on both client and server.</Description>
         <RepositoryUrl>https://github.com/scandal-uk/fluentvalidationlister</RepositoryUrl>
     </PropertyGroup>
@@ -12,10 +12,11 @@
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>Updated NuGet references</PackageReleaseNotes>
+        <PackageReleaseNotes>- Removed dependency on FluentValidation.AspNetCore. 
+- Fixed camel-case issues with ASP.NET 3.x.</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2019</Copyright>
         <PackageProjectUrl>https://github.com/scandal-uk/fluentvalidationlister</PackageProjectUrl>
