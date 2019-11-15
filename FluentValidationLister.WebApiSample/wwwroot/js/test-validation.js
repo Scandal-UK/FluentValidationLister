@@ -9,23 +9,24 @@
         var form = $(personForm);
         var errorList = [];
 
+        console.log(data);
         for (var fieldName in ruleList)
         {
-            var valid = true;
-            for (var ruleName in ruleList[fieldName])
-            {
-                switch (ruleName)
-                {
-                    case "required":
-                        if (!data[fieldName] || data[fieldName] === "") {
-                            valid = false;
-                            errorList.push(messageList[fieldName][ruleName]);
-                        }
-                        break;
+            if (fieldName !== "address") {
+                var valid = true;
+                for (var ruleName in ruleList[fieldName]) {
+                    switch (ruleName) {
+                        case "required":
+                            if (!data[fieldName] || data[fieldName] === "") {
+                                valid = false;
+                                errorList.push(messageList[fieldName][ruleName]);
+                            }
+                            break;
+                    }
                 }
-            }
 
-            if (valid === false) $('[name="' + fieldName + '"]', form).addClass("error");
+                if (valid === false) $('[name="' + fieldName + '"]', form).addClass("error");
+            }
         }
 
         if (errorList.length > 0)
@@ -56,7 +57,7 @@
             xhr.open("POST", "api/Person", true);
             xhr.setRequestHeader("Content-Type", "application/json");
 
-            xhr.send(JSON.stringify(getFormValues()));
+            xhr.send(JSON.stringify(getFormValues(true)));
         }
     };
 
@@ -91,11 +92,11 @@
         }
     };
 
-    var getFormValues = function () {
+    var getFormValues = function (splitField) {
         var data = {};
         $(personForm).serializeArray().map(function (field) {
             if (field.value !== "") {
-                if (field.name.includes(".")) {
+                if (splitField === true && field.name.includes(".")) {
                     var split = field.name.split(".");
                     if (!data[split[0]]) data[split[0]] = {};
 
