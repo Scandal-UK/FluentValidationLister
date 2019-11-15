@@ -1,11 +1,19 @@
-﻿(function (window, document, $) {
-    // Checkbox, Button, Form, Div
-    var populateForm, personForm, resultPanel;
+﻿$(function () {
+    $.ajaxSetup({
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: {},
+        cache: false
+    });
 
-    // Response from FluentValidationLister
     var validationList;
+    $.post("api/Person?validation=true", "{}", function (data) {
+        validationList = data;
+    });
 
-    // todo: rewrite script for jQuery
+    var personForm = $("#personForm"); // Form
+    var resultPanel = $("#resultPanel"); // Div
+
     var validateForm = function () {
         var data = getFormValues();
         var errorList = [];
@@ -27,8 +35,7 @@
             if (valid === false) $('[name="' + fieldName + '"]', personForm).addClass("error");
         });
 
-        if (errorList.length > 0)
-        {
+        if (errorList.length > 0) {
             if (console.error) console.error("Clientside validation failed!");
 
             var list = $("<ul />").addClass("error");
@@ -36,51 +43,10 @@
                 list.append($("<li />").text(val));
             });
 
-            $(resultPanel).append(list);
+            resultPanel.append(list);
         }
 
         return errorList.length === 0;
-    };
-
-    var submitForm = function (e) {
-        e.preventDefault();
-
-        if (personForm.prop("disabled") === true) return;
-        resetResult();
-
-        if ($("#performClientsideValidation").is(":checked")) {
-            if (validateForm() === false) return;
-        }
-
-        personForm.prop("disabled", true);
-
-        $.post("api/Person", JSON.stringify(getFormValues(true)), function (data) {
-            validationList = data;
-        })
-            .always(function () {
-                personForm.prop("disabled", false);
-            })
-            .done(function (data) {
-                $(resultPanel).append($("<p />").text(data.message));
-            })
-            .fail(function (data) {
-                if (console.error) console.error("Server-side validation failed!");
-
-                var validationResponse = data.responseJSON;
-                var errorList = [];
-
-                for (var key in validationResponse.errors) {
-                    $('[name="' + key + '"]', personForm).addClass("error");
-                    errorList.push(validationResponse.errors[key]);
-                }
-
-                var list = $("<ul />").addClass("error");
-                $.each(errorList, function (i, val) {
-                    list.append($("<li />").text(val));
-                });
-
-                $(resultPanel).append(list);
-            });
     };
 
     var getFormValues = function (splitField) {
@@ -103,7 +69,48 @@
         return data;
     };
 
-    var populateFormFromServer = function () {
+    $("#personForm").submit(function (e) {
+        e.preventDefault();
+
+        if (personForm.prop("disabled") === true) return;
+        resetResult();
+
+        if ($("#performClientsideValidation").is(":checked")) {
+            if (validateForm() === false) return;
+        }
+
+        personForm.prop("disabled", true);
+
+        $.post("api/Person", JSON.stringify(getFormValues(true)), function (data) {
+            validationList = data;
+        })
+            .always(function () {
+                personForm.prop("disabled", false);
+            })
+            .done(function (data) {
+                resultPanel.append($("<p />").text(data.message));
+            })
+            .fail(function (data) {
+                if (console.error) console.error("Server-side validation failed!");
+
+                var validationResponse = data.responseJSON;
+                var errorList = [];
+
+                for (var key in validationResponse.errors) {
+                    $('[name="' + key + '"]', personForm).addClass("error");
+                    errorList.push(validationResponse.errors[key]);
+                }
+
+                var list = $("<ul />").addClass("error");
+                $.each(errorList, function (i, val) {
+                    list.append($("<li />").text(val));
+                });
+
+                resultPanel.append(list);
+            });
+    });
+
+    $("#populateFormButton").click(function () {
         resetResult();
 
         $.getJSON("api/Person/1", function (json) {
@@ -117,36 +124,10 @@
                 }
             });
         });
-    };
+    });
 
     var resetResult = function () {
         $(".error").removeClass("error");
-        if (resultPanel.hasChildNodes()) resultPanel.removeChild(resultPanel.childNodes[0]);
+        resultPanel.empty();
     };
-
-    var getValidationRules = function () {
-        $.post("api/Person?validation=true", "{}", function (data) {
-            validationList = data;
-        });
-    };
-
-    window.addEventListener("load", function () {
-        $.ajaxSetup({
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            type: "GET",
-            data: {},
-            cache: false
-        });
-
-        getValidationRules();
-
-        populateForm = document.getElementById("populateFormButton"); // Button
-        resultPanel = document.getElementById("resultPanel"); // Div
-
-        personForm = $("#personForm"); // Form
-        personForm.submit(submitForm);
-
-        populateForm.addEventListener("click", populateFormFromServer);
-    });
-})(window, document, $);
+});
