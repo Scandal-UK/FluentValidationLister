@@ -6,13 +6,11 @@
         cache: false
     });
 
-    var validationList;
-    $.post("api/Person?validation=true", "{}", function (data) {
-        validationList = data;
-    });
-
     var personForm = $("#personForm"); // Form
     var resultPanel = $("#resultPanel"); // Div
+
+    var validationList;
+    $.post("api/Person?validation=true", "{}", data => validationList = data);
 
     var validateForm = function () {
         var data = getFormValues();
@@ -39,9 +37,7 @@
             if (console.error) console.error("Clientside validation failed!");
 
             var list = $("<ul />").addClass("error");
-            $.each(errorList, function (i, val) {
-                list.append($("<li />").text(val));
-            });
+            $.each(errorList, (i, val) => list.append($("<li />").text(val)));
 
             resultPanel.append(list);
         }
@@ -89,12 +85,8 @@
             personForm.prop("disabled", true);
 
             $.post("api/Person", JSON.stringify(getFormValues(true)))
-                .always(function () {
-                    personForm.prop("disabled", false);
-                })
-                .done(function (data) {
-                    resultPanel.append($("<p />").text(data.message));
-                })
+                .always(() => personForm.prop("disabled", false))
+                .done(data => resultPanel.append($("<p />").text(data.message)))
                 .fail(function (data) {
                     if (console.error) console.error("Server-side validation failed!");
 
@@ -107,9 +99,7 @@
                     }
 
                     var list = $("<ul />").addClass("error");
-                    $.each(errorList, function (i, val) {
-                        list.append($("<li />").text(val));
-                    });
+                    $.each(errorList, (i, val) => list.append($("<li />").text(val)));
 
                     resultPanel.append(list);
                 });
@@ -121,9 +111,7 @@
         $.getJSON("api/Person/1", function (json) {
             $.each(json, function (key, val) {
                 if (key === "address") {
-                    $.each(val, function (addrKey, addrVal) {
-                        $('[name="address.' + addrKey + '"]', personForm).val(addrVal);
-                    });
+                    $.each(val, (addrKey, addrVal) => $('[name="address.' + addrKey + '"]', personForm).val(addrVal));
                 } else {
                     $('[name="' + key + '"]', personForm).val(val);
                 }
