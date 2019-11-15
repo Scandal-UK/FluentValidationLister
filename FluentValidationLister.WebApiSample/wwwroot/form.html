@@ -15,9 +15,13 @@
     <h2>Test validation demo</h2>
     <p><strong>NOTE:</strong> This form implements clientside validation for required fields (server-side validation is presented the same way).</p>
     <p><a href="index.html">View validation</a> | <a href="#" onclick="return false" disabled>Test validation</a></p>
-    <p><button id="populate-form">Populate form</button></p>
-    <div id="result-panel"></div>
-    <form id="person-form">
+    <p>
+      <input id="performClientsideValidation" type="checkbox" checked />
+      <label for="performClientsideValidation">Perform clientside validation?</label>
+    </p>
+    <p><button id="populateFormButton">Populate form</button></p>
+    <div id="resultPanel"></div>
+    <form id="personForm">
         <div>
             <label for="surname">Surname</label>
             <div><input name="surname" type="text" /></div>
