@@ -17,20 +17,74 @@
         var errorList = [];
 
         $.each(data, function (fieldName, fieldValue) {
-            var valid = true;
+            var fieldIsValid = true;
             for (var ruleName in validationList.validatorList[fieldName]) {
+                var fieldPassesRule = true;
+                var fieldHasValue = fieldValue !== null && fieldValue !== "";
                 switch (ruleName) {
                     case "required":
-                        if (!fieldValue || fieldValue === "") {
-                            valid = false;
-                            errorList.push(validationList.errorList[fieldName][ruleName]);
+                        fieldPassesRule = fieldHasValue;
+                        break;
+                    case "regex":
+                        if (fieldHasValue === true) {
+                            var escapedExpression = validationList.validatorList[fieldName][ruleName]
+                                .replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+                            var regex = new RegExp(escapedExpression, "g");
+                            fieldPassesRule = regex.test(fieldValue);
                         }
                         break;
-                    // todo: default to AJAX validation for any unrecognised ruleName
+                    case "lessThan":
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue < validationList.validatorList[fieldName][ruleName];
+                        break;
+                    case "lessThanOrEqualTo":
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue <= validationList.validatorList[fieldName][ruleName];
+                        break;
+                    case "greaterThan":
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue > validationList.validatorList[fieldName][ruleName];
+                        break;
+                    case "greaterThanOrEqualTo":
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue >= validationList.validatorList[fieldName][ruleName];
+                        break;
+                    case "minLength":
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue.length >= parseInt(validationList.validatorList[fieldName][ruleName]);
+                        break;
+                    case "maxLength":
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue.length <= parseInt(validationList.validatorList[fieldName][ruleName]);
+                        break;
+                    case "exactLength":
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue.length === parseInt(validationList.validatorList[fieldName][ruleName]);
+                        break;
+                    case "length":
+                        if (fieldHasValue === true) {
+                            fieldPassesRule =
+                                fieldValue.length >= validationList.validatorList[fieldName][ruleName].min &&
+                                fieldValue.length <= validationList.validatorList[fieldName][ruleName].max;
+                        }
+                        break;
+                    case "range":
+                        if (fieldHasValue === true) {
+                            fieldPassesRule =
+                                fieldValue >= validationList.validatorList[fieldName][ruleName].from &&
+                                fieldValue <= validationList.validatorList[fieldName][ruleName].to;
+                        }
+                        break;
+                    case "exclusiveRange":
+                        if (fieldHasValue === true) {
+                            fieldPassesRule =
+                                fieldValue < validationList.validatorList[fieldName][ruleName].from &&
+                                fieldValue > validationList.validatorList[fieldName][ruleName].to;
+                        }
+                        break;
+                }
+
+                if (fieldPassesRule === false) {
+                    fieldIsValid = false;
+                    errorList.push(validationList.errorList[fieldName][ruleName]);
                 }
             }
 
-            if (valid === false) $('[name="' + fieldName + '"]', personForm).addClass("error");
+            if (fieldIsValid === false) $('[name="' + fieldName + '"]', personForm).addClass("error");
         });
 
         if (errorList.length > 0) {
@@ -74,8 +128,8 @@
         .on("reset", resetResult)
         .on("submit", function (e) {
             e.preventDefault();
-
             if (personForm.prop("disabled") === true) return;
+
             resetResult();
 
             if ($("#performClientsideValidation").is(":checked")) {
@@ -95,7 +149,7 @@
 
                     for (var key in validationResponse.errors) {
                         $('[name="' + key + '"]', personForm).addClass("error");
-                        errorList.push(validationResponse.errors[key]);
+                        $.each(validationResponse.errors[key], (i, val) => errorList.push(val));
                     }
 
                     var list = $("<ul />").addClass("error");
