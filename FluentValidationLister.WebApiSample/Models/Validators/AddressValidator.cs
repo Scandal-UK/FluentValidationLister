@@ -20,6 +20,7 @@
                 .WithMessage("County/province must be specified.");
 
             this.RuleFor(a => a.Postcode)
+                .Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
                 .PostcodeUk();
         }
