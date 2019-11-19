@@ -137,17 +137,10 @@
     };
 
     // Populate form fields with data from the server
-    var populateFormFromJson = function (json, prefix) {
+    var populateFormFromJson = function (json, prefix = "") {
         $.each(json, function (key, val) {
-            if (typeof val === "object") {
-                populateFormFromJson(val, key);
-            } else {
-                if (typeof prefix === "undefined") {
-                    $('[name="' + key + '"]', personForm).val(val);
-                } else {
-                    $('[name="' + prefix + '.' + key + '"]', personForm).val(val);
-                }
-            }
+            if (typeof val === "object") populateFormFromJson(val, key + ".");
+            else $('[name="' + prefix + key + '"]', personForm).val(val);
         });
     };
 
