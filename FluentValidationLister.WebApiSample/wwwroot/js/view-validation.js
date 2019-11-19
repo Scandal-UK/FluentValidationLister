@@ -9,13 +9,11 @@
 
                 // Format the response in a code element
                 var code = document.createElement("code");
-                if (this.getResponseHeader("content-type") === "text/xml; charset=utf-8")
-                {
+                if (this.getResponseHeader("content-type") === "text/xml; charset=utf-8") {
                     code.classList.add("language-xml");
                     code.appendChild(document.createTextNode(vkbeautify.xml(this.responseText)));
                 }
-                else
-                {
+                else {
                     var validationResponse = JSON.parse(this.responseText);
                     code.classList.add("language-json"); // prismjs?
                     code.innerHTML = JSON.stringify(validationResponse, null, 2);
@@ -28,10 +26,10 @@
 
             } else {
                 // Unexpected response status; show the error in the console
-                console.error(this.responseText);
+                if (console.error) console.error(this.responseText);
 
                 // Display the error as red in the result element
-                var error = document.createElement("span");
+                var error = document.createElement("pre");
                 error.classList.add("error");
                 error.innerHTML = this.responseText;
                 resultPanel.appendChild(error);

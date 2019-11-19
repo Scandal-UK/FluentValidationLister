@@ -1,4 +1,8 @@
 ﻿$(function () {
+    var personForm = $("#personForm"); // Form
+    var resultPanel = $("#resultPanel"); // Div
+
+    // AJAX settings
     $.ajaxSetup({
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -6,12 +10,21 @@
         cache: false
     });
 
-    var personForm = $("#personForm"); // Form
-    var resultPanel = $("#resultPanel"); // Div
+    // AJAX error handler
+    $(document).ajaxError(function (e, xhr) {
+        if (xhr.status > 400) {
+            if (console.error) console.error(xhr.responseText);
 
+            var container = $("<pre />").text(xhr.responseText).addClass("error");
+            resultPanel.append($("<p />").append(container));
+        }
+    });
+
+    // Get the validation meta-data for the Person form
     var validationList;
     $.post("api/Person?validation=true", "{}", data => validationList = data);
 
+    // Validate form fields against validation meta-data
     var validateForm = function () {
         var data = getFormValues();
         var errorList = [];
@@ -27,21 +40,18 @@
                         break;
                     case "regex":
                         if (fieldHasValue === true) {
-                            var escapedExpression = validationList.validatorList[fieldName][ruleName]
-                                .replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-
-                            var regex = new RegExp(escapedExpression, "g");
+                            var regex = new RegExp(validationList.validatorList[fieldName][ruleName], "g");
                             fieldPassesRule = regex.test(fieldValue);
                         }
                         break;
                     case "lessThan":
                         if (fieldHasValue === true) fieldPassesRule = fieldValue < validationList.validatorList[fieldName][ruleName];
                         break;
-                    case "lessThanOrEqualTo":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue <= validationList.validatorList[fieldName][ruleName];
-                        break;
                     case "greaterThan":
                         if (fieldHasValue === true) fieldPassesRule = fieldValue > validationList.validatorList[fieldName][ruleName];
+                        break;
+                    case "lessThanOrEqualTo":
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue <= validationList.validatorList[fieldName][ruleName];
                         break;
                     case "greaterThanOrEqualTo":
                         if (fieldHasValue === true) fieldPassesRule = fieldValue >= validationList.validatorList[fieldName][ruleName];
@@ -128,8 +138,8 @@
         .on("reset", resetResult)
         .on("submit", function (e) {
             e.preventDefault();
-            if (personForm.prop("disabled") === true) return;
 
+            if (personForm.prop("disabled") === true) return;
             resetResult();
 
             if ($("#performClientsideValidation").is(":checked")) {
@@ -142,30 +152,34 @@
                 .always(() => personForm.prop("disabled", false))
                 .done(data => resultPanel.append($("<p />").text(data.message)))
                 .fail(function (data) {
-                    if (console.error) console.error("Server-side validation failed!");
+                    if (data.status === 400) {
+                        // Validation failed - display the errors
+                        if (console.error) console.error("Server-side validation failed!");
 
-                    var validationResponse = data.responseJSON;
-                    var errorList = [];
+                        var validationResponse = data.responseJSON;
+                        var errorList = [];
 
-                    for (var key in validationResponse.errors) {
-                        $('[name="' + key + '"]', personForm).addClass("error");
-                        $.each(validationResponse.errors[key], (i, val) => errorList.push(val));
+                        for (var key in validationResponse.errors) {
+                            $('[name="' + key + '"]', personForm).addClass("error");
+                            $.each(validationResponse.errors[key], (i, val) => errorList.push(val));
+                        }
+
+                        var list = $("<ul />").addClass("error");
+                        $.each(errorList, (i, val) => list.append($("<li />").text(val)));
+
+                        resultPanel.append(list);
                     }
-
-                    var list = $("<ul />").addClass("error");
-                    $.each(errorList, (i, val) => list.append($("<li />").text(val)));
-
-                    resultPanel.append(list);
                 });
         });
 
     $("#populateFormButton").click(function () {
         resetResult();
 
+        // Retrieve a record from the API and populate the form
         $.getJSON("api/Person/1", function (json) {
             $.each(json, function (key, val) {
-                if (key === "address") {
-                    $.each(val, (addrKey, addrVal) => $('[name="address.' + addrKey + '"]', personForm).val(addrVal));
+                if (typeof val === "object") {
+                    $.each(val, (subKey, subVal) => $('[name="' + key + '.' + subKey + '"]', personForm).val(subVal));
                 } else {
                     $('[name="' + key + '"]', personForm).val(val);
                 }
