@@ -134,6 +134,26 @@
         resultPanel.empty();
     };
 
+    var populateFormFromJson = function (json, prefix) {
+        $.each(json, function (key, val) {
+            if (typeof val === "object") {
+                populateFormFromJson(val, key);
+            } else {
+                if (typeof prefix === "undefined") {
+                    $('[name="' + key + '"]', personForm).val(val);
+                } else {
+                    $('[name="' + prefix + '.' + key + '"]', personForm).val(val);
+                }
+            }
+        });
+    };
+
+    $("#populateFormButton").click(function () {
+        resetResult();
+
+        $.getJSON("api/Person/1", (json) => populateFormFromJson(json));
+    });
+
     $("#personForm")
         .on("reset", resetResult)
         .on("submit", function (e) {
@@ -171,19 +191,4 @@
                     }
                 });
         });
-
-    $("#populateFormButton").click(function () {
-        resetResult();
-
-        // Retrieve a record from the API and populate the form
-        $.getJSON("api/Person/1", function (json) {
-            $.each(json, function (key, val) {
-                if (typeof val === "object") {
-                    $.each(val, (subKey, subVal) => $('[name="' + key + '.' + subKey + '"]', personForm).val(subVal));
-                } else {
-                    $('[name="' + key + '"]', personForm).val(val);
-                }
-            });
-        });
-    });
 });
