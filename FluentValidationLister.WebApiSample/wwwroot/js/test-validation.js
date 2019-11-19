@@ -109,6 +109,7 @@
         return errorList.length === 0;
     };
 
+    // Format the form values into an object
     var getFormValues = function (splitField) {
         var data = {};
         personForm.serializeArray().map(function (field) {
@@ -129,11 +130,13 @@
         return data;
     };
 
+    // Clear any previous error/success result
     var resetResult = function () {
         $(".error").removeClass("error");
         resultPanel.empty();
     };
 
+    // Populate form fields with data from the server
     var populateFormFromJson = function (json, prefix) {
         $.each(json, function (key, val) {
             if (typeof val === "object") {
@@ -148,12 +151,14 @@
         });
     };
 
+    // Button click event
     $("#populateFormButton").click(function () {
         resetResult();
 
         $.getJSON("api/Person/1", (json) => populateFormFromJson(json));
     });
 
+    // Form submission event
     $("#personForm")
         .on("reset", resetResult)
         .on("submit", function (e) {
