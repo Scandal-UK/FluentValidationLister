@@ -1,17 +1,19 @@
-﻿(function (window, document, vkbeautify) {
-    var contentTypeSelector, getValidation, resultPanel;
+﻿(function (window, document) {
+    let contentTypeSelector: HTMLSelectElement;
+    let getValidation: HTMLButtonElement;
+    let resultPanel: HTMLDivElement;
 
-    var displayValidationResponse = function () {
+    const displayValidationResponse = function () {
         if (this.readyState === 4) {
             getValidation.disabled = false;
 
             if (this.status === 200) {
 
                 // Format the response in a code element
-                var code = document.createElement("code");
+                const code = document.createElement("code");
                 if (this.getResponseHeader("content-type") === "text/xml; charset=utf-8") {
                     code.classList.add("language-xml");
-                    code.appendChild(document.createTextNode(vkbeautify.xml(this.responseText)));
+                    code.appendChild(document.createTextNode(this.responseText));
                 }
                 else {
                     var validationResponse = JSON.parse(this.responseText);
@@ -20,7 +22,7 @@
                 }
 
                 // Display the code block in the result element
-                var output = document.createElement("pre");
+                const output = document.createElement("pre");
                 output.appendChild(code);
                 resultPanel.appendChild(output);
 
@@ -29,7 +31,7 @@
                 if (console.error) console.error(this.responseText);
 
                 // Display the error as red in the result element
-                var error = document.createElement("pre");
+                const error = document.createElement("pre");
                 error.classList.add("error");
                 error.innerHTML = this.responseText;
                 resultPanel.appendChild(error);
@@ -39,9 +41,9 @@
 
     window.addEventListener("load", function () {
         // Define the elements that we're interested in manipulating
-        contentTypeSelector = document.getElementById("content-type-selector");
-        getValidation = document.getElementById("get-validation");
-        resultPanel = document.getElementById("result-panel");
+        contentTypeSelector = document.getElementById("contentTypeSelector") as HTMLSelectElement;
+        getValidation = document.getElementById("getValidation") as HTMLButtonElement;
+        resultPanel = document.getElementById("resultPanel") as HTMLDivElement;
 
         // Define a button-click event listener
         getValidation.addEventListener("click", function () {
@@ -51,7 +53,7 @@
             }
 
             // Assign the callback (which displays validation information)
-            var xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest();
             xhr.onreadystatechange = displayValidationResponse;
 
             // Request the validation information for the endpoint "POST:api/Person"
@@ -67,5 +69,4 @@
             }
         });
     });
-})(window, document, vkbeautify);
-
+})(window, document);
