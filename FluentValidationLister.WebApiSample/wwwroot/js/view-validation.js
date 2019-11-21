@@ -59,7 +59,7 @@
 
             if (contentTypeSelector.value === "JSON") {
                 xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.send(JSON.stringify({ person: 1 })); // (any old body; it's ignored anyway)
+                xhr.send("{}"); // (any old body; it's ignored anyway)
             } else {
                 xhr.setRequestHeader("Content-Type", "text/xml");
                 xhr.setRequestHeader("Accept", "text/xml");
