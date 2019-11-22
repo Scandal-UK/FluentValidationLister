@@ -1,6 +1,8 @@
-﻿$(function () {
-    var personForm = $("#personForm"); // Form
-    var resultPanel = $("#resultPanel"); // Div
+﻿import $ = require('jquery');
+
+$(function () {
+    let personForm = $("#personForm"); // Form
+    let resultPanel = $("#resultPanel"); // Div
 
     // AJAX settings
     $.ajaxSetup({
@@ -21,16 +23,16 @@
     });
 
     // Get the validation meta-data for the Person form
-    var validationList;
+    let validationList;
     $.post("api/Person?validation=true", "{}", data => validationList = data);
 
     // Validate form fields against validation meta-data
-    var validateForm = function () {
-        var data = getFormValues();
-        var errorList = [];
+    const validateForm = function () {
+        let data = getFormValues();
+        let errorList = [];
 
         $.each(data, function (fieldName, fieldValue) {
-            var fieldIsValid = true;
+            let fieldIsValid = true;
             for (var ruleName in validationList.validatorList[fieldName]) {
                 var fieldPassesRule = true;
                 var fieldHasValue = fieldValue !== null && fieldValue !== "";
@@ -57,19 +59,19 @@
                         if (fieldHasValue === true) fieldPassesRule = fieldValue >= validationList.validatorList[fieldName][ruleName];
                         break;
                     case "minLength":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue.length >= parseInt(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length >= parseInt(validationList.validatorList[fieldName][ruleName]);
                         break;
                     case "maxLength":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue.length <= parseInt(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length <= parseInt(validationList.validatorList[fieldName][ruleName]);
                         break;
                     case "exactLength":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue.length === parseInt(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length === parseInt(validationList.validatorList[fieldName][ruleName]);
                         break;
                     case "length":
                         if (fieldHasValue === true) {
                             fieldPassesRule =
-                                fieldValue.length >= validationList.validatorList[fieldName][ruleName].min &&
-                                fieldValue.length <= validationList.validatorList[fieldName][ruleName].max;
+                                (fieldValue as string).length >= validationList.validatorList[fieldName][ruleName].min &&
+                                (fieldValue as string).length <= validationList.validatorList[fieldName][ruleName].max;
                         }
                         break;
                     case "range":
@@ -110,7 +112,7 @@
     };
 
     // Format the form values into an object
-    var getFormValues = function (splitField) {
+    const getFormValues = function (splitField?: boolean) {
         var data = {};
         personForm.serializeArray().map(function (field) {
             if (splitField === true && field.name.includes(".")) {
@@ -131,14 +133,14 @@
     };
 
     // Clear any previous error/success result
-    var resetResult = function () {
+    const resetResult = function () {
         $(".error").removeClass("error");
         resultPanel.empty();
     };
 
     // Populate form fields with data from the server
-    var populateFormFromJson = function (json, prefix = "") {
-        $.each(json, function (key, val) {
+    const populateFormFromJson = function (json, prefix = "") {
+        $.each(json, function (key: string, val) {
             if (typeof val === "object") populateFormFromJson(val, key + ".");
             else $('[name="' + prefix + key + '"]', personForm).val(val);
         });
