@@ -16,5 +16,5 @@ gulp.task('clean', function () {
 });
 
 gulp.task('default', function () {
-    gulp.src(paths.scripts).pipe(gulp.dest('wwwroot/js'));
+    return gulp.src(paths.scripts).pipe(gulp.dest('wwwroot/js'));
 });
