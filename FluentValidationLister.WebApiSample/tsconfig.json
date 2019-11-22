@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noEmitOnError": true,
+        "removeComments": true,
+        "target": "es6",
+        "typeRoots": [
+            "node_modules/@types"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        "wwwroot"
+    ],
+    "files": [
+        "Scripts/view-validation.ts",
+        "Scripts/test-validation.ts"
+    ]
+}

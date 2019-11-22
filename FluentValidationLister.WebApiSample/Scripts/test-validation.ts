@@ -1,8 +1,21 @@
-﻿$(function () {
-    var personForm = $("#personForm"); // Form
-    var resultPanel = $("#resultPanel"); // Div
+﻿/// <reference path="../node_modules/@types/jquery/index.d.ts" />
 
-    // AJAX settings
+// Define a string-indexed generic interface
+interface IDictionary<T> {
+    [key: string]: T;
+}
+
+// Define the structure for validation metadata
+interface IValidatorRules {
+    validatorList: IDictionary<IDictionary<any>>;
+    errorList: IDictionary<IDictionary<string>>;
+}
+
+$(function () {
+    const personForm = $("#personForm"); // Form
+    const resultPanel = $("#resultPanel"); // Div
+
+    // Define some common AJAX settings
     $.ajaxSetup({
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -10,37 +23,39 @@
         cache: false
     });
 
-    // AJAX error handler
+    // Define an AJAX error handler in case server-side has issues
     $(document).ajaxError(function (e, xhr) {
         if (xhr.status > 400) {
             if (console.error) console.error(xhr.responseText);
 
-            var container = $("<pre />").text(xhr.responseText).addClass("error");
+            const container = $("<pre />").text(xhr.responseText).addClass("error");
             resultPanel.append($("<p />").append(container));
         }
     });
 
     // Get the validation meta-data for the Person form
-    var validationList;
+    let validationList: IValidatorRules;
     $.post("api/Person?validation=true", "{}", data => validationList = data);
 
     // Validate form fields against validation meta-data
-    var validateForm = function () {
-        var data = getFormValues();
-        var errorList = [];
+    const validateForm = function () {
+        const data = getFormValues();
+        let errorList: Array<string> = [];
 
         $.each(data, function (fieldName, fieldValue) {
-            var fieldIsValid = true;
-            for (var ruleName in validationList.validatorList[fieldName]) {
-                var fieldPassesRule = true;
-                var fieldHasValue = fieldValue !== null && fieldValue !== "";
+            let fieldIsValid = true;
+            for (let ruleName in validationList.validatorList[fieldName]) {
+                const fieldHasValue = fieldValue !== null && fieldValue !== "";
+                let fieldPassesRule = true;
+
+                // Test the current rule with the field value
                 switch (ruleName) {
                     case "required":
                         fieldPassesRule = fieldHasValue;
                         break;
                     case "regex":
                         if (fieldHasValue === true) {
-                            var regex = new RegExp(validationList.validatorList[fieldName][ruleName], "g");
+                            const regex = new RegExp(validationList.validatorList[fieldName][ruleName], "g");
                             fieldPassesRule = regex.test(fieldValue);
                         }
                         break;
@@ -57,19 +72,19 @@
                         if (fieldHasValue === true) fieldPassesRule = fieldValue >= validationList.validatorList[fieldName][ruleName];
                         break;
                     case "minLength":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue.length >= parseInt(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length >= parseInt(validationList.validatorList[fieldName][ruleName]);
                         break;
                     case "maxLength":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue.length <= parseInt(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length <= parseInt(validationList.validatorList[fieldName][ruleName]);
                         break;
                     case "exactLength":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue.length === parseInt(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length === parseInt(validationList.validatorList[fieldName][ruleName]);
                         break;
                     case "length":
                         if (fieldHasValue === true) {
                             fieldPassesRule =
-                                fieldValue.length >= validationList.validatorList[fieldName][ruleName].min &&
-                                fieldValue.length <= validationList.validatorList[fieldName][ruleName].max;
+                                (fieldValue as string).length >= validationList.validatorList[fieldName][ruleName].min &&
+                                (fieldValue as string).length <= validationList.validatorList[fieldName][ruleName].max;
                         }
                         break;
                     case "range":
@@ -88,19 +103,22 @@
                         break;
                 }
 
+                // If the current rule failed, add the corresponding message to the collected errors
                 if (fieldPassesRule === false) {
                     fieldIsValid = false;
                     errorList.push(validationList.errorList[fieldName][ruleName]);
                 }
             }
 
+            // At least one rule failed for this field, highlight it with a red border
             if (fieldIsValid === false) $('[name="' + fieldName + '"]', personForm).addClass("error");
         });
 
         if (errorList.length > 0) {
+            // Validation failed - display the collected errors
             if (console.error) console.error("Clientside validation failed!");
 
-            var list = $("<ul />").addClass("error");
+            let list = $("<ul />").addClass("error");
             $.each(errorList, (i, val) => list.append($("<li />").text(val)));
 
             resultPanel.append(list);
@@ -110,13 +128,12 @@
     };
 
     // Format the form values into an object
-    var getFormValues = function (splitField) {
-        var data = {};
+    const getFormValues = function (splitField?: boolean) {
+        let data: IDictionary<any> = {};
         personForm.serializeArray().map(function (field) {
             if (splitField === true && field.name.includes(".")) {
-                var split = field.name.split(".");
-                if (!data[split[0]]) data[split[0]] = {};
-
+                const split = field.name.split(".");
+                if (typeof data[split[0]] === "undefined") data[split[0]] = {};
                 data[split[0]][split[1]] = field.value;
 
             } else {
@@ -124,21 +141,21 @@
             }
         });
 
-        // Correct any string-types that should be numeric or Boolean (only one in this example)
+        // Correct any string-types that should be numeric, date or Boolean (only one in this example)
         if (data.age === "") data.age = null; else data.age = parseInt(data.age);
 
         return data;
     };
 
     // Clear any previous error/success result
-    var resetResult = function () {
+    const resetResult = function () {
         $(".error").removeClass("error");
         resultPanel.empty();
     };
 
-    // Populate form fields with data from the server
-    var populateFormFromJson = function (json, prefix = "") {
-        $.each(json, function (key, val) {
+    // Populate the form fields from JSON data
+    const populateFormFromJson = function (json:any, prefix = "") {
+        $.each(json, function (key: string, val) {
             if (typeof val === "object") populateFormFromJson(val, key + ".");
             else $('[name="' + prefix + key + '"]', personForm).val(val);
         });
@@ -147,7 +164,6 @@
     // Button click event
     $("#populateFormButton").click(function () {
         resetResult();
-
         $.getJSON("api/Person/1", (json) => populateFormFromJson(json));
     });
 
@@ -164,6 +180,7 @@
                 if (validateForm() === false) return;
             }
 
+            // Disable the form to prevent multiple submits
             personForm.prop("disabled", true);
 
             $.post("api/Person", JSON.stringify(getFormValues(true)))
@@ -171,18 +188,18 @@
                 .done(data => resultPanel.append($("<p />").text(data.message)))
                 .fail(function (data) {
                     if (data.status === 400) {
-                        // Validation failed - display the errors
+                        // Validation failed - display the errors from the server
                         if (console.error) console.error("Server-side validation failed!");
 
-                        var validationResponse = data.responseJSON;
-                        var errorList = [];
+                        const validationResponse = data.responseJSON;
+                        let errorList:string[] = [];
 
-                        for (var key in validationResponse.errors) {
+                        for (const key in validationResponse.errors) {
                             $('[name="' + key + '"]', personForm).addClass("error");
                             $.each(validationResponse.errors[key], (i, val) => errorList.push(val));
                         }
 
-                        var list = $("<ul />").addClass("error");
+                        let list = $("<ul />").addClass("error");
                         $.each(errorList, (i, val) => list.append($("<li />").text(val)));
 
                         resultPanel.append(list);
