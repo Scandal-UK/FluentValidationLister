@@ -339,4 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
-FluentValidationLister.WebApiSample/wwwroot/js
+FluentValidationLister.WebApiSample/wwwroot/js/
