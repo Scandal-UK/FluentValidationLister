@@ -8,7 +8,7 @@ var gulp = require('gulp');
 var del = require('del');
 
 var paths = {
-    scripts: ['Scripts/**/*.js', 'Scripts/**/*.js.map', 'Scripts/**/*.ts']
+    scripts: ['Scripts/**/*.js']
 };
 
 gulp.task('clean', function () {

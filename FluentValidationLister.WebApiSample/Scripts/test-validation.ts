@@ -43,8 +43,9 @@ $(function () {
         $.each(data, function (fieldName, fieldValue) {
             let fieldIsValid = true;
             for (let ruleName in validationList.validatorList[fieldName]) {
-                let fieldPassesRule = true;
                 const fieldHasValue = fieldValue !== null && fieldValue !== "";
+                let fieldPassesRule = true;
+
                 switch (ruleName) {
                     case "required":
                         fieldPassesRule = fieldHasValue;
@@ -184,15 +185,15 @@ $(function () {
                         // Validation failed - display the errors
                         if (console.error) console.error("Server-side validation failed!");
 
-                        var validationResponse = data.responseJSON;
-                        var errorList:string[] = [];
+                        const validationResponse = data.responseJSON;
+                        let errorList:string[] = [];
 
-                        for (var key in validationResponse.errors) {
+                        for (const key in validationResponse.errors) {
                             $('[name="' + key + '"]', personForm).addClass("error");
                             $.each(validationResponse.errors[key], (i, val) => errorList.push(val));
                         }
 
-                        var list = $("<ul />").addClass("error");
+                        let list = $("<ul />").addClass("error");
                         $.each(errorList, (i, val) => list.append($("<li />").text(val)));
 
                         resultPanel.append(list);

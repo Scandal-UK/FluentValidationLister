@@ -16,8 +16,8 @@
                     code.appendChild(document.createTextNode(this.responseText));
                 }
                 else {
-                    var validationResponse = JSON.parse(this.responseText);
-                    code.classList.add("language-json"); // prismjs?
+                    const validationResponse = JSON.parse(this.responseText);
+                    code.classList.add("language-json");
                     code.innerHTML = JSON.stringify(validationResponse, null, 2);
                 }
 
