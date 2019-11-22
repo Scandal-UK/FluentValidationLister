@@ -4,7 +4,10 @@
         "noEmitOnError": true,
         "removeComments": true,
         "sourceMap": true,
-        "target": "es2015"
+        "target": "es6",
+        "typeRoots": [
+            "../node_modules/@types"
+        ]
     },
     "exclude": [
         "node_modules",
@@ -12,6 +15,7 @@
     ],
     "compileOnSave": true,
     "files": [
-        "./view-validation.ts"
+        "./view-validation.ts",
+        "./test-validation.ts"
     ]
 }

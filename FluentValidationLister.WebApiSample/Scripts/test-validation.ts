@@ -1,8 +1,17 @@
-﻿import $ = require('jquery');
+﻿/// <reference path="../node_modules/@types/jquery/index.d.ts" />
+
+interface IDictionary<T> {
+    [key: string]: T;
+}
+
+interface IValidatorRules {
+    validatorList: IDictionary<IDictionary<any>>;
+    errorList: IDictionary<IDictionary<string>>;
+}
 
 $(function () {
-    let personForm = $("#personForm"); // Form
-    let resultPanel = $("#resultPanel"); // Div
+    const personForm = $("#personForm"); // Form
+    const resultPanel = $("#resultPanel"); // Div
 
     // AJAX settings
     $.ajaxSetup({
@@ -17,32 +26,32 @@ $(function () {
         if (xhr.status > 400) {
             if (console.error) console.error(xhr.responseText);
 
-            var container = $("<pre />").text(xhr.responseText).addClass("error");
+            const container = $("<pre />").text(xhr.responseText).addClass("error");
             resultPanel.append($("<p />").append(container));
         }
     });
 
     // Get the validation meta-data for the Person form
-    let validationList;
+    let validationList: IValidatorRules;
     $.post("api/Person?validation=true", "{}", data => validationList = data);
 
     // Validate form fields against validation meta-data
     const validateForm = function () {
-        let data = getFormValues();
-        let errorList = [];
+        const data = getFormValues();
+        let errorList: Array<string> = [];
 
         $.each(data, function (fieldName, fieldValue) {
             let fieldIsValid = true;
-            for (var ruleName in validationList.validatorList[fieldName]) {
-                var fieldPassesRule = true;
-                var fieldHasValue = fieldValue !== null && fieldValue !== "";
+            for (let ruleName in validationList.validatorList[fieldName]) {
+                let fieldPassesRule = true;
+                const fieldHasValue = fieldValue !== null && fieldValue !== "";
                 switch (ruleName) {
                     case "required":
                         fieldPassesRule = fieldHasValue;
                         break;
                     case "regex":
                         if (fieldHasValue === true) {
-                            var regex = new RegExp(validationList.validatorList[fieldName][ruleName], "g");
+                            const regex = new RegExp(validationList.validatorList[fieldName][ruleName], "g");
                             fieldPassesRule = regex.test(fieldValue);
                         }
                         break;
@@ -102,7 +111,7 @@ $(function () {
         if (errorList.length > 0) {
             if (console.error) console.error("Clientside validation failed!");
 
-            var list = $("<ul />").addClass("error");
+            let list = $("<ul />").addClass("error");
             $.each(errorList, (i, val) => list.append($("<li />").text(val)));
 
             resultPanel.append(list);
@@ -113,12 +122,11 @@ $(function () {
 
     // Format the form values into an object
     const getFormValues = function (splitField?: boolean) {
-        var data = {};
+        let data: IDictionary<any> = {};
         personForm.serializeArray().map(function (field) {
             if (splitField === true && field.name.includes(".")) {
-                var split = field.name.split(".");
-                if (!data[split[0]]) data[split[0]] = {};
-
+                const split = field.name.split(".");
+                if (typeof data[split[0]] === "undefined") data[split[0]] = {};
                 data[split[0]][split[1]] = field.value;
 
             } else {
@@ -139,7 +147,7 @@ $(function () {
     };
 
     // Populate form fields with data from the server
-    const populateFormFromJson = function (json, prefix = "") {
+    const populateFormFromJson = function (json:any, prefix = "") {
         $.each(json, function (key: string, val) {
             if (typeof val === "object") populateFormFromJson(val, key + ".");
             else $('[name="' + prefix + key + '"]', personForm).val(val);
@@ -177,7 +185,7 @@ $(function () {
                         if (console.error) console.error("Server-side validation failed!");
 
                         var validationResponse = data.responseJSON;
-                        var errorList = [];
+                        var errorList:string[] = [];
 
                         for (var key in validationResponse.errors) {
                             $('[name="' + key + '"]', personForm).addClass("error");
