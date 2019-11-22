@@ -340,3 +340,5 @@ ASALocalRun/
 healthchecksdb
 
 FluentValidationLister.WebApiSample/wwwroot/js/
+FluentValidationLister.WebApiSample/Scripts/*.js
+FluentValidationLister.WebApiSample/Scripts/*.js.map
