@@ -1,11 +1,9 @@
 ﻿/// <reference path="../node_modules/@types/jquery/index.d.ts" />
 
-// Define a string-indexed generic interface
 interface IDictionary<T> {
     [key: string]: T;
 }
 
-// Define the structure for validation metadata
 interface IValidatorRules {
     validatorList: IDictionary<IDictionary<any>>;
     errorList: IDictionary<IDictionary<string>>;
@@ -15,7 +13,7 @@ $(function () {
     const personForm = $("#personForm"); // Form
     const resultPanel = $("#resultPanel"); // Div
 
-    // Define some common AJAX settings
+    // AJAX settings
     $.ajaxSetup({
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -23,7 +21,7 @@ $(function () {
         cache: false
     });
 
-    // Define an AJAX error handler in case server-side has issues
+    // AJAX error handler
     $(document).ajaxError(function (e, xhr) {
         if (xhr.status > 400) {
             if (console.error) console.error(xhr.responseText);
@@ -48,7 +46,6 @@ $(function () {
                 const fieldHasValue = fieldValue !== null && fieldValue !== "";
                 let fieldPassesRule = true;
 
-                // Test the current rule with the field value
                 switch (ruleName) {
                     case "required":
                         fieldPassesRule = fieldHasValue;
@@ -103,20 +100,17 @@ $(function () {
                         break;
                 }
 
-                // If the current rule failed, add the corresponding message to the collected errors
                 if (fieldPassesRule === false) {
                     fieldIsValid = false;
                     errorList.push(validationList.errorList[fieldName][ruleName]);
                 }
             }
 
-            // At least one rule failed for this field, highlight it with a red border
             if (fieldIsValid === false) $('[name="' + fieldName + '"]', personForm).addClass("error");
         });
 
         if (errorList.length > 0) {
-            // Validation failed - display the collected errors
-            if (console.error) console.error("Clientside validation failed!");
+            resultPanel.append($("<p />").addClass("errortitle").text("Clientside validation failed"));
 
             let list = $("<ul />").addClass("error");
             $.each(errorList, (i, val) => list.append($("<li />").text(val)));
@@ -141,7 +135,7 @@ $(function () {
             }
         });
 
-        // Correct any string-types that should be numeric, date or Boolean (only one in this example)
+        // Correct any string-types that should be numeric or Boolean (only one in this example)
         if (data.age === "") data.age = null; else data.age = parseInt(data.age);
 
         return data;
@@ -153,8 +147,8 @@ $(function () {
         resultPanel.empty();
     };
 
-    // Populate the form fields from JSON data
-    const populateFormFromJson = function (json:any, prefix = "") {
+    // Populate form fields with data from the server
+    const populateFormFromJson = function (json: any, prefix: string = "") {
         $.each(json, function (key: string, val) {
             if (typeof val === "object") populateFormFromJson(val, key + ".");
             else $('[name="' + prefix + key + '"]', personForm).val(val);
@@ -180,19 +174,18 @@ $(function () {
                 if (validateForm() === false) return;
             }
 
-            // Disable the form to prevent multiple submits
             personForm.prop("disabled", true);
 
             $.post("api/Person", JSON.stringify(getFormValues(true)))
                 .always(() => personForm.prop("disabled", false))
-                .done(data => resultPanel.append($("<p />").text(data.message)))
+                .done(data => resultPanel.append($("<p />").addClass("bold").text(data.message)))
                 .fail(function (data) {
                     if (data.status === 400) {
-                        // Validation failed - display the errors from the server
-                        if (console.error) console.error("Server-side validation failed!");
+                        // Validation failed - display the errors
+                        resultPanel.append($("<p />").addClass("errortitle").text("Server-side validation failed"));
 
                         const validationResponse = data.responseJSON;
-                        let errorList:string[] = [];
+                        let errorList: string[] = [];
 
                         for (const key in validationResponse.errors) {
                             $('[name="' + key + '"]', personForm).addClass("error");

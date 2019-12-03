@@ -132,7 +132,7 @@ The included ASP.NET Core 3 Web API Sample application is designed to be a minim
 
 Aside from the default Visual Studio template; it includes one controller, two models and two validators. The startup class includes the minimum setup detailed above.
 
-The first screen runs a very basic (and fully-commented) snippet of JavaScript to return and display the validation metadata for an endpoint. The second screen shows an implementation with a web form, this time using the jQuery library.
+The first screen runs a very basic (and fully-commented) snippet of TypeScript to return and display the validation metadata for an endpoint. The second screen shows a more complete TypeScript implementation with a web form, this time using the jQuery library.
 
 The validators in the project demonstrate these features of the filter;
 

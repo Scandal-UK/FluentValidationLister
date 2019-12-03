@@ -2,6 +2,8 @@
 
 var gulp = require('gulp');
 var del = require('del');
+var terser = require("gulp-terser");
+var rename = require("gulp-rename");
 
 var paths = {
     scripts: ['Scripts/**/*.js']
@@ -14,5 +16,7 @@ gulp.task('clean', function () {
 gulp.task('default', function () {
     return gulp
         .src(paths.scripts)
-        .pipe(gulp.dest('wwwroot/js'));
+        .pipe(terser())
+        .pipe(rename({ suffix: ".min" }))
+        .pipe(gulp.dest("wwwroot/js"));
 });

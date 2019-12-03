@@ -1,17 +1,48 @@
 ﻿/** html5doctor.com/html-5-reset-stylesheet/ **/
-html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,time,mark,audio,video { margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent; } 
-body { line-height:1; }
-ol,ul { list-style:none; }
-blockquote,q { quotes:none; }
-blockquote:before,blockquote:after,q:before,q:after { content:'';content:none; }
-ins { text-decoration:none; }
-del { text-decoration:line-through; }
-table { border-collapse:collapse;border-spacing:0; }
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    line-height: 1;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+    blockquote:before, blockquote:after, q:before, q:after {
+        content: '';
+        content: none;
+    }
+
+ins {
+    text-decoration: none;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
 
 * {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body, button {
@@ -61,14 +92,22 @@ a {
         color: #666
     }
 
-strong {
+strong, .bold {
     font-weight: bold;
-    font-size: 1.25em;
+    font-size: 1.15em;
 }
 
 .error {
     background-color: inherit;
     color: #d00;
+}
+
+.errortitle {
+    background-color: inherit;
+    color: #d00;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-left: 25%;
 }
 
 #result-panel {
@@ -122,14 +161,14 @@ input[type=number] {
         outline: 0 none;
     }
 
-input[type=text].error,
-input[type=email].error,
-input[type=url].error,
-input[type=password].error,
-input[type=number].error {
-    border: 1px solid #7C7C7C;
-    border-color: #FF6666 #FF6666 #E60000 #E60000;
-}
+    input[type=text].error,
+    input[type=email].error,
+    input[type=url].error,
+    input[type=password].error,
+    input[type=number].error {
+        border: 1px solid #7C7C7C;
+        border-color: #FF6666 #FF6666 #E60000 #E60000;
+    }
 
 ul.error {
     width: 400px;
@@ -138,6 +177,7 @@ ul.error {
     text-align: left;
     list-style: disc;
 }
+
 li {
     margin: 5px 10px;
 }

@@ -5,6 +5,8 @@
     "devDependencies": {
         "@types/jquery": "^3.3.31",
         "del": "5.1.0",
-        "gulp": "4.0.2"
+        "gulp": "4.0.2",
+        "gulp-terser": "1.2.0",
+        "gulp-rename": "1.4.0"
     }
 }
