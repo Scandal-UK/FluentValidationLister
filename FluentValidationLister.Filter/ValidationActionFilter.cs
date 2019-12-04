@@ -35,39 +35,34 @@
                 return;
             }
 
-            var validator = context.HttpContext.RequestServices
+            bool requestingValidatorList = context.HttpContext.Request.Query.Keys.Any(val => val == "validation");
+
+            if (!(context.HttpContext.RequestServices
                 .GetService(typeof(IValidator<>)
-                .MakeGenericType(GetModelType(model))) as IValidator;
-
-            // todo: Determine if user has chosen Pascal case! Tricky as its different between ASPNETCore 2 & 3
-            bool useJson = true;
-            if (context.HttpContext.Request.ContentType != null)
+                .MakeGenericType(GetModelType(model))) is IValidator validator))
             {
-                useJson = context.HttpContext.Request.ContentType.ToLowerInvariant().Contains("json");
-            }
-
-            // Return validation rules if requested
-            if (context.HttpContext.Request.Query.Keys.Any(val => val == "validation"))
-            {
-                if (validator == null)
+                // No validator is applicable for this endpoint
+                if (requestingValidatorList)
                 {
                     context.Result = new EmptyResult();
-                }
-                else
-                {
-                    var rules = new ValidationLister(validator).GetValidatorRules();
-                    if (useJson)
-                    {
-                        this.ConvertPropertyNamesToCamelCase(rules);
-                    }
-
-                    context.Result = new OkObjectResult(rules);
                 }
 
                 return;
             }
-            else if (validator == null)
+
+            // todo: Determine if user has chosen Pascal or camel case! Tricky as its different between ASPNETCore 2 & 3
+            bool useJson = context.HttpContext.Request.ContentType.ToLowerInvariant().Contains("json");
+
+            // Return list of validation rules
+            if (requestingValidatorList)
             {
+                var rules = new ValidationLister(validator).GetValidatorRules();
+                if (useJson)
+                {
+                    this.ConvertPropertyNamesToCamelCase(rules);
+                }
+
+                context.Result = new OkObjectResult(rules);
                 return;
             }
 
@@ -89,7 +84,7 @@
                         modelState.Remove(item.Key);
                     }
 
-                    // If the selected field is not invalid, return an empty OK result
+                    // If the selected field is valid, return an empty OK result
                     if (modelState.Count == 0)
                     {
                         context.Result = new EmptyResult();
