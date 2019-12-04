@@ -1,22 +1,24 @@
 ﻿/// <binding AfterBuild='default' Clean='clean' />
 
-var gulp = require('gulp');
-var del = require('del');
+var gulp = require("gulp");
+var del = require("del");
 var terser = require("gulp-terser");
 var rename = require("gulp-rename");
 
 var paths = {
-    scripts: ['Scripts/**/*.js']
+    scripts: ["Scripts/**/*.js"],
+    deployedScripts: ["wwwroot/js/**/*"],
+    deployTarget: "wwwroot/js"
 };
 
-gulp.task('clean', function () {
-    return del(['wwwroot/js/**/*']);
+gulp.task("clean", function () {
+    return del(paths.deployedScripts);
 });
 
-gulp.task('default', function () {
+gulp.task("default", function () {
     return gulp
         .src(paths.scripts)
         .pipe(terser())
         .pipe(rename({ suffix: ".min" }))
-        .pipe(gulp.dest("wwwroot/js"));
+        .pipe(gulp.dest(paths.deployTarget));
 });
