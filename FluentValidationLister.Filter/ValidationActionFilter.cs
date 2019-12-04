@@ -19,7 +19,7 @@
         /// <param name="context">Current executing context.</param>
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            if (context == null)
+            if (context == null || context.HttpContext.Request.Method == "GET")
             {
                 return;
             }
