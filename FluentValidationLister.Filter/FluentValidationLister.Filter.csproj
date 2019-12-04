@@ -12,11 +12,10 @@
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.0.4</Version>
+        <Version>1.0.5</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>- Removed dependency on FluentValidation.AspNetCore. 
-- Fixed camel-case issues with ASP.NET 3.x.</PackageReleaseNotes>
+        <PackageReleaseNotes>- Added a null check for the ContentType header in the action filter. Now defaults to JSON if nothing is specified.</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2019</Copyright>
         <PackageProjectUrl>https://github.com/scandal-uk/fluentvalidationlister</PackageProjectUrl>
