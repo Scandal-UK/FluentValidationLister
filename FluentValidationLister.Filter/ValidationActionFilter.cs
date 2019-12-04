@@ -40,7 +40,11 @@
                 .MakeGenericType(GetModelType(model))) as IValidator;
 
             // todo: Determine if user has chosen Pascal case! Tricky as its different between ASPNETCore 2 & 3
-            bool useJson = context.HttpContext.Request.ContentType.ToLowerInvariant().Contains("json");
+            bool useJson = true;
+            if (context.HttpContext.Request.ContentType != null)
+            {
+                useJson = context.HttpContext.Request.ContentType.ToLowerInvariant().Contains("json");
+            }
 
             // Return validation rules if requested
             if (context.HttpContext.Request.Query.Keys.Any(val => val == "validation"))
