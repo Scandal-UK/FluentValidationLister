@@ -1,5 +1,5 @@
 # FluentValidationLister
-#### v1.0.4
+#### v1.0.5
 
 This project adds an ActionFilter which will describe the rules and messages defined in a particular FluentValidation validator. It has been designed using FluentValidation v8.5.1.
 
@@ -83,7 +83,7 @@ Example output for JSON:
 }
 ```
 
-> **Note:** You will need to put something in the body for POST/PUT requests, but if you add the `validation=1` query-string parameter then the posted body will be ignored - in the demo we simply post `{foo=bar}`.
+> **Note:** You will need to put something in the body for POST/PUT requests, but if you add the `validation=1` query-string parameter then the posted body will be ignored - in the demo we simply post `{}`.
 
 ### How to use - Rules
 
