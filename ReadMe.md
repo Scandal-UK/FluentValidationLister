@@ -23,7 +23,7 @@ However, _sometimes_ you may not be using MVC - you might be using an SPA applic
 
 You still need to implement this in your front-end validation - this just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by the FluentValidation library.
 
-I have provided a working demonstration using jQuery, but it is very basic and will require some extension for your own use!
+I have provided a working TypeScript demonstration using jQuery, but it is very basic and will require some extension for your own use!
 
 ## Installation
 
@@ -130,9 +130,11 @@ The included ASP.NET Core 3 Web API Sample application is designed to be a minim
 
 > There is no Razor/MVC example because this package is unnecessary for those projects. This package is for other front-ends that need access to the validation metadata.
 
-Aside from the default Visual Studio template; it includes one controller, two models and two validators. The startup class includes the minimum setup detailed above.
+Aside from the default Visual Studio template; it includes one controller, two models and two validators. The startup class includes the minimum setup detailed above. Unnecessary libraries (including Entity Framework Core) have been removed for minimal dependencies.
 
-The first screen runs a very basic (and fully-commented) snippet of TypeScript to return and display the validation metadata for an endpoint. The second screen shows a more complete TypeScript implementation with a web form, this time using the jQuery library.
+The first screen runs a very basic (and fully-commented) snippet of TypeScript to return and display the validation metadata for an endpoint.
+
+The second screen shows a more complete TypeScript implementation with a web form, this time using the jQuery library. It handles client-side and server-side validation in the same way for comparison.
 
 The validators in the project demonstrate these features of the filter;
 
