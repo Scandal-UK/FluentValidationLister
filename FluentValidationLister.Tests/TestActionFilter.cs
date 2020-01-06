@@ -1,5 +1,6 @@
 ﻿namespace FluentValidationLister.Tests
 {
+    using System.Collections.Generic;
     using FluentAssertions;
     using FluentValidationLister.Filter;
     using Microsoft.AspNetCore.Http;
@@ -11,7 +12,6 @@
     using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.Primitives;
     using Moq;
-    using System.Collections.Generic;
     using Xunit;
 
     public class TestActionFilter
