@@ -32,7 +32,7 @@
         /// <response code="404">The supplied ID was not found.</response>
         /// <returns>Instance of <see cref="Person"/>.</returns>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(OkResult), 200)]
+        [ProducesResponseType(typeof(Person), 200)]
         [ProducesResponseType(typeof(NotFoundResult), 404)]
         public IActionResult GetPerson(int id)
         {
