@@ -22,7 +22,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="8.5.1" />
+        <PackageReference Include="FluentValidation" Version="8.6.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
     </ItemGroup>
