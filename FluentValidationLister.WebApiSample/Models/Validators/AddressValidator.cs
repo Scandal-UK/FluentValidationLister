@@ -3,8 +3,10 @@
     using FluentValidation;
     using FluentValidationLister.WebApiSample.Extensions;
 
+    /// <summary>Validator for the <see cref="Address"/> class.</summary>
     internal class AddressValidator : AbstractValidator<Address>
     {
+        /// <summary>Initialises a new instance of the <see cref="AddressValidator"/> class.</summary>
         public AddressValidator()
         {
             this.RuleFor(a => a.Line1)
