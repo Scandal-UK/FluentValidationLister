@@ -1,9 +1,9 @@
 # FluentValidationLister
-#### v1.0.6
+#### v1.0.7
 
-An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe the validators for a Web API project.
+An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
-This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v8.6.
+This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v8.6.1.
 
 This filter is fully compatible with ASP.NET Core 2.x and 3.x.
 
