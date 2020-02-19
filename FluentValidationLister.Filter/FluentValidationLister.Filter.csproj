@@ -17,7 +17,7 @@
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageReleaseNotes>Updated to reference FluentValidation v8.6.1.</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
-        <Copyright>Copyright (c) Dan Ware 2019</Copyright>
+        <Copyright>Copyright (c) Dan Ware 2020</Copyright>
         <PackageProjectUrl>https://github.com/scandal-uk/fluentvalidationlister</PackageProjectUrl>
     </PropertyGroup>
     
