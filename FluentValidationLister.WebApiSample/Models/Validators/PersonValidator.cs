@@ -3,8 +3,10 @@
     using FluentValidation;
     using FluentValidation.Validators;
 
+    /// <summary>Validator for the <see cref="Person"/> class.</summary>
     internal class PersonValidator : AbstractValidator<Person>
     {
+        /// <summary>Initialises a new instance of the <see cref="PersonValidator"/> class.</summary>
         public PersonValidator()
         {
             this.RuleFor(p => p.Surname)

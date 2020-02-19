@@ -1,9 +1,11 @@
 # FluentValidationLister
-#### v1.0.4
+#### v1.0.7
 
-This project adds an ActionFilter which will describe the rules and messages defined in a particular FluentValidation validator. It has been designed using FluentValidation v8.5.1.
+An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
-It is fully compatible with ASP.NET Core 2.x and 3.x.
+This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v8.6.1.
+
+This filter is fully compatible with ASP.NET Core 2.x and 3.x.
 
 ## Table of Contents
 
@@ -23,7 +25,7 @@ However, _sometimes_ you may not be using MVC - you might be using an SPA applic
 
 You still need to implement this in your front-end validation - this just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by the FluentValidation library.
 
-I have provided a working demonstration using jQuery, but it is very basic and will require some extension for your own use!
+In the Web API sample project I have provided a working TypeScript demonstration using jQuery, it is very basic and will require some extension for your own use, but it should be sufficient for demonstration of intention.
 
 ## Installation
 
@@ -83,7 +85,7 @@ Example output for JSON:
 }
 ```
 
-> **Note:** You will need to put something in the body for POST/PUT requests, but if you add the `validation=1` query-string parameter then the posted body will be ignored - in the demo we simply post `{foo=bar}`.
+> **Note:** You will need to put something in the body for POST/PUT requests, but if you add the `validation=1` query-string parameter then the posted body will be ignored - in the demo we simply post `{}`.
 
 ### How to use - Rules
 
@@ -126,13 +128,15 @@ Should you find a more "standard" way of presenting the validation information t
 
 ## Web API Sample
 
-The included ASP.NET Core 3 Web API Sample application is designed to be a minimal demonstration of how this package works.
+The included ASP.NET Core 3.1 Web API Sample application is designed to be a minimal demonstration of how this package works.
 
 > There is no Razor/MVC example because this package is unnecessary for those projects. This package is for other front-ends that need access to the validation metadata.
 
-Aside from the default Visual Studio template; it includes one controller, two models and two validators. The startup class includes the minimum setup detailed above.
+Aside from the default Visual Studio template; it includes one controller, two models and two validators. The startup class includes the minimum setup detailed above. Unnecessary libraries (including Entity Framework Core) have been removed for minimal dependencies.
 
-The first screen runs a very basic (and fully-commented) snippet of TypeScript to return and display the validation metadata for an endpoint. The second screen shows a more complete TypeScript implementation with a web form, this time using the jQuery library.
+The first screen runs a very basic (and fully-commented) snippet of TypeScript to return and display the validation metadata for an endpoint.
+
+The second screen shows a more complete TypeScript implementation with a web form, this time using the jQuery library. It handles client-side and server-side validation in the same way for comparison.
 
 The validators in the project demonstrate these features of the filter;
 
