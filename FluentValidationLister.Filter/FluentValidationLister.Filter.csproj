@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <Authors>Dan Ware</Authors>
         <Product>FluentValidationLister</Product>
-        <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralized;dynamic</PackageTags>
+        <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralised;centralized;dynamic</PackageTags>
         <Description>An ASP.NET Core extension for FluentValidation to provide additional endpoints that describe validator metadata for a Web API project.</Description>
         <RepositoryUrl>https://github.com/scandal-uk/fluentvalidationlister</RepositoryUrl>
     </PropertyGroup>
@@ -26,4 +26,5 @@
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
     </ItemGroup>
+
 </Project>
