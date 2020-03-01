@@ -12,10 +12,10 @@
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.0.7</Version>
+        <Version>1.0.8</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>Updated to reference FluentValidation v8.6.1.</PackageReleaseNotes>
+        <PackageReleaseNotes>Updated to reference FluentValidation v8.6.2.</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2020</Copyright>
         <PackageProjectUrl>https://github.com/scandal-uk/fluentvalidationlister</PackageProjectUrl>
