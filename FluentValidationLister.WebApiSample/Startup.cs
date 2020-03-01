@@ -6,16 +6,11 @@ namespace FluentValidationLister.WebApiSample
     using FluentValidationLister.WebApiSample.Models.Validators;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
-    public class Startup
+    public sealed class Startup
     {
-        public Startup(IConfiguration configuration) => Configuration = configuration;
-
-        public IConfiguration Configuration { get; }
-
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
@@ -32,15 +27,13 @@ namespace FluentValidationLister.WebApiSample
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
 
-            app.UseStaticFiles();
+                app.UseStaticFiles();
+            }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
