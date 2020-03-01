@@ -145,4 +145,4 @@ The validators in the project demonstrate these features of the filter;
 - `.WithName()` is respected in the returned messages _(e.g. Address.Line1)_
 - Custom error messages are returned where defined _(e.g. Address.County)_
 
-> The sample application is designed for you to download and "prototype" or test this package. Feel free to contribute through pull-requests on GitHub!
+> The sample application is designed for you to download and "prototype" or test this package. I particularly welcome contributions through pull-requests on GitHub!
