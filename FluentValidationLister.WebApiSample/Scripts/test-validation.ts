@@ -1,12 +1,10 @@
-﻿/// <reference path="../node_modules/@types/jquery/index.d.ts" />
-
-interface IDictionary<T> {
+﻿interface Dictionary<T> {
     [key: string]: T;
 }
 
-interface IValidatorRules {
-    validatorList: IDictionary<IDictionary<any>>;
-    errorList: IDictionary<IDictionary<string>>;
+interface ValidatorRules {
+    validatorList: Dictionary<Dictionary<any>>;
+    errorList: Dictionary<Dictionary<string>>;
 }
 
 $(function () {
@@ -32,17 +30,51 @@ $(function () {
     });
 
     // Get the validation meta-data for the Person form
-    let validationList: IValidatorRules;
+    let validationList: ValidatorRules;
     $.post("api/Person?validation=true", "{}", data => validationList = data);
+
+    // Format the form values into an object
+    const getFormValues = function (splitField?: boolean) {
+        const data: Dictionary<any> = {};
+        personForm.serializeArray().map(function (field) {
+            if (splitField === true && field.name.includes(".")) {
+                const split = field.name.split(".");
+                if (typeof data[split[0]] === "undefined") data[split[0]] = {};
+                data[split[0]][split[1]] = field.value;
+
+            } else {
+                data[field.name] = field.value;
+            }
+        });
+
+        // Correct any string-types that should be numeric or Boolean (only one in this example)
+        if (data.age === "") data.age = null; else data.age = parseInt(data.age);
+
+        return data;
+    };
+
+    // Clear any previous error/success result
+    const resetResult = function () {
+        $(".error").removeClass("error");
+        resultPanel.empty();
+    };
+
+    // Populate form fields with data from the server
+    const populateFormFromJson = function ({ json, prefix = "" }: { json: any; prefix?: string }) {
+        $.each(json, function (key: string, val) {
+            if (typeof val === "object") populateFormFromJson({ json: val, prefix: key + "." });
+            else $('[name="' + prefix + key + '"]', personForm).val(val);
+        });
+    };
 
     // Validate form fields against validation meta-data
     const validateForm = function () {
         const data = getFormValues();
-        let errorList: Array<string> = [];
+        const errorList: Array<string> = [];
 
         $.each(data, function (fieldName, fieldValue) {
             let fieldIsValid = true;
-            for (let ruleName in validationList.validatorList[fieldName]) {
+            for (const ruleName in validationList.validatorList[fieldName]) {
                 const fieldHasValue = fieldValue !== null && fieldValue !== "";
                 let fieldPassesRule = true;
 
@@ -112,7 +144,7 @@ $(function () {
         if (errorList.length > 0) {
             resultPanel.append($("<p />").addClass("errortitle").text("Clientside validation failed"));
 
-            let list = $("<ul />").addClass("error");
+            const list = $("<ul />").addClass("error");
             $.each(errorList, (i, val) => list.append($("<li />").text(val)));
 
             resultPanel.append(list);
@@ -121,44 +153,10 @@ $(function () {
         return errorList.length === 0;
     };
 
-    // Format the form values into an object
-    const getFormValues = function (splitField?: boolean) {
-        let data: IDictionary<any> = {};
-        personForm.serializeArray().map(function (field) {
-            if (splitField === true && field.name.includes(".")) {
-                const split = field.name.split(".");
-                if (typeof data[split[0]] === "undefined") data[split[0]] = {};
-                data[split[0]][split[1]] = field.value;
-
-            } else {
-                data[field.name] = field.value;
-            }
-        });
-
-        // Correct any string-types that should be numeric or Boolean (only one in this example)
-        if (data.age === "") data.age = null; else data.age = parseInt(data.age);
-
-        return data;
-    };
-
-    // Clear any previous error/success result
-    const resetResult = function () {
-        $(".error").removeClass("error");
-        resultPanel.empty();
-    };
-
-    // Populate form fields with data from the server
-    const populateFormFromJson = function (json: any, prefix: string = "") {
-        $.each(json, function (key: string, val) {
-            if (typeof val === "object") populateFormFromJson(val, key + ".");
-            else $('[name="' + prefix + key + '"]', personForm).val(val);
-        });
-    };
-
     // Button click event
     $("#populateFormButton").click(function () {
         resetResult();
-        $.getJSON("api/Person/1", (json) => populateFormFromJson(json));
+        $.getJSON("api/Person/1", (json) => populateFormFromJson({ json }));
     });
 
     // Form submission event
@@ -185,14 +183,14 @@ $(function () {
                         resultPanel.append($("<p />").addClass("errortitle").text("Server-side validation failed"));
 
                         const validationResponse = data.responseJSON;
-                        let errorList: string[] = [];
+                        const errorList: string[] = [];
 
                         for (const key in validationResponse.errors) {
                             $('[name="' + key + '"]', personForm).addClass("error");
                             $.each(validationResponse.errors[key], (i, val) => errorList.push(val));
                         }
 
-                        let list = $("<ul />").addClass("error");
+                        const list = $("<ul />").addClass("error");
                         $.each(errorList, (i, val) => list.append($("<li />").text(val)));
 
                         resultPanel.append(list);
