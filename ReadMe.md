@@ -136,7 +136,7 @@ Aside from the default Visual Studio template; it includes one controller, two m
 
 The first screen runs a very basic (and fully-commented) snippet of TypeScript to return and display the validation metadata for an endpoint.
 
-The second screen shows a more complete TypeScript implementation with a web form, this time using the jQuery library. It handles client-side and server-side validation in the same way for comparison.
+The second screen shows a generic TypeScript implementation with a web form, this time using the jQuery library. It displays client-side and server-side (problem details) validation errors in the same way for comparison.
 
 The validators in the project demonstrate these features of the filter;
 
@@ -144,5 +144,3 @@ The validators in the project demonstrate these features of the filter;
 - Custom regular expressions are returned _(e.g. Address.Postcode)_
 - `.WithName()` is respected in the returned messages _(e.g. Address.Line1)_
 - Custom error messages are returned where defined _(e.g. Address.County)_
-
-> The sample application is designed for you to download and "prototype" or test this package. I particularly welcome contributions through pull-requests on GitHub!
