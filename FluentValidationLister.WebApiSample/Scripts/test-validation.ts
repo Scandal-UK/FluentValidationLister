@@ -169,7 +169,7 @@ $(function () {
         $.getJSON("api/Person/1", (json) => populateFormFromJson({ json }));
     });
 
-    // Form submission event
+    // Form events
     $("#personForm")
         .on("reset", resetResult)
         .on("submit", function (e) {
@@ -201,7 +201,7 @@ $(function () {
                         }
 
                         const list = $("<ul />").addClass("error");
-                        $.each(errorList, (i, val) => list.append($("<li />").text(val)));
+                        $.each(errorList, (_i, val) => list.append($("<li />").text(val)));
 
                         resultPanel.append(list);
                     }
