@@ -46,7 +46,7 @@ table {
 }
 
 body, button {
-    font-family: Arial, Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 10pt;
     line-height: 1.5em;
 }
@@ -87,9 +87,9 @@ a {
         color: #f00
     }
 
-    .disabled, a.disabled:hover {
+    a.disabled, a.disabled:hover {
         background-color: inherit;
-        color: #666
+        color: #666 !important;
     }
 
 strong, .bold {

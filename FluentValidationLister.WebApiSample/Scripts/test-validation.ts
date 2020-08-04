@@ -59,6 +59,7 @@ $(function () {
 
         // Correct any string-types that should be numeric or Boolean (only one in this example)
         if (data.age === "") data.age = null; else data.age = parseInt(data.age as string);
+        // Note: we might need to expose the datatype in a future revision to address this
 
         return data;
     };

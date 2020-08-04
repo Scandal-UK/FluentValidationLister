@@ -12,26 +12,18 @@
 <body>
     <h1>FluentValidationLister</h1>
     <p>
-      Source:
-      <a href="https://github.com/Scandal-UK/FluentValidationLister" target="_blank">
-        https://github.com/Scandal-UK/FluentValidationLister
-      </a>
+        Source:
+        <a href="https://github.com/Scandal-UK/FluentValidationLister" target="_blank">
+            https://github.com/Scandal-UK/FluentValidationLister
+        </a>
     </p>
-    <h2>Validation demo</h2>
-    <p>This is intended to demonstrate dynamic clientside validation rules that are defined when the page initially loads.</p>
+    <h2>Test validation demo</h2>
+    <p><a href="index.html">View validation</a> | <a href="#" onclick="return false" class="disabled">Test validation</a></p>
+    <p>This is intended to demonstrate using clientside validation rules that are defined when the page initially loads. It also demonstrates parsing and displaying a Problem-Details response from the server-side (untick the checkbox below).</p>
+    <p>Note that the script for this page is generic, so there is an expectation that the field names in the JSON match the input names on the form.</p>
     <p>
-        <strong>NOTE:</strong> This form implements clientside validation for a number of rules (server-side validation is also presented
-        the same way). Open your preferred developer console to see whether the validation is from the client or server (naturally if clientside
-        validation fails, server-side validation will not occur; unless the checkbox is unticked of course).
-    </p>
-    <p>
-        This demo is implemented using jQuery as a very simplified example - you should extend it for production use, for example to allow it to validate each field
-        during the "onBlur" event.
-    </p>
-    <p><a href="index.html">View validation</a> | <a href="#" onclick="return false" disabled>Test validation</a></p>
-    <p>
-      <input id="performClientsideValidation" type="checkbox" checked />
-      <label for="performClientsideValidation">Perform clientside validation?</label>
+        <input id="performClientsideValidation" type="checkbox" checked />
+        <label for="performClientsideValidation">Perform clientside validation?</label>
     </p>
     <p><button id="populateFormButton">Populate form</button></p>
     <div id="resultPanel"></div>
