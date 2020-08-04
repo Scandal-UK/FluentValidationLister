@@ -3,8 +3,18 @@
 }
 
 interface ValidatorRules {
-    validatorList: Dictionary<Dictionary<any>>;
+    validatorList: Dictionary<Dictionary<unknown>>;
     errorList: Dictionary<Dictionary<string>>;
+}
+
+interface RangeValues {
+    from: number;
+    to: number;
+}
+
+interface LimitValues {
+    min: number;
+    max: number;
 }
 
 $(function () {
@@ -20,7 +30,7 @@ $(function () {
     });
 
     // AJAX error handler
-    $(document).ajaxError(function (e, xhr) {
+    $(document).ajaxError(function (_e, xhr) {
         if (xhr.status > 400) {
             if (console.error) console.error(xhr.responseText);
 
@@ -35,12 +45,12 @@ $(function () {
 
     // Format the form values into an object
     const getFormValues = function (splitField?: boolean) {
-        const data: Dictionary<any> = {};
+        const data: Dictionary<unknown> = {};
         personForm.serializeArray().map(function (field) {
             if (splitField === true && field.name.includes(".")) {
                 const split = field.name.split(".");
                 if (typeof data[split[0]] === "undefined") data[split[0]] = {};
-                data[split[0]][split[1]] = field.value;
+                (data[split[0]] as Dictionary<string>)[split[1]] = field.value;
 
             } else {
                 data[field.name] = field.value;
@@ -48,7 +58,7 @@ $(function () {
         });
 
         // Correct any string-types that should be numeric or Boolean (only one in this example)
-        if (data.age === "") data.age = null; else data.age = parseInt(data.age);
+        if (data.age === "") data.age = null; else data.age = parseInt(data.age as string);
 
         return data;
     };
@@ -60,7 +70,7 @@ $(function () {
     };
 
     // Populate form fields with data from the server
-    const populateFormFromJson = function ({ json, prefix = "" }: { json: any; prefix?: string }) {
+    const populateFormFromJson = function ({ json, prefix = "" }: { json: unknown; prefix?: string }) {
         $.each(json, function (key: string, val) {
             if (typeof val === "object") populateFormFromJson({ json: val, prefix: key + "." });
             else $('[name="' + prefix + key + '"]', personForm).val(val);
@@ -72,7 +82,7 @@ $(function () {
         const data = getFormValues();
         const errorList: Array<string> = [];
 
-        $.each(data, function (fieldName, fieldValue) {
+        $.each(data, function (fieldName, fieldValue: string) {
             let fieldIsValid = true;
             for (const ruleName in validationList.validatorList[fieldName]) {
                 const fieldHasValue = fieldValue !== null && fieldValue !== "";
@@ -84,7 +94,7 @@ $(function () {
                         break;
                     case "regex":
                         if (fieldHasValue === true) {
-                            const regex = new RegExp(validationList.validatorList[fieldName][ruleName], "g");
+                            const regex = new RegExp(validationList.validatorList[fieldName][ruleName] as string, "g");
                             fieldPassesRule = regex.test(fieldValue);
                         }
                         break;
@@ -101,33 +111,33 @@ $(function () {
                         if (fieldHasValue === true) fieldPassesRule = fieldValue >= validationList.validatorList[fieldName][ruleName];
                         break;
                     case "minLength":
-                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length >= parseInt(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length >= parseInt(validationList.validatorList[fieldName][ruleName] as string);
                         break;
                     case "maxLength":
-                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length <= parseInt(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length <= parseInt(validationList.validatorList[fieldName][ruleName] as string);
                         break;
                     case "exactLength":
-                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length === parseInt(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length === parseInt(validationList.validatorList[fieldName][ruleName] as string);
                         break;
                     case "length":
                         if (fieldHasValue === true) {
                             fieldPassesRule =
-                                (fieldValue as string).length >= validationList.validatorList[fieldName][ruleName].min &&
-                                (fieldValue as string).length <= validationList.validatorList[fieldName][ruleName].max;
+                                (fieldValue as string).length >= (validationList.validatorList[fieldName][ruleName] as LimitValues).min &&
+                                (fieldValue as string).length <= (validationList.validatorList[fieldName][ruleName] as LimitValues).max;
                         }
                         break;
                     case "range":
                         if (fieldHasValue === true) {
                             fieldPassesRule =
-                                fieldValue >= validationList.validatorList[fieldName][ruleName].from &&
-                                fieldValue <= validationList.validatorList[fieldName][ruleName].to;
+                                parseInt(fieldValue) >= (validationList.validatorList[fieldName][ruleName] as RangeValues).from &&
+                                parseInt(fieldValue) <= (validationList.validatorList[fieldName][ruleName] as RangeValues).to;
                         }
                         break;
                     case "exclusiveRange":
                         if (fieldHasValue === true) {
                             fieldPassesRule =
-                                fieldValue < validationList.validatorList[fieldName][ruleName].from &&
-                                fieldValue > validationList.validatorList[fieldName][ruleName].to;
+                                parseInt(fieldValue) < (validationList.validatorList[fieldName][ruleName] as RangeValues).from &&
+                                parseInt(fieldValue) > (validationList.validatorList[fieldName][ruleName] as RangeValues).to;
                         }
                         break;
                 }
@@ -187,7 +197,7 @@ $(function () {
 
                         for (const key in validationResponse.errors) {
                             $('[name="' + key + '"]', personForm).addClass("error");
-                            $.each(validationResponse.errors[key], (i, val) => errorList.push(val));
+                            $.each(validationResponse.errors[key], (_i, val) => errorList.push(val));
                         }
 
                         const list = $("<ul />").addClass("error");
