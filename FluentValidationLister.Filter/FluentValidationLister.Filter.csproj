@@ -5,24 +5,24 @@
         <Authors>Dan Ware</Authors>
         <Product>FluentValidationLister</Product>
         <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralised;centralized;dynamic</PackageTags>
-        <Description>An ASP.NET Core extension for FluentValidation to provide additional endpoints that describe validator metadata for a Web API project.</Description>
+        <Description>ASP.NET Core extension for FluentValidation to provide additional endpoints that describe validator metadata for a Web API project.</Description>
         <RepositoryUrl>https://github.com/scandal-uk/fluentvalidationlister</RepositoryUrl>
     </PropertyGroup>
     
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.0.8</Version>
+        <Version>1.0.9</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>Updated to reference FluentValidation v8.6.2.</PackageReleaseNotes>
+        <PackageReleaseNotes>Updated to reference FluentValidation v9.0.1.</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2020</Copyright>
         <PackageProjectUrl>https://github.com/scandal-uk/fluentvalidationlister</PackageProjectUrl>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="8.6.2" />
+        <PackageReference Include="FluentValidation" Version="9.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
     </ItemGroup>

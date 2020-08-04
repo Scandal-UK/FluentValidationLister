@@ -56,9 +56,9 @@
 
         private void AddRuleOrDescendantRules(PropertyRule rule, IPropertyValidator validator, string propertyName)
         {
-            if (validator is ChildValidatorAdaptor childValidatorAdaptor)
+            if (validator is IChildValidatorAdaptor)
             {
-                var childValidator = childValidatorAdaptor.GetValidator(new PropertyValidatorContext(null, rule, rule.PropertyName));
+                var childValidator = ExtractChildValidator(rule, validator);
                 var childDescriptor = childValidator.CreateDescriptor();
 
                 foreach (var member in childDescriptor.GetMembersWithValidators())
@@ -70,6 +70,16 @@
             {
                 this.AddRuleBasedOnValidatorType(rule, validator, propertyName);
             }
+        }
+
+        private static IValidator ExtractChildValidator(PropertyRule rule, IPropertyValidator validator)
+        {
+            Type t = validator.GetType();
+            var methodName = nameof(ChildValidatorAdaptor<object, object>.GetValidator);
+            var methodInfo = t.GetMethod(methodName);
+
+            var context = new PropertyValidatorContext(null, rule, rule.PropertyName);
+            return (IValidator)methodInfo.Invoke(validator, new object[] { context });
         }
 
         internal abstract void AddRuleBasedOnValidatorType(PropertyRule rule, IPropertyValidator validator, string propertyName);

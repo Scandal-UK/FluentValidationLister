@@ -127,7 +127,7 @@
 
         private void ValidateModel(IValidator validator, object model, ModelStateDictionary modelState)
         {
-            var result = validator.Validate(new ValidationContext(model));
+            var result = validator.Validate(new ValidationContext<object>(model));
             if (!result.IsValid)
             {
                 foreach (var error in result.Errors)
