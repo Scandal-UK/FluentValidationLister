@@ -18,6 +18,9 @@
         /// <summary>Gets or sets the email address.</summary>
         public string Email { get; set; }
 
+        /// <summary>Gets or sets a value which indicates if the <see cref="Person"/> has agreed to sell their soul.</summary>
+        public bool? SaleOfSoulAgreed { get; set; }
+
         /// <summary>Gets or sets the postal address.</summary>
         public Address Address { get; set; }
     }
