@@ -152,7 +152,7 @@ Aside from the default Visual Studio template; it includes one controller, two m
 
 The first screen runs a very basic (and fully-commented) snippet of TypeScript to return and display the validation metadata for an endpoint.
 
-The second screen shows a generic TypeScript implementation with a web form, this time using the jQuery library. It displays client-side and server-side (problem details) validation errors in the same way for comparison.
+The second screen shows a generic TypeScript implementation with a web form, this time using the jQuery library. It displays client-side and server-side (problem details) validation errors in the same way for comparison. **This script is generic, so there is an expectation that the form field names match the JSON property names for this to work properly!**
 
 The validators in the project demonstrate these features of the filter;
 
