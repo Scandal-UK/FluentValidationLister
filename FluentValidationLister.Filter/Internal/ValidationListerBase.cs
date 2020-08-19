@@ -16,7 +16,6 @@
     public abstract class ValidationListerBase
     {
         private readonly IValidatorDescriptor validatorDescriptor;
-        private readonly Type modelType;
         private ValidatorRules rules;
 
         /// <summary>
@@ -27,13 +26,13 @@
         protected ValidationListerBase(IValidator validator, Type modelType)
         {
             this.validatorDescriptor = validator?.CreateDescriptor() ?? throw new ArgumentNullException(nameof(validator));
-            this.modelType = modelType;
+            this.ModelType = modelType ?? throw new ArgumentNullException(nameof(modelType));
         }
 
-        /// <summary>
-        /// Inspects the <see cref="IValidator"/> to produce a populated instance
-        /// of the <see cref="ValidatorRules"/> class.
-        /// </summary>
+        /// <summary>Gets the <see cref="Type"/> of the model that is being validated.</summary>
+        public Type ModelType { get; }
+
+        /// <summary>Instantiates an instance of the <see cref="ValidatorRules"/> class.</summary>
         /// <returns>Instance of <see cref="ValidatorRules"/>.</returns>
         public ValidatorRules GetValidatorRules()
         {
@@ -43,7 +42,7 @@
                 this.AddRulesForMember(this.validatorDescriptor, member.Key);
             }
 
-            this.AddPropertyTypes(modelType);
+            this.AddPropertyTypes(this.ModelType);
 
             return this.rules;
         }

@@ -12,17 +12,17 @@
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.0.9</Version>
+        <Version>1.0.10</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>Updated to reference FluentValidation v9.0.1.</PackageReleaseNotes>
+        <PackageReleaseNotes>Now exposes JSON datatypes</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2020</Copyright>
         <PackageProjectUrl>https://github.com/scandal-uk/fluentvalidationlister</PackageProjectUrl>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="9.1.2" />
+        <PackageReference Include="FluentValidation" Version="9.1.3" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
     </ItemGroup>

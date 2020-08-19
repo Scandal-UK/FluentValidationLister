@@ -15,7 +15,11 @@
     {
         [Fact(DisplayName = "Null validator throws ArgumentNullException")]
         public void NullValidator_ThrowsArgumentNullException() =>
-            Assert.Throws<ArgumentNullException>(() => new ValidationLister(null));
+            Assert.Throws<ArgumentNullException>(() => new ValidationLister(null, typeof(string)));
+
+        [Fact(DisplayName = "Null modelType throws ArgumentNullException")]
+        public void NullModelType_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new ValidationLister(new TestValidator(), null));
 
         [Fact(DisplayName = "NotEmpty() returns required rule")]
         public void NotEmpty_ReturnsRequiredRule() =>
@@ -200,7 +204,10 @@
         [Fact(DisplayName = "ExclusiveBetween() returns correct values")]
         public void ExclusiveBetween_ReturnsCorrectValues()
         {
-            var anotherIntRules = this.GetValidatorRules(v => v.RuleFor(x => x.AnotherInt).ExclusiveBetween(5, 8)).ValidatorList["AnotherInt"];
+            var anotherIntRules = this.GetValidatorRules(v => v.RuleFor(x => x.AnotherInt)
+                .ExclusiveBetween(5, 8))
+                .ValidatorList["AnotherInt"];
+
             anotherIntRules["exclusiveRange"].Should().BeOfType(typeof(FromToValues));
 
             FromToValues values = (FromToValues)anotherIntRules["exclusiveRange"];
@@ -211,7 +218,7 @@
         // Helper functions
 
         private ValidatorRules GetValidatorRules(params Action<TestValidator>[] actions) =>
-            new ValidationLister(new TestValidator(actions)).GetValidatorRules();
+            new ValidationLister(new TestValidator(actions), actions.GetType()).GetValidatorRules();
 
         private JObject GetDeserialisedValidatorRules(ValidatorRules rules) =>
             JObject.Parse(JsonConvert.SerializeObject(
