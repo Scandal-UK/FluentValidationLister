@@ -150,25 +150,38 @@ input[type=number] {
     transition: border 0.15s linear 0s, box-shadow 0.15s linear 0s, color 0.15s linear 0s;
 }
 
-    input[type=text]:focus,
-    input[type=email]:focus,
-    input[type=url]:focus,
-    input[type=password]:focus,
-    input[type=number]:focus {
-        border-color: #4697e4;
-        border-color: rgba(41, 92, 161, 0.4);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(41, 92, 161, 0.6);
-        outline: 0 none;
-    }
+input[type=checkbox].error {
+    outline: 1px solid #C3C3C3;
+}
 
-    input[type=text].error,
-    input[type=email].error,
-    input[type=url].error,
-    input[type=password].error,
-    input[type=number].error {
-        border: 1px solid #7C7C7C;
-        border-color: #FF6666 #FF6666 #E60000 #E60000;
-    }
+input[type=text]:focus,
+input[type=email]:focus,
+input[type=url]:focus,
+input[type=password]:focus,
+input[type=number]:focus {
+    border-color: #4697e4;
+    border-color: rgba(41, 92, 161, 0.4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(41, 92, 161, 0.6);
+    outline: 0 none;
+}
+
+input[type=checkbox]:focus {
+    outline: 1px solid #4697e4;
+}
+
+input[type=text].error,
+input[type=email].error,
+input[type=url].error,
+input[type=password].error,
+input[type=number].error,
+input[type=checkbox].error {
+    border: 1px solid #FF6666;
+    border-color: #FF6666 #FF6666 #E60000 #E60000;
+}
+
+input[type=checkbox].error {
+    outline: 1px solid #FF6666;
+}
 
 ul.error {
     width: 400px;
