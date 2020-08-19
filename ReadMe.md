@@ -1,11 +1,11 @@
 # FluentValidationLister
-#### v1.0.9
+#### v1.0.10
 
 An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
 > Execute your server-side FluentValidation rules automatically in the front-end!
 
-This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v9.0.1.
+This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v9.0.3.
 
 ## Table of Contents
 
@@ -61,7 +61,7 @@ Example output for JSON:
 
 ```json
 {
-  "rules": {
+  "validatorList": {
     "foreName": {
       "required": true,
       "length": {
@@ -69,18 +69,34 @@ Example output for JSON:
         "max": 10
       }
     },
+    "age": {
+      "required": true,
+      "range": {
+        "from": 16,
+        "to": 60
+      }
+    },
     "address.line1": {
       "required": true
     }
   },
-  "messages": {
+  "errorList": {
     "foreName": {
       "required": "'Forename' must not be empty.",
       "length": "'Forename' must be between 2 and 10 characters."
     },
+    "age": {
+      "required": "'Age' must not be empty.",
+      "range": "'Age' must be between 16 and 60."
+    },
     "address.line1": {
       "required": "'Line1' must not be empty."
     }
+  },
+  "typeList": {
+    "foreName": "string",
+    "age": "number",
+    "address.line1": "string"
   }
 }
 ```

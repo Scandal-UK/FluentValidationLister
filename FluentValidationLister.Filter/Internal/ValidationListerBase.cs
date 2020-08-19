@@ -1,7 +1,9 @@
 ﻿namespace FluentValidationLister.Filter.Internal
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Numerics;
     using FluentValidation;
     using FluentValidation.Internal;
     using FluentValidation.Validators;
@@ -14,14 +16,19 @@
     public abstract class ValidationListerBase
     {
         private readonly IValidatorDescriptor validatorDescriptor;
+        private readonly Type modelType;
         private ValidatorRules rules;
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ValidationListerBase"/> class with a specified <see cref="IValidator"/>.
         /// </summary>
         /// <param name="validator">An instance of a FluentValidation <see cref="IValidator"/>.</param>
-        protected ValidationListerBase(IValidator validator) =>
+        /// <param name="modelType">The <see cref="Type"/> of the model being validated.</param>
+        protected ValidationListerBase(IValidator validator, Type modelType)
+        {
             this.validatorDescriptor = validator?.CreateDescriptor() ?? throw new ArgumentNullException(nameof(validator));
+            this.modelType = modelType;
+        }
 
         /// <summary>
         /// Inspects the <see cref="IValidator"/> to produce a populated instance
@@ -36,7 +43,32 @@
                 this.AddRulesForMember(this.validatorDescriptor, member.Key);
             }
 
+            this.AddPropertyTypes(modelType);
+
             return this.rules;
+        }
+
+        private void AddPropertyTypes(Type targetType, string targetPrefix = "")
+        {
+            foreach (var prop in targetType.GetProperties())
+            {
+                this.AddPropertyTypeOrDescendantPropertyTypes(
+                    Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType,
+                    $"{targetPrefix}{prop.Name}");
+            }
+        }
+
+        private void AddPropertyTypeOrDescendantPropertyTypes(Type propertyType, string propertyName)
+        {
+            var jsonType = DeriveJsonTypeFromType(propertyType);
+            if (jsonType == "object")
+            {
+                this.AddPropertyTypes(propertyType, propertyName + '.');
+            }
+            else
+            {
+                this.AddType(propertyName, jsonType);
+            }
         }
 
         private void AddRulesForMember(IValidatorDescriptor descriptor, string memberName, string propertyPrefix = "")
@@ -82,6 +114,22 @@
             return (IValidator)methodInfo.Invoke(validator, new object[] { context });
         }
 
+        private static string DeriveJsonTypeFromType(Type dataType)
+        {
+            if (NumericTypes.Contains(dataType))
+            {
+                return "number";
+            }
+
+            switch (dataType.Name)
+            {
+                case "Boolean": return "bool";
+                case "DateTime": return "date";
+                case "String": return "string";
+                default: return "object";
+            };
+        }
+
         internal abstract void AddRuleBasedOnValidatorType(PropertyRule rule, IPropertyValidator validator, string propertyName);
 
         internal void AddRule(string propertyName, string displayName, string errorMessageTemplate, string validatorType, object validatorValue, params (string, object)?[] additionalArguments)
@@ -98,6 +146,18 @@
             }
 
             this.rules.ValidatorList[propertyName].Add(validatorType, validatorValue);
+        }
+
+        private void AddType(string propertyName, string jsonDataType)
+        {
+            if (!this.rules.TypeList.ContainsKey(propertyName))
+            {
+                this.rules.TypeList.Add(propertyName, jsonDataType);
+            }
+            else
+            {
+                this.rules.TypeList[propertyName] = jsonDataType;
+            }
         }
 
         private void AddErrorMessage(string propertyName, string validatorType, string displayName, string errorMessageTemplate, params (string, object)?[] additionalArguments)
@@ -128,5 +188,13 @@
 
             return formatter.BuildMessage(errorMessageTemplate);
         }
+
+        private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
+        {
+            typeof(int),  typeof(double), typeof(decimal),
+            typeof(long), typeof(short),  typeof(sbyte),
+            typeof(byte), typeof(ulong),  typeof(ushort),
+            typeof(uint), typeof(float),  typeof(BigInteger)
+        };
     }
 }

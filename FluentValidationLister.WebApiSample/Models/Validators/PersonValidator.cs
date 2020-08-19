@@ -10,7 +10,7 @@
         public PersonValidator()
         {
             this.RuleFor(p => p.Surname)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .Length(3, 20);
 
@@ -18,14 +18,17 @@
                 .NotEmpty();
 
             this.RuleFor(p => p.Age)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotNull()
                 .InclusiveBetween(16, 60);
 
             this.RuleFor(p => p.Email)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .EmailAddress(EmailValidationMode.AspNetCoreCompatible);
+
+            this.RuleFor(p => p.SaleOfSoulAgreed)
+                .NotNull();
 
             this.RuleFor(p => p.Address)
                 .NotNull()

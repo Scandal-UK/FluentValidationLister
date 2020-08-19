@@ -5,6 +5,7 @@
 interface ValidatorRules {
     validatorList: Dictionary<Dictionary<unknown>>;
     errorList: Dictionary<Dictionary<string>>;
+    typeList: Dictionary<string>;
 }
 
 interface RangeValues {
@@ -43,6 +44,18 @@ $(function () {
     let validationList: ValidatorRules;
     $.post("api/Person?validation=true", "{}", data => validationList = data);
 
+    const getValue = function (fieldName: string, fieldValue: string) {
+        switch (validationList.typeList[fieldName])
+        {
+            case "bool":
+                console.log("Bool value:");
+                console.log(fieldValue);
+                return fieldValue === "" ? null : fieldValue === "true";
+            case "number": return fieldValue === "" ? null : Number(fieldValue);
+            default: return fieldValue;
+        }
+    };
+
     // Format the form values into an object
     const getFormValues = function (splitField?: boolean) {
         const data: Dictionary<unknown> = {};
@@ -53,13 +66,14 @@ $(function () {
                 (data[split[0]] as Dictionary<string>)[split[1]] = field.value;
 
             } else {
-                data[field.name] = field.value;
+                data[field.name] = getValue(field.name, field.value);
             }
         });
 
-        // Correct any string-types that should be numeric or Boolean (only one in this example)
-        if (data.age === "") data.age = null; else data.age = parseInt(data.age as string);
-        // Note: we might need to expose the datatype in a future revision to address this
+        $("input:checkbox").each(function () {
+            const field = this as HTMLInputElement;
+            data[field.name] = field.checked;
+        });
 
         return data;
     };
@@ -190,7 +204,7 @@ $(function () {
                 .done(data => resultPanel.append($("<p />").addClass("bold").text(data.message)))
                 .fail(function (data) {
                     if (data.status === 400) {
-                        // Validation failed - display the errors
+                        // Server-side validation failed - display the errors
                         resultPanel.append($("<p />").addClass("errortitle").text("Server-side validation failed"));
 
                         const validationResponse = data.responseJSON;

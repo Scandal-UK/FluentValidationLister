@@ -56,7 +56,8 @@
             // Return list of validation rules
             if (requestingValidatorList)
             {
-                var rules = new ValidationLister(validator).GetValidatorRules();
+                // todo: consider passing type here so we can list all property types
+                var rules = new ValidationLister(validator, GetModelType(model)).GetValidatorRules();
                 if (useJson)
                 {
                     this.ConvertPropertyNamesToCamelCase(rules);
@@ -121,8 +122,13 @@
             foreach (var item in validatorRules.ErrorList)
                 newErrorList.Add(item.Key.ToCamelCase(), validatorRules.ErrorList[item.Key]);
 
+            var newTypeList = new SerialisableDictionary<string, string>();
+            foreach (var item in validatorRules.TypeList)
+                newTypeList.Add(item.Key.ToCamelCase(), validatorRules.TypeList[item.Key]);
+
             validatorRules.ValidatorList = newValidatorList;
             validatorRules.ErrorList = newErrorList;
+            validatorRules.TypeList = newTypeList;
         }
 
         private void ValidateModel(IValidator validator, object model, ModelStateDictionary modelState)
