@@ -11,7 +11,7 @@
 
     /// <summary>
     /// A base class to inspect an instance of <see cref="IValidator"/> and produce a list of
-    /// rules and failure messages based on the types specified in the derivatives.
+    /// rules, types and failure messages based on the types specified in the derivatives.
     /// </summary>
     public abstract class ValidationListerBase
     {
