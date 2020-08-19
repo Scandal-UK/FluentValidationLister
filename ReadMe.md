@@ -96,7 +96,8 @@ Example output for JSON:
   "typeList": {
     "foreName": "string",
     "age": "number",
-    "address.line1": "string"
+    "address.line1": "string",
+    "address.line2": "string"
   }
 }
 ```
@@ -152,11 +153,13 @@ Aside from the default Visual Studio template; it includes one controller, two m
 
 The first screen runs a very basic (and fully-commented) snippet of TypeScript to return and display the validation metadata for an endpoint.
 
-The second screen shows a generic TypeScript implementation with a web form, this time using the jQuery library. It displays client-side and server-side (problem details) validation errors in the same way for comparison. **This script is generic, so there is an expectation that the form field names match the JSON property names for this to work properly!**
+The second screen shows a generic TypeScript implementation with a web form, this time using the jQuery library. It displays client-side and server-side (problem details) validation errors in the same way for comparison. **Note that this script is generic, so there is an expectation that the form field names match the JSON property names for this to work properly!**
 
 The validators in the project demonstrate these features of the filter;
 
+- Required JSON datatypes are exposed from the backend _(e.g. age and saleOfSoulAgreed)_
 - Child records are returned with a dot delimiter _(e.g. Address.Line1)_
-- Custom regular expressions are returned _(e.g. Address.Postcode)_
 - `.WithName()` is respected in the returned messages _(e.g. Address.Line1)_
+- JSON datatypes are listed even if they have no related validator _(e.g. Address.Line2)_
+- Custom regular expressions are returned _(e.g. Address.Postcode)_
 - Custom error messages are returned where defined _(e.g. Address.County)_
