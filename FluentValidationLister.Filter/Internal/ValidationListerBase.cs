@@ -60,7 +60,7 @@
         private void AddPropertyTypeOrDescendantPropertyTypes(Type propertyType, string propertyName)
         {
             var jsonType = DeriveJsonTypeFromType(propertyType);
-            if (jsonType == "object")
+            if (jsonType == "object" && propertyType.IsClass && !propertyType.IsGenericType)
             {
                 this.AddPropertyTypes(propertyType, propertyName + '.');
             }
@@ -122,7 +122,7 @@
 
             switch (dataType.Name)
             {
-                case "Boolean": return "bool";
+                case "Boolean": return "boolean";
                 case "DateTime": return "date";
                 case "String": return "string";
                 default: return "object";
