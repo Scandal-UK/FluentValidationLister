@@ -193,6 +193,10 @@
         public void Types_IncludeBoolean() =>
             this.GetValidatorRules().TypeList["IsActive"].Should().Be("boolean");
 
+        [Fact(DisplayName = "Types include date")]
+        public void Types_IncludeDate() =>
+            this.GetValidatorRules().TypeList["DateOfBirth"].Should().Be("date");
+
         [Fact(DisplayName = "Types include child types")]
         public void Types_IncludeChildTypes() =>
             this.GetValidatorRules().TypeList["Address.Line1"].Should().Be("string");
