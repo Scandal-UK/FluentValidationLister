@@ -5,7 +5,7 @@ An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinne
 
 > Execute your server-side FluentValidation rules automatically in the front-end!
 
-This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v9.0.3.
+This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v9.1.3.
 
 ## Table of Contents
 
