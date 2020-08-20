@@ -44,10 +44,11 @@ $(function () {
     let validationList: ValidatorRules;
     $.post("api/Person?validation=true", "{}", data => validationList = data);
 
+    // Format a value based on the declared JSON type (e.g. boolean, number, date or string)
     const getValue = function (fieldName: string, fieldValue: string) {
         switch (validationList.typeList[fieldName])
         {
-            case "bool": return fieldValue === "" ? null : fieldValue === "true";
+            case "boolean": return fieldValue === "" ? null : fieldValue === "true";
             case "number": return fieldValue === "" ? null : Number(fieldValue);
             default: return fieldValue;
         }
@@ -60,7 +61,7 @@ $(function () {
             if (splitField === true && field.name.includes(".")) {
                 const split = field.name.split(".");
                 if (typeof data[split[0]] === "undefined") data[split[0]] = {};
-                (data[split[0]] as Dictionary<string>)[split[1]] = field.value;
+                (data[split[0]] as Dictionary<string | number | boolean>)[split[1]] = getValue(field.name, field.value);
 
             } else {
                 data[field.name] = getValue(field.name, field.value);
@@ -97,7 +98,7 @@ $(function () {
         const data = getFormValues();
         const errorList: Array<string> = [];
 
-        $.each(data, function (fieldName, fieldValue: string) {
+        $.each(data, function (fieldName: string, fieldValue: string) {
             let fieldIsValid = true;
             for (const ruleName in validationList.validatorList[fieldName]) {
                 const fieldHasValue = fieldValue !== null && fieldValue !== "";
@@ -170,7 +171,7 @@ $(function () {
             resultPanel.append($("<p />").addClass("errortitle").text("Clientside validation failed"));
 
             const list = $("<ul />").addClass("error");
-            $.each(errorList, (i, val) => list.append($("<li />").text(val)));
+            $.each(errorList, (_i, val) => list.append($("<li />").text(val)));
 
             resultPanel.append(list);
         }
