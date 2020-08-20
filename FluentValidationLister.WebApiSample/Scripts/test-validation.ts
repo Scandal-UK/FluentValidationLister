@@ -47,10 +47,7 @@ $(function () {
     const getValue = function (fieldName: string, fieldValue: string) {
         switch (validationList.typeList[fieldName])
         {
-            case "bool":
-                console.log("Bool value:");
-                console.log(fieldValue);
-                return fieldValue === "" ? null : fieldValue === "true";
+            case "bool": return fieldValue === "" ? null : fieldValue === "true";
             case "number": return fieldValue === "" ? null : Number(fieldValue);
             default: return fieldValue;
         }
@@ -88,7 +85,10 @@ $(function () {
     const populateFormFromJson = function ({ json, prefix = "" }: { json: unknown; prefix?: string }) {
         $.each(json, function (key: string, val) {
             if (typeof val === "object") populateFormFromJson({ json: val, prefix: key + "." });
-            else $('[name="' + prefix + key + '"]', personForm).val(val);
+            else {
+                const formField = $('[name="' + prefix + key + '"]', personForm);
+                if (formField.is(":checkbox")) formField.prop("checked", val); else formField.val(val);
+            }
         });
     };
 

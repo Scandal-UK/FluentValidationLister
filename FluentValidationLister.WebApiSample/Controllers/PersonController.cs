@@ -35,6 +35,7 @@
                 Forename = "Bob",
                 Email = "bob.sample@email.com",
                 Age = 21,
+                SaleOfSoulAgreed = true,
                 Address = new Address
                 {
                     Line1 = "123 Sample Street",
