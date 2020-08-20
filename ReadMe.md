@@ -1,5 +1,5 @@
 # FluentValidationLister
-#### v1.0.10
+#### v1.1.0
 
 An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
