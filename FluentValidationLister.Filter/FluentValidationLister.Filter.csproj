@@ -12,10 +12,10 @@
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.1.0</Version>
+        <Version>1.1.1</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>Fixes and improvements</PackageReleaseNotes>
+        <PackageReleaseNotes>Fixed infinite recursion issue with self-referencing types</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2020</Copyright>
         <PackageProjectUrl>https://github.com/scandal-uk/fluentvalidationlister</PackageProjectUrl>
