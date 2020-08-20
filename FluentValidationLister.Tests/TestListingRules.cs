@@ -193,6 +193,14 @@
         public void Types_IncludeBoolean() =>
             this.GetValidatorRules().TypeList["IsActive"].Should().Be("boolean");
 
+        [Fact(DisplayName = "Types include child types")]
+        public void Types_IncludeChildTypes() =>
+            this.GetValidatorRules().TypeList["Address.Line1"].Should().Be("string");
+
+        [Fact(DisplayName = "Types include collection types")]
+        public void Types_IncludeCollectionTypes() =>
+            this.GetValidatorRules().TypeList["Orders.Amount"].Should().Be("number");
+
         [Fact(DisplayName = "When serialised returns correct message")]
         public void WhenSerialised_ReturnsCorrectMessage() =>
             this.GetDeserialisedValidatorRules(this.GetValidatorRules(v => v.RuleFor(x => x.Forename).NotEmpty()))["errorList"]["forename"]["required"].ToString().Should().Be("'Forename' must not be empty.");
