@@ -1,6 +1,7 @@
 ﻿namespace FluentValidationLister.Filter.Internal
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
@@ -60,14 +61,24 @@
         private void AddPropertyTypeOrDescendantPropertyTypes(Type propertyType, string propertyName)
         {
             var jsonType = DeriveJsonTypeFromType(propertyType);
-            if (jsonType == "object" && propertyType.IsClass && !propertyType.IsGenericType)
-            {
-                this.AddPropertyTypes(propertyType, propertyName + '.');
-            }
-            else
+            if (propertyType.IsPrimitive || jsonType != "object" || IsDuplicatedPropertyName(propertyName))
             {
                 this.AddType(propertyName, jsonType);
             }
+            else if (typeof(IEnumerable).IsAssignableFrom(propertyType))
+            {
+                this.AddPropertyTypes(propertyType.GetGenericArguments()[0], propertyName + '.');
+            }
+            else if (propertyType.IsClass && !propertyType.IsGenericType)
+            {
+                this.AddPropertyTypes(propertyType, propertyName + '.');
+            }
+        }
+
+        private static bool IsDuplicatedPropertyName(string propertyName)
+        {
+            var parts = propertyName.Split('.');
+            return parts.Length > 1 && parts[parts.Length - 1] == parts[parts.Length - 2];
         }
 
         private void AddRulesForMember(IValidatorDescriptor descriptor, string memberName, string propertyPrefix = "")
