@@ -13,6 +13,7 @@
         public int Id { get; set; }
         public string Surname { get; set; }
         public string Forename { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public List<Person> Children { get; set; }
 

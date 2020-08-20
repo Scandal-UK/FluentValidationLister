@@ -15,7 +15,7 @@
     {
         [Fact(DisplayName = "Null validator throws ArgumentNullException")]
         public void NullValidator_ThrowsArgumentNullException() =>
-            Assert.Throws<ArgumentNullException>(() => new ValidationLister(null, typeof(string)));
+            Assert.Throws<ArgumentNullException>(() => new ValidationLister(null, typeof(Person)));
 
         [Fact(DisplayName = "Null modelType throws ArgumentNullException")]
         public void NullModelType_ThrowsArgumentNullException() =>
@@ -181,6 +181,18 @@
             this.GetValidatorRules(v => v.RuleForEach(x => x.Orders).SetValidator(new OrderValidator()))
                 .ValidatorList["Orders.Amount"].Should().NotBeNull();
 
+        [Fact(DisplayName = "Types include string")]
+        public void Types_IncludeString() =>
+            this.GetValidatorRules().TypeList["Surname"].Should().Be("string");
+
+        [Fact(DisplayName = "Types include number")]
+        public void Types_IncludeNumber() =>
+            this.GetValidatorRules().TypeList["Id"].Should().Be("number");
+
+        [Fact(DisplayName = "Types include boolean")]
+        public void Types_IncludeBoolean() =>
+            this.GetValidatorRules().TypeList["IsActive"].Should().Be("boolean");
+
         [Fact(DisplayName = "When serialised returns correct message")]
         public void WhenSerialised_ReturnsCorrectMessage() =>
             this.GetDeserialisedValidatorRules(this.GetValidatorRules(v => v.RuleFor(x => x.Forename).NotEmpty()))["errorList"]["forename"]["required"].ToString().Should().Be("'Forename' must not be empty.");
@@ -218,7 +230,7 @@
         // Helper functions
 
         private ValidatorRules GetValidatorRules(params Action<TestValidator>[] actions) =>
-            new ValidationLister(new TestValidator(actions), actions.GetType()).GetValidatorRules();
+            new ValidationLister(new TestValidator(actions), typeof(Person)).GetValidatorRules();
 
         private JObject GetDeserialisedValidatorRules(ValidatorRules rules) =>
             JObject.Parse(JsonConvert.SerializeObject(
