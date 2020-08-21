@@ -1,4 +1,5 @@
-﻿interface Dictionary<T> {
+﻿// Define FluentValidationLister payload through interfaces
+interface Dictionary<T> {
     [key: string]: T;
 }
 
@@ -12,13 +13,13 @@ interface LimitValues {
     max: number;
 }
 
-// Define FluentValidationLister payload
 interface ValidatorRules {
     validatorList: Dictionary<Dictionary<string | boolean | number | RangeValues | LimitValues>>;
     errorList: Dictionary<Dictionary<string>>;
     typeList: Dictionary<string>;
 }
 
+// Begin document.ready event handler
 $(function () {
     const personForm = $("#personForm"); // Form
     const resultPanel = $("#resultPanel"); // Div
@@ -45,7 +46,7 @@ $(function () {
     let validationList: ValidatorRules;
     $.post("api/Person?validation=true", "{}", data => validationList = data);
 
-    // Format a value based on the declared JSON type (e.g. boolean, number, date or string)
+    // Format a value based on the declared JSON type (e.g. boolean, number, null or string)
     const getValue = function (fieldName: string, fieldValue: string) {
         switch (validationList.typeList[fieldName])
         {
