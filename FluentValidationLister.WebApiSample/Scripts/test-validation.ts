@@ -2,12 +2,6 @@
     [key: string]: T;
 }
 
-interface ValidatorRules {
-    validatorList: Dictionary<Dictionary<unknown>>;
-    errorList: Dictionary<Dictionary<string>>;
-    typeList: Dictionary<string>;
-}
-
 interface RangeValues {
     from: number;
     to: number;
@@ -16,6 +10,13 @@ interface RangeValues {
 interface LimitValues {
     min: number;
     max: number;
+}
+
+// Define FluentValidationLister payload
+interface ValidatorRules {
+    validatorList: Dictionary<Dictionary<string | boolean | number | RangeValues | LimitValues>>;
+    errorList: Dictionary<Dictionary<string>>;
+    typeList: Dictionary<string>;
 }
 
 $(function () {
@@ -30,7 +31,7 @@ $(function () {
         cache: false
     });
 
-    // AJAX error handler
+    // AJAX error handler - displays server-side errors
     $(document).ajaxError(function (_e, xhr) {
         if (xhr.status > 400) {
             if (console.error) console.error(xhr.responseText);
@@ -56,21 +57,22 @@ $(function () {
 
     // Format the form values into an object
     const getFormValues = function (splitField?: boolean) {
-        const data: Dictionary<unknown> = {};
+        const data: Dictionary<string | number | boolean | {} | null> = {};
         personForm.serializeArray().map(function (field) {
             if (splitField === true && field.name.includes(".")) {
                 const split = field.name.split(".");
                 if (typeof data[split[0]] === "undefined") data[split[0]] = {};
-                (data[split[0]] as Dictionary<string | number | boolean>)[split[1]] = getValue(field.name, field.value);
+                (data[split[0]] as Dictionary<string | number | boolean | null>)[split[1]] = getValue(field.name, field.value);
 
             } else {
                 data[field.name] = getValue(field.name, field.value);
             }
         });
 
-        $("input:checkbox").each(function () {
+        // To include false values for checkboxes, we must add them separately from SerializeArray()
+        $("input:checkbox:not(:checked)", personForm).each(function () {
             const field = this as HTMLInputElement;
-            data[field.name] = field.checked;
+            data[field.name] = false;
         });
 
         return data;
@@ -98,7 +100,7 @@ $(function () {
         const data = getFormValues();
         const errorList: Array<string> = [];
 
-        $.each(data, function (fieldName: string, fieldValue: string) {
+        $.each(data, function (fieldName: string, fieldValue) {
             let fieldIsValid = true;
             for (const ruleName in validationList.validatorList[fieldName]) {
                 const fieldHasValue = fieldValue !== null && fieldValue !== "";
@@ -106,34 +108,35 @@ $(function () {
 
                 switch (ruleName) {
                     case "required":
-                        fieldPassesRule = fieldHasValue;
+                        if (validationList.validatorList[fieldName][ruleName] as boolean) fieldPassesRule = fieldHasValue;
                         break;
                     case "regex":
                         if (fieldHasValue === true) {
                             const regex = new RegExp(validationList.validatorList[fieldName][ruleName] as string, "g");
-                            fieldPassesRule = regex.test(fieldValue);
+                            fieldPassesRule = regex.test(fieldValue as string);
                         }
                         break;
                     case "lessThan":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue < validationList.validatorList[fieldName][ruleName];
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue as number < validationList.validatorList[fieldName][ruleName];
                         break;
                     case "greaterThan":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue > validationList.validatorList[fieldName][ruleName];
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue as number > validationList.validatorList[fieldName][ruleName];
                         break;
                     case "lessThanOrEqualTo":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue <= validationList.validatorList[fieldName][ruleName];
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue as number <= validationList.validatorList[fieldName][ruleName];
                         break;
                     case "greaterThanOrEqualTo":
-                        if (fieldHasValue === true) fieldPassesRule = fieldValue >= validationList.validatorList[fieldName][ruleName];
+                        if (fieldHasValue === true) fieldPassesRule = fieldValue as number >= validationList.validatorList[fieldName][ruleName];
                         break;
                     case "minLength":
-                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length >= parseInt(validationList.validatorList[fieldName][ruleName] as string);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length >= (validationList.validatorList[fieldName][ruleName] as number);
                         break;
                     case "maxLength":
-                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length <= parseInt(validationList.validatorList[fieldName][ruleName] as string);
+                        console.log(validationList.validatorList[fieldName][ruleName]);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length <= (validationList.validatorList[fieldName][ruleName] as number);
                         break;
                     case "exactLength":
-                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length === parseInt(validationList.validatorList[fieldName][ruleName] as string);
+                        if (fieldHasValue === true) fieldPassesRule = (fieldValue as string).length === (validationList.validatorList[fieldName][ruleName] as number);
                         break;
                     case "length":
                         if (fieldHasValue === true) {
@@ -145,15 +148,15 @@ $(function () {
                     case "range":
                         if (fieldHasValue === true) {
                             fieldPassesRule =
-                                parseInt(fieldValue) >= (validationList.validatorList[fieldName][ruleName] as RangeValues).from &&
-                                parseInt(fieldValue) <= (validationList.validatorList[fieldName][ruleName] as RangeValues).to;
+                                fieldValue as number >= (validationList.validatorList[fieldName][ruleName] as RangeValues).from &&
+                                fieldValue as number <= (validationList.validatorList[fieldName][ruleName] as RangeValues).to;
                         }
                         break;
                     case "exclusiveRange":
                         if (fieldHasValue === true) {
                             fieldPassesRule =
-                                parseInt(fieldValue) < (validationList.validatorList[fieldName][ruleName] as RangeValues).from &&
-                                parseInt(fieldValue) > (validationList.validatorList[fieldName][ruleName] as RangeValues).to;
+                                fieldValue as number < (validationList.validatorList[fieldName][ruleName] as RangeValues).from &&
+                                fieldValue as number > (validationList.validatorList[fieldName][ruleName] as RangeValues).to;
                         }
                         break;
                 }

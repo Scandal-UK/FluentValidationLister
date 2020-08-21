@@ -3,7 +3,7 @@
     let getValidation: HTMLButtonElement;
     let resultPanel: HTMLDivElement;
 
-    const displayValidationResponse = function () {
+    const displayValidationResponse = function (this: XMLHttpRequest) {
         if (this.readyState === 4) {
             getValidation.disabled = false;
 
