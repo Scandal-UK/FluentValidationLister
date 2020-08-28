@@ -32,16 +32,20 @@ namespace FluentValidationLister.Tests
         public void Types_IncludeCollectionTypes() =>
             TestListingHelper.GetValidatorRules().TypeList[$"{nameof(Person.Orders)}.{nameof(Order.Amount)}"].Should().Be("number");
 
-        [Fact(DisplayName = "Types; int? returns number")]
+        [Fact(DisplayName = "Types; Integer? returns number")]
         public void Types_IntegerReturnsNumber() =>
             TestListingHelper.GetValidatorRules().TypeList[nameof(Person.NullableInt)].Should().Be("number");
 
-        [Fact(DisplayName = "Types; decimal? returns number")]
+        [Fact(DisplayName = "Types; Decimal? returns number")]
         public void Types_DecimalReturnsNumber() =>
             TestListingHelper.GetValidatorRules().TypeList[nameof(Person.Discount)].Should().Be("number");
 
-        [Fact(DisplayName = "Types; double? returns number")]
+        [Fact(DisplayName = "Types; Double? returns number")]
         public void Types_DoubleReturnsNumber() =>
             TestListingHelper.GetValidatorRules().TypeList[nameof(Person.Age)].Should().Be("number");
+
+        [Fact(DisplayName = "Types; Float? returns number")]
+        public void Types_FloatOrSingleReturnsNumber() =>
+            TestListingHelper.GetValidatorRules().TypeList[nameof(Person.SomeSingleValue)].Should().Be("number");
     }
 }

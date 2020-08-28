@@ -58,6 +58,8 @@
         public string GenderString { get; set; }
 
         public string ForenameReadOnly => Forename;
+
+        public float? SomeSingleValue { get; set; } = (float)1.0;
     }
 
     public interface IAddress
