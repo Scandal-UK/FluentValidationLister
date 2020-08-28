@@ -1,4 +1,7 @@
-﻿namespace FluentValidationLister.Tests
+﻿using FluentAssertions.Equivalency;
+using FluentValidationLister.Tests.Samples;
+
+namespace FluentValidationLister.Tests
 {
     using FluentAssertions;
     using Xunit;
@@ -7,26 +10,38 @@
     {
         [Fact(DisplayName = "Types include string")]
         public void Types_IncludeString() =>
-            TestListingHelper.GetValidatorRules().TypeList["Surname"].Should().Be("string");
+            TestListingHelper.GetValidatorRules().TypeList[nameof(Person.Surname)].Should().Be("string");
 
         [Fact(DisplayName = "Types include number")]
         public void Types_IncludeNumber() =>
-            TestListingHelper.GetValidatorRules().TypeList["Id"].Should().Be("number");
+            TestListingHelper.GetValidatorRules().TypeList[nameof(Person.Id)].Should().Be("number");
 
         [Fact(DisplayName = "Types include boolean")]
         public void Types_IncludeBoolean() =>
-            TestListingHelper.GetValidatorRules().TypeList["IsActive"].Should().Be("boolean");
+            TestListingHelper.GetValidatorRules().TypeList[nameof(Person.IsActive)].Should().Be("boolean");
 
         [Fact(DisplayName = "Types include date")]
         public void Types_IncludeDate() =>
-            TestListingHelper.GetValidatorRules().TypeList["DateOfBirth"].Should().Be("date");
+            TestListingHelper.GetValidatorRules().TypeList[nameof(Person.DateOfBirth)].Should().Be("date");
 
         [Fact(DisplayName = "Types include child types")]
         public void Types_IncludeChildTypes() =>
-            TestListingHelper.GetValidatorRules().TypeList["Address.Line1"].Should().Be("string");
+            TestListingHelper.GetValidatorRules().TypeList[$"{nameof(Address)}.{nameof(Address.Line1)}"].Should().Be("string");
 
         [Fact(DisplayName = "Types include collection types")]
         public void Types_IncludeCollectionTypes() =>
-            TestListingHelper.GetValidatorRules().TypeList["Orders.Amount"].Should().Be("number");
+            TestListingHelper.GetValidatorRules().TypeList[$"{nameof(Person.Orders)}.{nameof(Order.Amount)}"].Should().Be("number");
+
+        [Fact(DisplayName = "Types; int? returns number")]
+        public void Types_IntegerReturnsNumber() =>
+            TestListingHelper.GetValidatorRules().TypeList[nameof(Person.NullableInt)].Should().Be("number");
+
+        [Fact(DisplayName = "Types; decimal? returns number")]
+        public void Types_DecimalReturnsNumber() =>
+            TestListingHelper.GetValidatorRules().TypeList[nameof(Person.Discount)].Should().Be("number");
+
+        [Fact(DisplayName = "Types; double? returns number")]
+        public void Types_DoubleReturnsNumber() =>
+            TestListingHelper.GetValidatorRules().TypeList[nameof(Person.Age)].Should().Be("number");
     }
 }
