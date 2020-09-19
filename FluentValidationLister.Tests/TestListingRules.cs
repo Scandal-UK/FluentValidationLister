@@ -21,67 +21,67 @@
         [Fact(DisplayName = "NotEmpty() returns required rule")]
         public void NotEmpty_ReturnsRequiredRule() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).NotEmpty())
-                .ValidatorList[nameof(Person.Forename)]["required"].Should().Be(true);
+                .ValidatorList[key: nameof(Person.Forename)]["required"].Should().Be(true);
 
         [Fact(DisplayName = "Two validators return two rules")]
         public void TwoValidators_ReturnTwoRulesAndMessages() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.NullableInt).NotNull().LessThan(100))
-                .ValidatorList[nameof(Person.NullableInt)].Count.Should().Be(2);
+                .ValidatorList[key: nameof(Person.NullableInt)].Count.Should().Be(2);
 
         [Fact(DisplayName = "LessThan() returns correct limit value")]
         public void LessThan_ReturnsCorrectLimitValue() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.NullableInt).LessThan(100))
-                .ValidatorList[nameof(Person.NullableInt)]["lessThan"].Should().Be(100);
+                .ValidatorList[key: nameof(Person.NullableInt)]["lessThan"].Should().Be(100);
 
         [Fact(DisplayName = "LessThanOrEqualTo() returns correct limit value")]
         public void LessThanOrEqualTo_ReturnsCorrectLimitValue() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.NullableInt).LessThanOrEqualTo(100))
-                .ValidatorList[nameof(Person.NullableInt)]["lessThanOrEqualTo"].Should().Be(100);
+                .ValidatorList[key: nameof(Person.NullableInt)]["lessThanOrEqualTo"].Should().Be(100);
 
         [Fact(DisplayName = "GreaterThan() returns correct limit value")]
         public void GreaterThan_ReturnsCorrectLimitValue() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.NullableInt).GreaterThan(100))
-                .ValidatorList[nameof(Person.NullableInt)]["greaterThan"].Should().Be(100);
+                .ValidatorList[key: nameof(Person.NullableInt)]["greaterThan"].Should().Be(100);
 
         [Fact(DisplayName = "GreaterThanOrEqualTo() returns correct limit value")]
         public void GreaterThanOrEqualTo_ReturnsCorrectLimitValue() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.NullableInt).GreaterThanOrEqualTo(100))
-                .ValidatorList[nameof(Person.NullableInt)]["greaterThanOrEqualTo"].Should().Be(100);
+                .ValidatorList[key: nameof(Person.NullableInt)]["greaterThanOrEqualTo"].Should().Be(100);
 
         [Fact(DisplayName = "MaxLength() returns correct limit value")]
         public void MaxLength_ReturnsCorrectLimitValue() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).MaximumLength(10))
-                .ValidatorList[nameof(Person.Forename)]["maxLength"].Should().Be(10);
+                .ValidatorList[key: nameof(Person.Forename)]["maxLength"].Should().Be(10);
 
         [Fact(DisplayName = "MinLength() returns correct limit value")]
         public void MinLength_ReturnsCorrectLimitValue() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).MinimumLength(10))
-                .ValidatorList[nameof(Person.Forename)]["minLength"].Should().Be(10);
+                .ValidatorList[key: nameof(Person.Forename)]["minLength"].Should().Be(10);
 
         [Fact(DisplayName = "Exact Length() returns correct value")]
         public void ExactLength_ReturnsCorrectValue() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).Length(10))
-                .ValidatorList[nameof(Person.Forename)]["exactLength"].Should().Be(10);
+                .ValidatorList[key: nameof(Person.Forename)]["exactLength"].Should().Be(10);
 
         [Fact(DisplayName = "Equal() returns correct comparison property")]
         public void Equal_ReturnsCorrectComparisonProperty() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).Equal(x => x.Surname))
-                .ValidatorList[nameof(Person.Forename)]["compare"].Should().Be("Surname");
+                .ValidatorList[key: nameof(Person.Forename)]["compare"].Should().Be("Surname");
 
         [Fact(DisplayName = "Equal() returns correct comparison value")]
         public void Equal_ReturnsCorrectComparisonValue() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).Equal("Foo bar"))
-                .ValidatorList[nameof(Person.Forename)]["compare"].Should().Be("Foo bar");
+                .ValidatorList[key: nameof(Person.Forename)]["compare"].Should().Be("Foo bar");
 
         [Fact(DisplayName = "Matches() returns regular expression")]
         public void Matches_ReturnsRegularExpression() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).Matches("^[A-Za-z]+$"))
-                .ValidatorList[nameof(Person.Forename)]["regex"].Should().Be("^[A-Za-z]+$");
+                .ValidatorList[key: nameof(Person.Forename)]["regex"].Should().Be("^[A-Za-z]+$");
 
         [Fact(DisplayName = "EmailAddress() returns regular expression")]
         public void EmailAddress_ReturnsRegularExpression() =>
             TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Email).EmailAddress())
-                .ValidatorList[nameof(Person.Email)]["regex"].Should().NotBeNull();
+                .ValidatorList[key: nameof(Person.Email)]["regex"].Should().NotBeNull();
 
         [Fact(DisplayName = "Validator includes child validator rules")]
         public void Validator_IncludesChildValidatorRules() =>
