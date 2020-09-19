@@ -100,12 +100,12 @@
 
         [Fact(DisplayName = "When serialised returns correct message")]
         public void WhenSerialised_ReturnsCorrectMessage() =>
-            TestListingHelper.GetDeserialisedValidatorRules(TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).NotEmpty()))["errorList"][nameof(Person.Forename)]["required"].ToString().Should().Be("'Forename' must not be empty.");
+            TestListingHelper.GetDeserialisedValidatorRules(TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).NotEmpty()))["errorList"]["forename"]["required"].ToString().Should().Be("'Forename' must not be empty.");
 
         [Fact(DisplayName = "Length() when serialised, returns correct values")]
         public void Length_WhenSerialisedReturnsCorrectValues()
         {
-            var forenameRules = TestListingHelper.GetDeserialisedValidatorRules(TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).Length(2, 10)))["validatorList"][nameof(Person.Forename)]["length"];
+            var forenameRules = TestListingHelper.GetDeserialisedValidatorRules(TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.Forename).Length(2, 10)))["validatorList"]["forename"]["length"];
             forenameRules["min"].ToObject<int>().Should().Be(2);
             forenameRules["max"].ToObject<int>().Should().Be(10);
         }
@@ -113,7 +113,7 @@
         [Fact(DisplayName = "InclusiveBetween() when serialised, returns correct values")]
         public void InclusiveBetween_WhenSerialisedReturnsCorrectValues()
         {
-            var anotherIntRules = TestListingHelper.GetDeserialisedValidatorRules(TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.AnotherInt).InclusiveBetween(2, 10)))["validatorList"][nameof(Person.AnotherInt)]["range"];
+            var anotherIntRules = TestListingHelper.GetDeserialisedValidatorRules(TestListingHelper.GetValidatorRules(v => v.RuleFor(x => x.AnotherInt).InclusiveBetween(2, 10)))["validatorList"]["anotherInt"]["range"];
             anotherIntRules["from"].ToObject<int>().Should().Be(2);
             anotherIntRules["to"].ToObject<int>().Should().Be(10);
         }
