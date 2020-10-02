@@ -18,11 +18,11 @@
         <PackageReleaseNotes>Fixed infinite recursion issue with self-referencing types</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2020</Copyright>
-        <PackageProjectUrl>https://github.com/scandal-uk/fluentvalidationlister</PackageProjectUrl>
+        <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="9.2.1" />
+        <PackageReference Include="FluentValidation" Version="9.2.2" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
     </ItemGroup>
