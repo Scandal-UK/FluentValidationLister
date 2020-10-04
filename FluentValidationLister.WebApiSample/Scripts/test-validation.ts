@@ -52,7 +52,7 @@ $(function () {
         {
             case "boolean": return fieldValue === "" ? null : fieldValue === "true";
             case "number": return fieldValue === "" ? null : Number(fieldValue);
-            default: return fieldValue;
+            default: return fieldValue === "" ? null : fieldValue;
         }
     };
 
