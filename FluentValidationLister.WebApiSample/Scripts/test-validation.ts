@@ -162,18 +162,21 @@ $(function () {
                         break;
                 }
 
+                // Compile the error message(s)
                 if (fieldPassesRule === false) {
                     fieldIsValid = false;
                     errorList.push(validationList.errorList[fieldName][ruleName]);
                 }
             }
 
+            // Highlight the affected field
             if (fieldIsValid === false) $('[name="' + fieldName + '"]', personForm).addClass("error");
         });
 
         if (errorList.length > 0) {
             resultPanel.append($("<p />").addClass("errortitle").text("Clientside validation failed"));
 
+            // Add the messages to the displayed result
             const list = $("<ul />").addClass("error");
             $.each(errorList, (_i, val) => list.append($("<li />").text(val)));
 
@@ -198,28 +201,32 @@ $(function () {
             if (personForm.prop("disabled") === true) return;
             resetResult();
 
+            // If client-side validation fails, bail-out here without posting the payload
             if ($("#performClientsideValidation").is(":checked")) {
                 if (validateForm() === false) return;
             }
 
             personForm.prop("disabled", true);
 
+            // Post the form payload to the server
             $.post("api/Person", JSON.stringify(getFormValues(true)))
                 .always(() => personForm.prop("disabled", false))
                 .done(data => resultPanel.append($("<p />").addClass("bold").text(data.message)))
                 .fail(function (data) {
                     if (data.status === 400) {
-                        // Server-side validation failed - display the errors
+                        // Server-side validation failed
                         resultPanel.append($("<p />").addClass("errortitle").text("Server-side validation failed"));
 
                         const validationResponse = data.responseJSON;
                         const errorList: string[] = [];
 
+                        // Highlight the affected fields and compile the error messages
                         for (const key in validationResponse.errors) {
                             $('[name="' + key + '"]', personForm).addClass("error");
                             $.each(validationResponse.errors[key], (_i, val) => errorList.push(val));
                         }
 
+                        // Add the messages to the displayed result
                         const list = $("<ul />").addClass("error");
                         $.each(errorList, (_i, val) => list.append($("<li />").text(val)));
 
