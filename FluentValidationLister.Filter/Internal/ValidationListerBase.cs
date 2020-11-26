@@ -152,7 +152,7 @@
         {
             if (!this.rules.ValidatorList.ContainsKey(propertyName))
             {
-                this.rules.ValidatorList.Add(propertyName, new SerialisableDictionary<string, object>());
+                this.rules.ValidatorList.Add(propertyName, new Dictionary<string, object>());
             }
 
             this.rules.ValidatorList[propertyName].Add(validatorType, validatorValue);
@@ -174,7 +174,7 @@
         {
             if (!this.rules.ErrorList.ContainsKey(propertyName))
             {
-                this.rules.ErrorList.Add(propertyName, new SerialisableDictionary<string, string>());
+                this.rules.ErrorList.Add(propertyName, new Dictionary<string, string>());
             }
 
             this.rules.ErrorList[propertyName].Add(validatorType, this.BuildErrorMessage(displayName, errorMessageTemplate, additionalArguments));

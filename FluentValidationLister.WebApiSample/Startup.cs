@@ -11,16 +11,12 @@ namespace FluentValidationLister.WebApiSample
 
     public sealed class Startup
     {
-        public static void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers()
-                .AddXmlSerializerFormatters();
-
+        public static void ConfigureServices(IServiceCollection services) =>
             services
                 .AddFluentValidationLister()
                 .AddTransient<IValidator<Person>, PersonValidator>()
-                .AddTransient<IValidator<Address>, AddressValidator>();
-        }
+                .AddTransient<IValidator<Address>, AddressValidator>()
+                .AddControllers();
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

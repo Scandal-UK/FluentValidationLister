@@ -19,10 +19,10 @@ interface ValidatorRules {
     typeList: Dictionary<string>;
 }
 
-// Begin document.ready event handler
+// Define the document.ready() event handler
 $(function () {
-    const personForm = $("#personForm"); // Form
-    const resultPanel = $("#resultPanel"); // Div
+    const personForm = $("#personForm"); // Form element
+    const resultPanel = $("#resultPanel"); // Div element
 
     // AJAX settings
     $.ajaxSetup({
@@ -198,14 +198,18 @@ $(function () {
         .on("submit", function (e) {
             e.preventDefault();
 
+            // If form is already submitted finish here
             if (personForm.prop("disabled") === true) return;
+
+            // Clear any previous results from the UI
             resetResult();
 
-            // If client-side validation fails, bail-out here without posting the payload
+            // If client-side validation fails, bail-out here (without posting the payload)
             if ($("#performClientsideValidation").is(":checked")) {
                 if (validateForm() === false) return;
             }
 
+            // Try to prevent subsequent submits(!)
             personForm.prop("disabled", true);
 
             // Post the form payload to the server
@@ -220,13 +224,13 @@ $(function () {
                         const validationResponse = data.responseJSON;
                         const errorList: string[] = [];
 
-                        // Highlight the affected fields and compile the error messages
+                        // Highlight the affected fields and compile the error messages into an array
                         for (const key in validationResponse.errors) {
                             $('[name="' + key + '"]', personForm).addClass("error");
                             $.each(validationResponse.errors[key], (_i, val) => errorList.push(val));
                         }
 
-                        // Add the messages to the displayed result
+                        // Add the array of error messages to the UI as a bullet list
                         const list = $("<ul />").addClass("error");
                         $.each(errorList, (_i, val) => list.append($("<li />").text(val)));
 
