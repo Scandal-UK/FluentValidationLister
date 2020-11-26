@@ -22,14 +22,14 @@
         /// <param name="to">Value for the To property.</param>
         public FromToValues(IComparable from, IComparable to)
         {
-            From = from;
-            To = to;
+            this.From = from is int @int ? @int : throw new InvalidOperationException($"Cannot set range for type {from.GetType()}");
+            this.To = to is int int1 ? int1 : throw new InvalidOperationException($"Cannot set range for type {to.GetType()}");
         }
 
         /// <summary>Gets or sets the From value.</summary>
-        public IComparable From { get; set; }
+        public int From { get; set; }
 
         /// <summary>Gets or sets the To value.</summary>
-        public IComparable To { get; set; }
+        public int To { get; set; }
     }
 }
