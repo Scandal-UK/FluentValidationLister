@@ -38,8 +38,8 @@
         /// <param name="propertyName">Name of the property to check.</param>
         internal override void AddRuleBasedOnValidatorType(PropertyRule rule, IPropertyValidator validator, string propertyName)
         {
-            var displayName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rule.GetDisplayName());
-            var errorMessageTemplate = validator.Options.ErrorMessageSource.GetString(null);
+            var displayName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rule.GetDisplayName(null));
+            var errorMessageTemplate = validator.Options.GetErrorMessageTemplate(null);
 
             // This is the open extension point for OCP (Open Closed Principle)
             switch (validator)
