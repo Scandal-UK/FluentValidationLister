@@ -1,5 +1,4 @@
 ﻿(function (window, document) {
-    let contentTypeSelector: HTMLSelectElement;
     let getValidation: HTMLButtonElement;
     let resultPanel: HTMLDivElement;
 
@@ -11,15 +10,8 @@
 
                 // Format the response in a code element
                 const code = document.createElement("code");
-                if (this.getResponseHeader("content-type") === "text/xml; charset=utf-8") {
-                    code.classList.add("language-xml");
-                    code.appendChild(document.createTextNode(this.responseText));
-                }
-                else {
-                    const validationResponse = JSON.parse(this.responseText);
-                    code.classList.add("language-json");
-                    code.innerHTML = JSON.stringify(validationResponse, null, 2);
-                }
+                const validationResponse = JSON.parse(this.responseText);
+                code.innerHTML = JSON.stringify(validationResponse, null, 2);
 
                 // Display the code block in the result element
                 const output = document.createElement("pre");
@@ -41,7 +33,6 @@
 
     window.addEventListener("load", function () {
         // Define the elements that we're interested in manipulating
-        contentTypeSelector = document.getElementById("contentTypeSelector") as HTMLSelectElement;
         getValidation = document.getElementById("getValidation") as HTMLButtonElement;
         resultPanel = document.getElementById("resultPanel") as HTMLDivElement;
 
@@ -58,15 +49,8 @@
 
             // Request the validation information for the endpoint "POST:api/Person"
             xhr.open("POST", "api/Person?validation=true", true);
-
-            if (contentTypeSelector.value === "JSON") {
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.send("{}"); // (any old body; it's ignored anyway)
-            } else {
-                xhr.setRequestHeader("Content-Type", "text/xml");
-                xhr.setRequestHeader("Accept", "text/xml");
-                xhr.send("<Person>1</Person>");
-            }
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send("{}"); // (any old body; it's ignored anyway)
         });
     });
 })(window, document);
