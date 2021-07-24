@@ -183,7 +183,7 @@
         private string BuildErrorMessage(string displayName, string errorMessageTemplate, params (string, object)?[] additionalArguments)
         {
             // Discard second sentences which rely on users input (e.g. "you entered {TotalLength} characters")
-            if (errorMessageTemplate.Contains("{TotalLength}") || errorMessageTemplate.Contains("{Value}"))
+            if (errorMessageTemplate.Contains("{TotalLength}") || errorMessageTemplate.Contains("{PropertyValue}"))
             {
                 errorMessageTemplate = errorMessageTemplate.Substring(0, errorMessageTemplate.IndexOf('.') + 1);
             }
