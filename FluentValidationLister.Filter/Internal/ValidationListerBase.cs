@@ -120,7 +120,7 @@
             var methodName = nameof(ChildValidatorAdaptor<object, object>.GetValidator);
             var methodInfo = t.GetMethod(methodName);
 
-            var context = new PropertyValidatorContext(null, rule, rule.PropertyName);
+            var context = new PropertyValidatorContext(null, rule, rule.PropertyName, rule.PropertyFunc);
             return (IValidator)methodInfo.Invoke(validator, new object[] { context });
         }
 

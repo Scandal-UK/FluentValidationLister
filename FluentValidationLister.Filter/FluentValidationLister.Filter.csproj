@@ -17,7 +17,7 @@
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageReleaseNotes>Updated to reference new FluentValidation release</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
-        <Copyright>Copyright (c) Dan Ware 2020</Copyright>
+        <Copyright>Copyright (c) Dan Ware 2021</Copyright>
         <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
     </PropertyGroup>
     
