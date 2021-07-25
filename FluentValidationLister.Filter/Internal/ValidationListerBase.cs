@@ -83,24 +83,23 @@
 
         private void AddRulesForMember(IValidatorDescriptor descriptor, string memberName, string propertyPrefix = "")
         {
-            var propertyRules = descriptor
-                .GetRulesForMember(memberName)
-                .OfType<PropertyRule>();
+            var validationRules = descriptor
+                .GetRulesForMember(memberName);
 
-            foreach (var rule in propertyRules)
+            foreach (var rule in validationRules)
             {
-                foreach (var validator in rule.Validators)
+                foreach (var component in rule.Components)
                 {
-                    this.AddRuleOrDescendantRules(rule, validator, $"{propertyPrefix}{memberName}");
+                    this.AddRuleOrDescendantRules(rule, component, $"{propertyPrefix}{memberName}");
                 }
             }
         }
 
-        private void AddRuleOrDescendantRules(PropertyRule rule, IPropertyValidator validator, string propertyName)
+        private void AddRuleOrDescendantRules(IValidationRule rule, IRuleComponent component, string propertyName)
         {
-            if (validator is IChildValidatorAdaptor)
+            if (component.Validator is IChildValidatorAdaptor childValidatorAdaptor)
             {
-                var childValidator = ExtractChildValidator(rule, validator);
+                var childValidator = ExtractChildValidator(rule, childValidatorAdaptor);
                 var childDescriptor = childValidator.CreateDescriptor();
 
                 foreach (var member in childDescriptor.GetMembersWithValidators())
@@ -110,18 +109,18 @@
             }
             else
             {
-                this.AddRuleBasedOnValidatorType(rule, validator, propertyName);
+                this.AddRuleBasedOnValidatorType(rule, component, propertyName);
             }
         }
 
-        private static IValidator ExtractChildValidator(PropertyRule rule, IPropertyValidator validator)
+        private static IValidator ExtractChildValidator(IValidationRule rule, IChildValidatorAdaptor validator)
         {
             Type t = validator.GetType();
             var methodName = nameof(ChildValidatorAdaptor<object, object>.GetValidator);
             var methodInfo = t.GetMethod(methodName);
 
-            var context = new PropertyValidatorContext(null, rule, rule.PropertyName, rule.PropertyFunc);
-            return (IValidator)methodInfo.Invoke(validator, new object[] { context });
+            //var context = new PropertyValidatorContext(null, rule, rule.PropertyName, rule.PropertyFunc);
+            return (IValidator)methodInfo.Invoke(validator, new object[] { null });
         }
 
         private static string DeriveJsonTypeFromType(Type dataType)
@@ -140,7 +139,7 @@
             };
         }
 
-        internal abstract void AddRuleBasedOnValidatorType(PropertyRule rule, IPropertyValidator validator, string propertyName);
+        internal abstract void AddRuleBasedOnValidatorType(IValidationRule rule, IRuleComponent component, string propertyName);
 
         internal void AddRule(string propertyName, string displayName, string errorMessageTemplate, string validatorType, object validatorValue, params (string, object)?[] additionalArguments)
         {
