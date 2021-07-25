@@ -119,7 +119,7 @@
             var methodInfo = t.GetMethod(methodName);
 
             //var context = new PropertyValidatorContext(null, rule, rule.PropertyName, rule.PropertyFunc);
-            return (IValidator)methodInfo.Invoke(validator, new object[] { null, rule. });
+            return (IValidator)methodInfo.Invoke(validator, new object[] { null, rule.Member });
         }
 
         private static string DeriveJsonTypeFromType(Type dataType)
