@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Numerics;
     using FluentValidation;
     using FluentValidation.Internal;
@@ -120,7 +119,7 @@
             var methodInfo = t.GetMethod(methodName);
 
             //var context = new PropertyValidatorContext(null, rule, rule.PropertyName, rule.PropertyFunc);
-            return (IValidator)methodInfo.Invoke(validator, new object[] { null });
+            return (IValidator)methodInfo.Invoke(validator, new object[] { null, rule. });
         }
 
         private static string DeriveJsonTypeFromType(Type dataType)
