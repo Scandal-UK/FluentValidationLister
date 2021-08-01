@@ -25,8 +25,10 @@
         /// Initialises a new instance of the <see cref="ValidationLister"/> class with a specified <see cref="IValidator"/>.
         /// </summary>
         /// <param name="validator">An instance of <see cref="IValidator"/>.</param>
-        public ValidationLister(IValidator validator, Type modelType)
-            : base(validator, modelType)
+        /// <param name="modelType">The <see cref="Type"/> of the model being validated.</param>
+        /// <param name="serviceProvider">Current IoC for the application.</param>
+        public ValidationLister(IValidator validator, Type modelType, IServiceProvider serviceProvider)
+            : base(validator, modelType, serviceProvider)
         {
         }
 

@@ -24,8 +24,9 @@
         public AddressValidator()
             : this(v => v.RuleFor(x => x.Line1).NotEmpty())
         {
-            var countryValidator = new CountryValidator(v => v.RuleFor(x => x.Name).NotEmpty());
-            this.RuleFor(x => x.Country).SetValidator(countryValidator);
+            this.RuleFor(x => x.Country).SetInheritanceValidator(v => {
+                v.Add<Country>(new CountryValidator());
+            });
         }
 
         public AddressValidator(params Action<AddressValidator>[] actions)
@@ -40,6 +41,8 @@
     /// </summary>
     public class CountryValidator : InlineValidator<Country>
     {
+        public CountryValidator() => this.RuleFor(x => x.Name).NotEmpty();
+
         public CountryValidator(params Action<CountryValidator>[] actions)
         {
             foreach (var action in actions)

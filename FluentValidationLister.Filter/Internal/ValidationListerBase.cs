@@ -16,6 +16,7 @@
     public abstract class ValidationListerBase
     {
         private readonly IValidatorDescriptor validatorDescriptor;
+        private readonly IServiceProvider serviceProvider;
         private ValidatorRules rules;
 
         /// <summary>
@@ -23,10 +24,12 @@
         /// </summary>
         /// <param name="validator">An instance of a FluentValidation <see cref="IValidator"/>.</param>
         /// <param name="modelType">The <see cref="Type"/> of the model being validated.</param>
-        protected ValidationListerBase(IValidator validator, Type modelType)
+        /// <param name="serviceProvider">Current IoC for the application.</param>
+        protected ValidationListerBase(IValidator validator, Type modelType, IServiceProvider serviceProvider)
         {
             this.validatorDescriptor = validator?.CreateDescriptor() ?? throw new ArgumentNullException(nameof(validator));
             this.ModelType = modelType ?? throw new ArgumentNullException(nameof(modelType));
+            this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
         /// <summary>Gets the <see cref="Type"/> of the model that is being validated.</summary>
@@ -98,7 +101,7 @@
         {
             if (component.Validator is IChildValidatorAdaptor childValidatorAdaptor)
             {
-                var childValidator = ExtractChildValidator(rule, childValidatorAdaptor);
+                var childValidator = ExtractChildValidator(childValidatorAdaptor);
                 var childDescriptor = childValidator.CreateDescriptor();
 
                 foreach (var member in childDescriptor.GetMembersWithValidators())
@@ -112,15 +115,9 @@
             }
         }
 
-        private static IValidator ExtractChildValidator(IValidationRule rule, IChildValidatorAdaptor validator)
-        {
-            Type t = validator.GetType();
-            var methodName = nameof(ChildValidatorAdaptor<object, object>.GetValidator);
-            var methodInfo = t.GetMethod(methodName);
-
-            //var context = new PropertyValidatorContext(null, rule, rule.PropertyName, rule.PropertyFunc);
-            return (IValidator)methodInfo.Invoke(validator, new object[] { null, rule.Member });
-        }
+        private IValidator ExtractChildValidator(IChildValidatorAdaptor childValidatorAdaptor) =>
+            (IValidator)this.serviceProvider.GetService(typeof(IValidator<>)
+                .MakeGenericType(childValidatorAdaptor.GetType().GenericTypeArguments[1]));
 
         private static string DeriveJsonTypeFromType(Type dataType)
         {

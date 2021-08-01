@@ -53,7 +53,7 @@
             if (requestingValidatorList)
             {
                 // todo: consider passing type here so we can list all property types
-                var rules = new ValidationLister(validator, GetModelType(model)).GetValidatorRules();
+                var rules = new ValidationLister(validator, GetModelType(model), context.HttpContext.RequestServices).GetValidatorRules();
                 this.ConvertPropertyNamesToCamelCase(rules);
 
                 context.Result = new OkObjectResult(rules);
