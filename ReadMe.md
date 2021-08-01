@@ -15,7 +15,7 @@ This project adds an ActionFilter which will describe the rules and messages def
   - [Rules](#how-to-use---rules)
   - [AJAX validation](#how-to-use---ajax-validation)
   - [Advanced customisation](#how-to-use---advanced-customisation)
-- [ASP.NET Core 3 Web API Sample](#web-api-sample)
+- [ASP.NET 5 Web API Sample](#web-api-sample)
 
 ## Purpose
 
@@ -145,7 +145,7 @@ Should you find a more "standard" way of presenting the validation information t
 
 ## Web API Sample
 
-The included ASP.NET Core 3.1 Web API Sample application is designed to be a minimal demonstration of how this package works.
+The included ASP.NET 5 Web API Sample application is designed to be a minimal demonstration of how this package works.
 
 > There is no Razor/MVC example because this package is unnecessary for those projects. This package is for other front-ends that need access to the validation metadata.
 
