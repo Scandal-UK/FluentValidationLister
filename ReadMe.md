@@ -55,7 +55,7 @@ public void ConfigureServices(IServiceCollection services)
 
 For any given endpoint, add the query-string `?validation=1` to the endpoint URL in order to view the validator details, if applicable.
 
-XML **is supported** but the documentation/examples will be using JSON (you can see a demonstration of both XML and JSON in the Web API sample project).
+XML **is supported (pre v1.2)** but the documentation/examples will be using JSON (you can see a demonstration of both XML and JSON in the Web API sample project).
 
 Example output for JSON:
 
