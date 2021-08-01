@@ -3,7 +3,6 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Numerics;
     using FluentValidation;
     using FluentValidation.Internal;
@@ -17,6 +16,7 @@
     public abstract class ValidationListerBase
     {
         private readonly IValidatorDescriptor validatorDescriptor;
+        private readonly IServiceProvider serviceProvider;
         private ValidatorRules rules;
 
         /// <summary>
@@ -24,10 +24,12 @@
         /// </summary>
         /// <param name="validator">An instance of a FluentValidation <see cref="IValidator"/>.</param>
         /// <param name="modelType">The <see cref="Type"/> of the model being validated.</param>
-        protected ValidationListerBase(IValidator validator, Type modelType)
+        /// <param name="serviceProvider">Current IoC for the application.</param>
+        protected ValidationListerBase(IValidator validator, Type modelType, IServiceProvider serviceProvider)
         {
             this.validatorDescriptor = validator?.CreateDescriptor() ?? throw new ArgumentNullException(nameof(validator));
             this.ModelType = modelType ?? throw new ArgumentNullException(nameof(modelType));
+            this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
         /// <summary>Gets the <see cref="Type"/> of the model that is being validated.</summary>
@@ -83,24 +85,23 @@
 
         private void AddRulesForMember(IValidatorDescriptor descriptor, string memberName, string propertyPrefix = "")
         {
-            var propertyRules = descriptor
-                .GetRulesForMember(memberName)
-                .OfType<PropertyRule>();
+            var validationRules = descriptor
+                .GetRulesForMember(memberName);
 
-            foreach (var rule in propertyRules)
+            foreach (var rule in validationRules)
             {
-                foreach (var validator in rule.Validators)
+                foreach (var component in rule.Components)
                 {
-                    this.AddRuleOrDescendantRules(rule, validator, $"{propertyPrefix}{memberName}");
+                    this.AddRuleOrDescendantRules(rule, component, $"{propertyPrefix}{memberName}");
                 }
             }
         }
 
-        private void AddRuleOrDescendantRules(PropertyRule rule, IPropertyValidator validator, string propertyName)
+        private void AddRuleOrDescendantRules(IValidationRule rule, IRuleComponent component, string propertyName)
         {
-            if (validator is IChildValidatorAdaptor)
+            if (component.Validator is IChildValidatorAdaptor childValidatorAdaptor)
             {
-                var childValidator = ExtractChildValidator(rule, validator);
+                var childValidator = ExtractChildValidator(childValidatorAdaptor);
                 var childDescriptor = childValidator.CreateDescriptor();
 
                 foreach (var member in childDescriptor.GetMembersWithValidators())
@@ -110,19 +111,13 @@
             }
             else
             {
-                this.AddRuleBasedOnValidatorType(rule, validator, propertyName);
+                this.AddRuleBasedOnValidatorType(rule, component, propertyName);
             }
         }
 
-        private static IValidator ExtractChildValidator(PropertyRule rule, IPropertyValidator validator)
-        {
-            Type t = validator.GetType();
-            var methodName = nameof(ChildValidatorAdaptor<object, object>.GetValidator);
-            var methodInfo = t.GetMethod(methodName);
-
-            var context = new PropertyValidatorContext(null, rule, rule.PropertyName);
-            return (IValidator)methodInfo.Invoke(validator, new object[] { context });
-        }
+        private IValidator ExtractChildValidator(IChildValidatorAdaptor childValidatorAdaptor) =>
+            (IValidator)this.serviceProvider.GetService(typeof(IValidator<>)
+                .MakeGenericType(childValidatorAdaptor.GetType().GenericTypeArguments[1]));
 
         private static string DeriveJsonTypeFromType(Type dataType)
         {
@@ -140,7 +135,7 @@
             };
         }
 
-        internal abstract void AddRuleBasedOnValidatorType(PropertyRule rule, IPropertyValidator validator, string propertyName);
+        internal abstract void AddRuleBasedOnValidatorType(IValidationRule rule, IRuleComponent component, string propertyName);
 
         internal void AddRule(string propertyName, string displayName, string errorMessageTemplate, string validatorType, object validatorValue, params (string, object)?[] additionalArguments)
         {
@@ -152,7 +147,7 @@
         {
             if (!this.rules.ValidatorList.ContainsKey(propertyName))
             {
-                this.rules.ValidatorList.Add(propertyName, new SerialisableDictionary<string, object>());
+                this.rules.ValidatorList.Add(propertyName, new Dictionary<string, object>());
             }
 
             this.rules.ValidatorList[propertyName].Add(validatorType, validatorValue);
@@ -174,7 +169,7 @@
         {
             if (!this.rules.ErrorList.ContainsKey(propertyName))
             {
-                this.rules.ErrorList.Add(propertyName, new SerialisableDictionary<string, string>());
+                this.rules.ErrorList.Add(propertyName, new Dictionary<string, string>());
             }
 
             this.rules.ErrorList[propertyName].Add(validatorType, this.BuildErrorMessage(displayName, errorMessageTemplate, additionalArguments));
@@ -183,7 +178,7 @@
         private string BuildErrorMessage(string displayName, string errorMessageTemplate, params (string, object)?[] additionalArguments)
         {
             // Discard second sentences which rely on users input (e.g. "you entered {TotalLength} characters")
-            if (errorMessageTemplate.Contains("{TotalLength}") || errorMessageTemplate.Contains("{Value}"))
+            if (errorMessageTemplate.Contains("{TotalLength}") || errorMessageTemplate.Contains("{PropertyValue}"))
             {
                 errorMessageTemplate = errorMessageTemplate.Substring(0, errorMessageTemplate.IndexOf('.') + 1);
             }

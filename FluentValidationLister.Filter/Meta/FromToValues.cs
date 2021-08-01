@@ -22,10 +22,8 @@
         /// <param name="to">Value for the To property.</param>
         public FromToValues(IComparable from, IComparable to)
         {
-            // Note: IComparable was switched to Int for XML serialisation support
-            // todo: Re-implement to allow date ranges again; may need a new class
-            this.From = from is int ? (int)from : throw new InvalidOperationException($"Cannot set range for type {from.GetType()}");
-            this.To = to is int ? (int)to : throw new InvalidOperationException($"Cannot set range for type {to.GetType()}");
+            this.From = from is int @int ? @int : throw new InvalidOperationException($"Cannot set range for type {from.GetType()}");
+            this.To = to is int int1 ? int1 : throw new InvalidOperationException($"Cannot set range for type {to.GetType()}");
         }
 
         /// <summary>Gets or sets the From value.</summary>

@@ -1,11 +1,11 @@
 # FluentValidationLister
-#### v1.1.2
+#### v1.2.0
 
 An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
 > Execute your server-side FluentValidation rules automatically in the front-end!
 
-This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v9.2.2.
+This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v10.3.0.
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@ This project adds an ActionFilter which will describe the rules and messages def
   - [Rules](#how-to-use---rules)
   - [AJAX validation](#how-to-use---ajax-validation)
   - [Advanced customisation](#how-to-use---advanced-customisation)
-- [ASP.NET Core 3 Web API Sample](#web-api-sample)
+- [ASP.NET 5 Web API Sample](#web-api-sample)
 
 ## Purpose
 
@@ -145,7 +145,7 @@ Should you find a more "standard" way of presenting the validation information t
 
 ## Web API Sample
 
-The included ASP.NET Core 3.1 Web API Sample application is designed to be a minimal demonstration of how this package works.
+The included ASP.NET 5 Web API Sample application is designed to be a minimal demonstration of how this package works.
 
 > There is no Razor/MVC example because this package is unnecessary for those projects. This package is for other front-ends that need access to the validation metadata.
 

@@ -12,19 +12,20 @@
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.1.2</Version>
+        <Version>1.2.0</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageReleaseNotes>Updated to reference new FluentValidation release</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
-        <Copyright>Copyright (c) Dan Ware 2020</Copyright>
+        <Copyright>Copyright (c) Dan Ware 2021</Copyright>
         <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="9.2.2" />
+        <PackageReference Include="FluentValidation" Version="10.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
+        <PackageReference Include="ServiceStack" Version="5.11.0" />
     </ItemGroup>
 
 </Project>

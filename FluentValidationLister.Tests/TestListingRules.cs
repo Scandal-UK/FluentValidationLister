@@ -6,17 +6,22 @@
     using FluentValidationLister.Filter;
     using FluentValidationLister.Filter.Meta;
     using FluentValidationLister.Tests.Samples;
+    using Microsoft.Extensions.DependencyInjection;
     using Xunit;
 
     public class TestListingRules
     {
         [Fact(DisplayName = "Null validator throws ArgumentNullException")]
         public void NullValidator_ThrowsArgumentNullException() =>
-            Assert.Throws<ArgumentNullException>(() => new ValidationLister(null, typeof(Person)));
+            Assert.Throws<ArgumentNullException>(() => new ValidationLister(validator: null, typeof(Person), new ServiceCollection().BuildServiceProvider()));
 
         [Fact(DisplayName = "Null modelType throws ArgumentNullException")]
         public void NullModelType_ThrowsArgumentNullException() =>
-            Assert.Throws<ArgumentNullException>(() => new ValidationLister(new TestValidator(), null));
+            Assert.Throws<ArgumentNullException>(() => new ValidationLister(new TestValidator(), modelType: null, new ServiceCollection().BuildServiceProvider()));
+
+        [Fact(DisplayName = "Null serviceProvider throws ArgumentNullException")]
+        public void NullServiceProvider_ThrowsArgumentNullException() =>
+            Assert.Throws<ArgumentNullException>(() => new ValidationLister(new TestValidator(), typeof(Person), serviceProvider: null));
 
         [Fact(DisplayName = "NotEmpty() returns required rule")]
         public void NotEmpty_ReturnsRequiredRule() =>

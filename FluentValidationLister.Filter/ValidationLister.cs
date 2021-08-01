@@ -25,8 +25,10 @@
         /// Initialises a new instance of the <see cref="ValidationLister"/> class with a specified <see cref="IValidator"/>.
         /// </summary>
         /// <param name="validator">An instance of <see cref="IValidator"/>.</param>
-        public ValidationLister(IValidator validator, Type modelType)
-            : base(validator, modelType)
+        /// <param name="modelType">The <see cref="Type"/> of the model being validated.</param>
+        /// <param name="serviceProvider">Current IoC for the application.</param>
+        public ValidationLister(IValidator validator, Type modelType, IServiceProvider serviceProvider)
+            : base(validator, modelType, serviceProvider)
         {
         }
 
@@ -34,61 +36,74 @@
         /// Inspect the validator type and add the rules/messages with the correct properties.
         /// </summary>
         /// <param name="rule">FluentValidation Property Rule.</param>
-        /// <param name="validator">Validator to inspect.</param>
+        /// <param name="component">Validator to inspect.</param>
         /// <param name="propertyName">Name of the property to check.</param>
-        internal override void AddRuleBasedOnValidatorType(PropertyRule rule, IPropertyValidator validator, string propertyName)
+        internal override void AddRuleBasedOnValidatorType(IValidationRule rule, IRuleComponent component, string propertyName)
         {
-            var displayName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rule.GetDisplayName());
-            var errorMessageTemplate = validator.Options.ErrorMessageSource.GetString(null);
+            var displayName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rule.GetDisplayName(null));
+            var errorMessageTemplate = component.GetUnformattedErrorMessage();
+            var validator = component.Validator;
 
             // This is the open extension point for OCP (Open Closed Principle)
-            switch (validator)
+            switch (validator.Name)
             {
-                case NotNullValidator _:
-                case NotEmptyValidator _:
+                case "NotNullValidator":
+                case "NotEmptyValidator":
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "required", true);
                     break;
-                case AspNetCoreCompatibleEmailValidator _:
+                case "AspNetCoreCompatibleEmailValidator":
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "regex", AspNetCoreCompatibleEmailAddressRegex);
                     break;
-                case EmailValidator _:
+                case "EmailValidator":
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "regex", Net4xEmailAddressRegex);
                     break;
-                case RegularExpressionValidator expressionValidator:
+                case "RegularExpressionValidator":
+                    var expressionValidator = (IRegularExpressionValidator)validator;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "regex", expressionValidator.Expression);
                     break;
-                case EqualValidator equalValidator:
+                case "EqualValidator":
+                    var equalValidator = (IEqualValidator)validator;
                     var comparisonValue = equalValidator.MemberToCompare?.Name ?? equalValidator.ValueToCompare;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "compare", comparisonValue, ("ComparisonValue", comparisonValue));
                     break;
-                case LessThanValidator lessThanValidator:
+                case "LessThanValidator":
+                    var lessThanValidator = (IComparisonValidator)validator;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "lessThan", lessThanValidator.ValueToCompare, ("ComparisonValue", lessThanValidator.ValueToCompare));
                     break;
-                case LessThanOrEqualValidator lessThanOrEqualValidator:
+                case "LessThanOrEqualValidator":
+                    var lessThanOrEqualValidator = (ILessThanOrEqualValidator)validator;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "lessThanOrEqualTo", lessThanOrEqualValidator.ValueToCompare, ("ComparisonValue", lessThanOrEqualValidator.ValueToCompare));
                     break;
-                case GreaterThanValidator greaterThanValidator:
+                case "GreaterThanValidator":
+                    var greaterThanValidator = (IComparisonValidator)validator;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "greaterThan", greaterThanValidator.ValueToCompare, ("ComparisonValue", greaterThanValidator.ValueToCompare));
                     break;
-                case GreaterThanOrEqualValidator greaterThanOrEqualValidator:
+                case "GreaterThanOrEqualValidator":
+                    var greaterThanOrEqualValidator = (IGreaterThanOrEqualValidator)validator;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "greaterThanOrEqualTo", greaterThanOrEqualValidator.ValueToCompare, ("ComparisonValue", greaterThanOrEqualValidator.ValueToCompare));
                     break;
-                case InclusiveBetweenValidator inclusiveBetweenValidator:
-                    this.AddRule(propertyName, displayName, errorMessageTemplate, "range", new FromToValues(inclusiveBetweenValidator.From, inclusiveBetweenValidator.To), ("From", inclusiveBetweenValidator.From), ("To", inclusiveBetweenValidator.To));
+                case "InclusiveBetweenValidator":
+                    var inclusiveBetweenValidator = (IInclusiveBetweenValidator)validator;
+                    this.AddRule(propertyName, displayName, errorMessageTemplate, "range", new FromToValues((IComparable)inclusiveBetweenValidator.From, (IComparable)inclusiveBetweenValidator.To), ("From", inclusiveBetweenValidator.From), ("To", inclusiveBetweenValidator.To));
                     break;
-                case ExclusiveBetweenValidator exclusiveBetweenValidator:
-                    this.AddRule(propertyName, displayName, errorMessageTemplate, "exclusiveRange", new FromToValues(exclusiveBetweenValidator.From, exclusiveBetweenValidator.To), ("From", exclusiveBetweenValidator.From), ("To", exclusiveBetweenValidator.To));
+                case "ExclusiveBetweenValidator":
+                    var exclusiveBetweenValidator = (IBetweenValidator)validator;
+                    this.AddRule(propertyName, displayName, errorMessageTemplate, "exclusiveRange", new FromToValues((IComparable)exclusiveBetweenValidator.From, (IComparable)exclusiveBetweenValidator.To), ("From", exclusiveBetweenValidator.From), ("To", exclusiveBetweenValidator.To));
                     break;
-                case ExactLengthValidator exactLengthValidator:
+                case "ExactLengthValidator":
+                    var exactLengthValidator = (IExactLengthValidator)validator;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "exactLength", exactLengthValidator.Max, ("MaxLength", exactLengthValidator.Max));
                     break;
-                case MinimumLengthValidator minimumLengthValidator:
+                case "MinimumLengthValidator":
+                    var minimumLengthValidator = (IMinimumLengthValidator)validator;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "minLength", minimumLengthValidator.Min, ("MinLength", minimumLengthValidator.Min));
                     break;
-                case MaximumLengthValidator maximumLengthValidator:
+                case "MaximumLengthValidator":
+                    var maximumLengthValidator = (IMaximumLengthValidator)validator;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "maxLength", maximumLengthValidator.Max, ("MaxLength", maximumLengthValidator.Max));
                     break;
-                case LengthValidator lengthValidator:
+                case "LengthValidator":
+                    var lengthValidator = (ILengthValidator)validator;
                     this.AddRule(propertyName, displayName, errorMessageTemplate, "length", new MinMaxValues(lengthValidator.Min, lengthValidator.Max), ("MinLength", lengthValidator.Min), ("MaxLength", lengthValidator.Max));
                     break;
                 default:
