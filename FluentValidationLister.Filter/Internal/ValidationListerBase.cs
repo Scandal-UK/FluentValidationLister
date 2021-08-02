@@ -77,12 +77,6 @@
             }
         }
 
-        private static bool IsDuplicatedPropertyName(string propertyName)
-        {
-            var parts = propertyName.Split('.');
-            return parts.Length > 1 && parts[parts.Length - 1] == parts[parts.Length - 2];
-        }
-
         private void AddRulesForMember(IValidatorDescriptor descriptor, string memberName, string propertyPrefix = "")
         {
             var validationRules = descriptor
@@ -101,7 +95,7 @@
         {
             if (component.Validator is IChildValidatorAdaptor childValidatorAdaptor)
             {
-                var childValidator = ExtractChildValidator(childValidatorAdaptor);
+                var childValidator = FetchChildValidatorFromIoC(childValidatorAdaptor);
                 var childDescriptor = childValidator.CreateDescriptor();
 
                 foreach (var member in childDescriptor.GetMembersWithValidators())
@@ -113,26 +107,6 @@
             {
                 this.AddRuleBasedOnValidatorType(rule, component, propertyName);
             }
-        }
-
-        private IValidator ExtractChildValidator(IChildValidatorAdaptor childValidatorAdaptor) =>
-            (IValidator)this.serviceProvider.GetService(typeof(IValidator<>)
-                .MakeGenericType(childValidatorAdaptor.GetType().GenericTypeArguments[1]));
-
-        private static string DeriveJsonTypeFromType(Type dataType)
-        {
-            if (NumericTypes.Contains(dataType))
-            {
-                return "number";
-            }
-
-            switch (dataType.Name)
-            {
-                case "Boolean": return "boolean";
-                case "DateTime": return "date";
-                case "String": return "string";
-                default: return "object";
-            };
         }
 
         internal abstract void AddRuleBasedOnValidatorType(IValidationRule rule, IRuleComponent component, string propertyName);
@@ -172,10 +146,36 @@
                 this.rules.ErrorList.Add(propertyName, new Dictionary<string, string>());
             }
 
-            this.rules.ErrorList[propertyName].Add(validatorType, this.BuildErrorMessage(displayName, errorMessageTemplate, additionalArguments));
+            this.rules.ErrorList[propertyName].Add(validatorType, BuildErrorMessage(displayName, errorMessageTemplate, additionalArguments));
         }
 
-        private string BuildErrorMessage(string displayName, string errorMessageTemplate, params (string, object)?[] additionalArguments)
+        private IValidator FetchChildValidatorFromIoC(IChildValidatorAdaptor childValidatorAdaptor) =>
+            (IValidator)this.serviceProvider.GetService(typeof(IValidator<>)
+                .MakeGenericType(childValidatorAdaptor.GetType().GenericTypeArguments[1]));
+
+        private static bool IsDuplicatedPropertyName(string propertyName)
+        {
+            var parts = propertyName.Split('.');
+            return parts.Length > 1 && parts[parts.Length - 1] == parts[parts.Length - 2];
+        }
+
+        private static string DeriveJsonTypeFromType(Type dataType)
+        {
+            if (NumericTypes.Contains(dataType))
+            {
+                return "number";
+            }
+
+            switch (dataType.Name)
+            {
+                case "Boolean": return "boolean";
+                case "DateTime": return "date";
+                case "String": return "string";
+                default: return "object";
+            };
+        }
+
+        private static string BuildErrorMessage(string displayName, string errorMessageTemplate, params (string, object)?[] additionalArguments)
         {
             // Discard second sentences which rely on users input (e.g. "you entered {TotalLength} characters")
             if (errorMessageTemplate.Contains("{TotalLength}") || errorMessageTemplate.Contains("{PropertyValue}"))
@@ -199,7 +199,7 @@
             typeof(int),  typeof(double), typeof(decimal),
             typeof(long), typeof(short),  typeof(sbyte),
             typeof(byte), typeof(ulong),  typeof(ushort),
-            typeof(uint), typeof(float),  typeof(BigInteger)
+            typeof(uint), typeof(float),  typeof(BigInteger),
         };
     }
 }
