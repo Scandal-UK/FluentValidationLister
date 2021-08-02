@@ -15,7 +15,7 @@
         <Version>1.2.1</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>Removed unnecessary dependencies</PackageReleaseNotes>
+        <PackageReleaseNotes>Removed unnecessary dependency</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2021</Copyright>
         <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
