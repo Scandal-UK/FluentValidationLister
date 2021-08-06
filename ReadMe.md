@@ -1,11 +1,13 @@
 # FluentValidationLister
-#### v1.2.0
+#### v1.2.1
 
 An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
 > Execute your server-side FluentValidation rules automatically in the front-end!
 
 This project adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v10.3.0.
+
+There are generic TypeScript handlers for most scenarios included in the sample application.
 
 ## Table of Contents
 
@@ -15,11 +17,11 @@ This project adds an ActionFilter which will describe the rules and messages def
   - [Rules](#how-to-use---rules)
   - [AJAX validation](#how-to-use---ajax-validation)
   - [Advanced customisation](#how-to-use---advanced-customisation)
-- [ASP.NET 5 Web API Sample](#web-api-sample)
+- [.NET 5 Web API Sample](#web-api-sample)
 
 ## Purpose
 
-If you want to use clientside validation with the FluentValidation library (you really should), then the recommended way is to use the [FluentValidation.AspNetCore](https://www.nuget.org/packages/FluentValidation.AspNetCore/) package with ASP.NET Core MVC. It integrates perfectly and there's no need for this filter at all.
+If you want to use clientside validation with the FluentValidation library (you really should), then the recommended way is to use the [FluentValidation.AspNetCore](https://www.nuget.org/packages/FluentValidation.AspNetCore/) package with ASP.NET Core MVC. It integrates perfectly and there's no need for this filter at all (note that the same is true for Razor implementations).
 
 However, _sometimes_ you may not be using MVC - you might be using an SPA application, such as React or Angular, or maybe a mobile application front-end. In this case you should probably want your clientside validators to match your server-side FluentValidation validators, without having to duplicate the effort - this filter exposes the validators on the clientside!
 
@@ -55,7 +57,9 @@ public void ConfigureServices(IServiceCollection services)
 
 For any given endpoint, add the query-string `?validation=1` to the endpoint URL in order to view the validator details, if applicable.
 
-XML **is supported (pre v1.2)** but the documentation/examples will be using JSON (you can see a demonstration of both XML and JSON in the Web API sample project).
+> **XML is only supported in versions prior to v1.2** but the documentation/examples will be using JSON. XML support was deprecated because none of the consumers of this package seemed to be using XML anyway(!)
+
+Along with the ``validatorList`` you are also presented with an ``errorList`` of potential messages and a ``typeList`` that describes the JSON type for each form element.
 
 Example output for JSON:
 
@@ -145,7 +149,7 @@ Should you find a more "standard" way of presenting the validation information t
 
 ## Web API Sample
 
-The included ASP.NET 5 Web API Sample application is designed to be a minimal demonstration of how this package works.
+The included .NET 5 Web API Sample application is designed to be a minimal demonstration of how this package works (the same code will work with earlier versions of dotnet core).
 
 > There is no Razor/MVC example because this package is unnecessary for those projects. This package is for other front-ends that need access to the validation metadata.
 
@@ -160,6 +164,10 @@ The validators in the project demonstrate these features of the filter;
 - Required JSON datatypes are exposed from the backend _(e.g. age and saleOfSoulAgreed)_
 - Child records are returned with a dot delimiter _(e.g. Address.Line1)_
 - `.WithName()` is respected in the returned messages _(e.g. Address.Line1)_
-- JSON datatypes are listed even if they have no related validator _(e.g. Address.Line2)_
+- JSON datatypes are listed **even if they have no related validator** _(e.g. Address.Line2)_
 - Custom regular expressions are returned _(e.g. Address.Postcode)_
 - Custom error messages are returned where defined _(e.g. Address.County)_
+
+---
+
+![demo-screenshot](./clientside.png)

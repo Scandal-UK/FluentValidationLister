@@ -17,16 +17,29 @@
     public class TestActionFilter
     {
         /// <summary>
-        /// This is incomplete - I have been experimenting a prototype unit test to test the filter.
+        /// This is incomplete - I have been experimenting with a prototype unit test to test the filter.
         /// </summary>
         [Fact]
         public void ActionFilter_ReturnsJsonResult()
         {
+            // Arrange
             var modelState = new ModelStateDictionary();
 
             var httpContextMock = new DefaultHttpContext();
             httpContextMock.Request.Query = new QueryCollection(new Dictionary<string, StringValues> { { "validate", new StringValues("1") } });
 
+            var validationFilter = new ValidationActionFilter();
+            ActionExecutingContext actionExecutingContext = GetPlainActionExecutingContext(modelState, httpContextMock);
+
+            // Act
+            validationFilter.OnActionExecuting(actionExecutingContext);
+
+            // Assert
+            actionExecutingContext.Result.Should().BeOfType<EmptyResult>();
+        }
+
+        private static ActionExecutingContext GetPlainActionExecutingContext(ModelStateDictionary modelState, DefaultHttpContext httpContextMock)
+        {
             var actionContext = new ActionContext(
                 httpContextMock,
                 Mock.Of<RouteData>(),
@@ -40,10 +53,7 @@
                 new Dictionary<string, object>(),
                 Mock.Of<Controller>());
 
-            var validationFilter = new ValidationActionFilter();
-            validationFilter.OnActionExecuting(actionExecutingContext);
-
-            actionExecutingContext.Result.Should().BeOfType<EmptyResult>();
+            return actionExecutingContext;
         }
     }
 }
