@@ -164,7 +164,7 @@ The validators in the project demonstrate these features of the filter;
 - Required JSON datatypes are exposed from the backend _(e.g. age and saleOfSoulAgreed)_
 - Child records are returned with a dot delimiter _(e.g. Address.Line1)_
 - `.WithName()` is respected in the returned messages _(e.g. Address.Line1)_
-- JSON datatypes are listed even if they have no related validator _(e.g. Address.Line2)_
+- JSON datatypes are listed **even if they have no related validator** _(e.g. Address.Line2)_
 - Custom regular expressions are returned _(e.g. Address.Postcode)_
 - Custom error messages are returned where defined _(e.g. Address.County)_
 
