@@ -43,6 +43,7 @@
                 // No validator is applicable for this endpoint
                 if (requestingValidatorList)
                 {
+                    // todo: consider returning applicable JSON datatypes anyway..?
                     context.Result = new EmptyResult();
                 }
 
@@ -52,16 +53,15 @@
             // Return list of validation rules
             if (requestingValidatorList)
             {
-                // todo: consider passing type here so we can list all property types
                 var rules = new ValidationLister(validator, GetModelType(model), context.HttpContext.RequestServices).GetValidatorRules();
-                this.ConvertPropertyNamesToCamelCase(rules);
+                ConvertPropertyNamesToCamelCase(rules);
 
                 context.Result = new OkObjectResult(rules);
                 return;
             }
 
             // Validate the model
-            this.ValidateModel(validator, model, context.ModelState);
+            ValidateModel(validator, model, context.ModelState);
             if (!context.ModelState.IsValid)
             {
                 // Force camel-cased keys (if the model was attributed with [FromForm], the keys won't be camel-cased)
@@ -103,7 +103,16 @@
             }
         }
 
-        private void ConvertPropertyNamesToCamelCase(ValidatorRules validatorRules)
+        /// <summary>
+        /// Event that fires after an action has finished execution.
+        /// </summary>
+        /// <param name="context">Context of executed action.</param>
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+            return;
+        }
+
+        private static void ConvertPropertyNamesToCamelCase(ValidatorRules validatorRules)
         {
             var newValidatorList = new Dictionary<string, Dictionary<string, object>>();
             foreach (var item in validatorRules.ValidatorList)
@@ -122,7 +131,7 @@
             validatorRules.TypeList = newTypeList;
         }
 
-        private void ValidateModel(IValidator validator, object model, ModelStateDictionary modelState)
+        private static void ValidateModel(IValidator validator, object model, ModelStateDictionary modelState)
         {
             var result = validator.Validate(new ValidationContext<object>(model));
             if (!result.IsValid)
@@ -139,15 +148,6 @@
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Event that fires after an action has finished execution.
-        /// </summary>
-        /// <param name="context">Context of executed action.</param>
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-            return;
         }
 
         private static object ActionArgumentAsModel(ActionExecutingContext actionContext) =>
