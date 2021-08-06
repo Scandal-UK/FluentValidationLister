@@ -23,7 +23,7 @@
                 return;
             }
 
-            var model = ActionArgumentAsModel(context);
+            var model = ValidationActionFilter.ActionArgumentAsModel(context);
             if (model == null)
             {
                 if (context.HttpContext.Request.Query.Keys.Any(val => val == "validate"))
@@ -53,15 +53,17 @@
             // Return list of validation rules
             if (requestingValidatorList)
             {
-                var rules = new ValidationLister(validator, GetModelType(model), context.HttpContext.RequestServices).GetValidatorRules();
-                ConvertPropertyNamesToCamelCase(rules);
+                var rules = new ValidationLister(validator,
+                                                 ValidationActionFilter.GetModelType(model),
+                                                 context.HttpContext.RequestServices).GetValidatorRules();
+                ValidationActionFilter.ConvertPropertyNamesToCamelCase(rules);
 
                 context.Result = new OkObjectResult(rules);
                 return;
             }
 
             // Validate the model
-            ValidateModel(validator, model, context.ModelState);
+            ValidationActionFilter.ValidateModel(validator, model, context.ModelState);
             if (!context.ModelState.IsValid)
             {
                 // Force camel-cased keys (if the model was attributed with [FromForm], the keys won't be camel-cased)
