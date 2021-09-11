@@ -6,8 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="10.3.0" />
-        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.3.5">
+        <PackageReference Include="FluentValidation" Version="10.3.3" />
+        <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.4.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
