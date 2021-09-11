@@ -1,6 +1,4 @@
-﻿/// <reference types="jquery" />
-
-interface Dictionary<T> {
+﻿interface Dictionary<T> {
     [key: string]: T;
 }
 
