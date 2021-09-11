@@ -2,18 +2,13 @@
     "compilerOptions": {
         "target": "ES2015",
         "module": "CommonJS",
+        "lib": [ "ES2015", "dom" ],
         "strict": true,
         "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
         "noImplicitAny": true,
         "noEmitOnError": true,
         "removeComments": true,
-        "allowSyntheticDefaultImports": true,
-        "typeRoots": [
-            "node_modules/@types"
-        ],
-        "types": [ "jquery" ]
+        "types": [ "jquery", "sizzle" ]
     },
     "include": [ "Scripts/**/*" ],
     "exclude": [ "node_modules", "wwwroot" ]
