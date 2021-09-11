@@ -14,12 +14,16 @@ jobs:
       with:
         dotnet-version: '5.0.x'
 
-    - name: Restore dependencies
+    - name: Restore dependencies for filter
       run: dotnet restore FluentValidationLister.Filter/FluentValidationLister.Filter.csproj
+
+    - name: Restore dependencies for test
       run: dotnet restore FluentValidationLister.Tests/FluentValidationLister.Tests.csproj
 
-    - name: Build
+    - name: Build filter
       run: dotnet build FluentValidationLister.Filter/FluentValidationLister.Filter.csproj --no-restore
+
+    - name: Build tests
       run: dotnet build FluentValidationLister.Tests/FluentValidationLister.Tests.csproj --no-restore
 
     - name: Test
