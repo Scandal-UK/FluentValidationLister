@@ -1,5 +1,4 @@
-﻿// Define FluentValidationLister payload through interfaces
-interface Dictionary<T> {
+﻿interface Dictionary<T> {
     [key: string]: T;
 }
 
@@ -19,12 +18,10 @@ interface ValidatorRules {
     typeList: Dictionary<string>;
 }
 
-// Define the document.ready() event handler
 $(function () {
     const personForm = $("#personForm"); // Form element
     const resultPanel = $("#resultPanel"); // Div element
 
-    // AJAX settings
     $.ajaxSetup({
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -32,7 +29,6 @@ $(function () {
         cache: false
     });
 
-    // AJAX error handler - displays server-side errors
     $(document).ajaxError(function (_e, xhr) {
         if (xhr.status > 400) {
             if (console.error) console.error(xhr.responseText);

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "ES2015",
-        "module": "commonjs",
+        "module": "CommonJS",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
@@ -9,9 +9,11 @@
         "noImplicitAny": true,
         "noEmitOnError": true,
         "removeComments": true,
+        "allowSyntheticDefaultImports": true,
         "typeRoots": [
             "node_modules/@types"
-        ]
+        ],
+        "types": [ "jquery" ]
     },
     "include": [ "Scripts/**/*" ],
     "exclude": [ "node_modules", "wwwroot" ]
