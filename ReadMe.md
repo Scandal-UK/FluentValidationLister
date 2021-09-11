@@ -1,3 +1,6 @@
+[![Build Status](https://github.com/Scandal-UK/FluentValidationLister/workflows/Build%20and%20Test/badge.svg)](https://github.com/Scandal-UK/QuickCompare/actions)
+[![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
+[![Downloads](https://img.shields.io/nuget/dt/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 # FluentValidationLister
 #### v1.2.1
 
@@ -8,8 +11,6 @@ An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinne
 This package adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v10.3.3.
 
 There are generic TypeScript handlers for most scenarios included in the sample application.
-
-[![Build Status](https://github.com/Scandal-UK/FluentValidationLister/workflows/Build%20and%20Test/badge.svg)](https://github.com/Scandal-UK/QuickCompare/actions)
 
 ## Table of Contents
 
