@@ -21,4 +21,4 @@ jobs:
       run: dotnet build FluentValidationLister.Filter/FluentValidationLister.Filter.csproj --no-restore
 
     - name: Test
-      run: dotnet test --no-build
+      run: dotnet test --no-restore
