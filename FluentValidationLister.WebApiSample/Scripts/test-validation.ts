@@ -29,7 +29,7 @@ $(function () {
         cache: false
     });
 
-    $(document).ajaxError(function (_e, xhr) {
+    $(document).ajaxError(function (_, xhr: JQueryXHR) {
         if (xhr.status > 400) {
             if (console.error) console.error(xhr.responseText);
 
