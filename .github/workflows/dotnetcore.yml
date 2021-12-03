@@ -1,6 +1,10 @@
 name: Build and Test
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
@@ -17,14 +21,14 @@ jobs:
     - name: Restore dependencies for filter
       run: dotnet restore FluentValidationLister.Filter/FluentValidationLister.Filter.csproj
 
-    - name: Restore dependencies for test
+    - name: Build filter
+      run: dotnet build FluentValidationLister.Filter/FluentValidationLister.Filter.csproj --configuration Release --no-restore
+
+    - name: Restore dependencies for tests
       run: dotnet restore FluentValidationLister.Tests/FluentValidationLister.Tests.csproj
 
-    - name: Build filter
-      run: dotnet build FluentValidationLister.Filter/FluentValidationLister.Filter.csproj --no-restore
-
     - name: Build tests
-      run: dotnet build FluentValidationLister.Tests/FluentValidationLister.Tests.csproj --no-restore
+      run: dotnet build FluentValidationLister.Tests/FluentValidationLister.Tests.csproj --configuration Release --no-restore
 
-    - name: Test
-      run: dotnet test --no-restore --no-build
+    - name: Run tests
+      run: dotnet test --no-restore --no-build --verbosity normal
