@@ -192,7 +192,7 @@ $(function () {
         $.getJSON("api/Person/1", (json) => populateFormFromJson({ json }));
     });
 
-    // Add the form submission event
+    // Add the form submit/reset events
     $("#personForm")
         .on("reset", resetResult)
         .on("submit", function (e) {
@@ -204,7 +204,7 @@ $(function () {
             // Clear any previous results from the UI
             resetResult();
 
-            // If client-side validation fails, bail-out here (without posting the payload)
+            // If client-side validation fails, bail-out here (without proceeding to post the form)
             if ($("#performClientsideValidation").is(":checked")) {
                 if (validateForm() === false) return;
             }
@@ -212,7 +212,7 @@ $(function () {
             // Try to prevent subsequent submits(!)
             personForm.prop("disabled", true);
 
-            // Post the form payload to the server
+            // Post the form payload to the server & define the promises
             $.post("api/Person", JSON.stringify(getFormValues(true)))
                 .always(() => personForm.prop("disabled", false))
                 .done(data => resultPanel.append($("<p />").addClass("bold").text(data.message)))
