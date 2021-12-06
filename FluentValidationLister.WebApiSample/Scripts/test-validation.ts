@@ -96,7 +96,7 @@ $(function () {
         });
     };
 
-    // Define a method that validates form fields against the validation meta-data
+    // Define a method that validates form fields against the validation meta-data purely on the client-side
     const validateForm = function () {
         const data = getFormValues();
         const errorList: Array<string> = [];
@@ -192,7 +192,7 @@ $(function () {
         $.getJSON("api/Person/1", (json) => populateFormFromJson({ json }));
     });
 
-    // Add the form submit/reset events
+    // Add the form submit/reset events via jQuery
     $("#personForm")
         .on("reset", resetResult)
         .on("submit", function (e) {
@@ -230,10 +230,9 @@ $(function () {
                             $.each(validationResponse.errors[key], (_i, val) => errorList.push(val));
                         }
 
-                        // Add the array of error messages to the UI as a bullet list
+                        // Add the array of error messages to the UI as a bulleted list
                         const list = $("<ul />").addClass("error");
                         $.each(errorList, (_i, val) => list.append($("<li />").text(val)));
-
                         resultPanel.append(list);
                     }
                 });
