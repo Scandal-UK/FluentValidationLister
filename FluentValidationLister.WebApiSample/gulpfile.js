@@ -15,6 +15,10 @@ gulp.task("clean", function () {
     return del(paths.deployedScripts);
 });
 
+gulp.task("watch", function () {
+    return gulp.watch(paths.scripts, [ "default" ]);
+});
+
 gulp.task("default", function () {
     return gulp
         .src(paths.scripts)
