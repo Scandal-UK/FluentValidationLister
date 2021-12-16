@@ -6,6 +6,7 @@ var terser = require("gulp-terser");
 var rename = require("gulp-rename");
 
 var paths = {
+    source: ["Scripts/**/*.ts"],
     scripts: ["Scripts/**/*.js"],
     deployedScripts: ["wwwroot/js/**/*"],
     deployTarget: "wwwroot/js"
@@ -16,7 +17,7 @@ gulp.task("clean", function () {
 });
 
 gulp.task("watch", function () {
-    return gulp.watch(paths.scripts, [ "default" ]);
+    gulp.watch(paths.source, gulp.series("default"));
 });
 
 gulp.task("default", function () {
