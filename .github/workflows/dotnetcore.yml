@@ -35,14 +35,14 @@ jobs:
     - name: Restore project
       run: dotnet restore FluentValidationLister.Filter/FluentValidationLister.Filter.csproj
 
-    - name: Build project
-      run: dotnet build FluentValidationLister.Filter/FluentValidationLister.Filter.csproj --configuration Release --no-restore
-
     - name: Restore tests
       run: dotnet restore FluentValidationLister.Tests/FluentValidationLister.Tests.csproj
 
+    - name: Build project
+      run: dotnet build FluentValidationLister.Filter/FluentValidationLister.Filter.csproj --no-restore --configuration Release
+
     - name: Build tests
-      run: dotnet build FluentValidationLister.Tests/FluentValidationLister.Tests.csproj --configuration Release --no-restore
+      run: dotnet build FluentValidationLister.Tests/FluentValidationLister.Tests.csproj --no-restore --configuration Release
 
     - name: Run tests
       run: dotnet test --no-restore --no-build
