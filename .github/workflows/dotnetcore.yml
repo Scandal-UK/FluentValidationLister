@@ -32,3 +32,12 @@ jobs:
 
     - name: Run tests
       run: dotnet test --no-restore --no-build --verbosity normal
+
+    - name: Pack
+      run: dotnet pack -v normal -c Release --no-restore --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID FluentValidationLister.Filter/FluentValidationLister.Filter.csproj
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: ./FluentValidationLister.Filter/bin/Release/FluentValidationLister.Filter.nupkg
