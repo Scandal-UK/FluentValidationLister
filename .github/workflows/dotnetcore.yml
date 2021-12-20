@@ -54,7 +54,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: nupkg
-        path: ./$PROJECT_NAME/bin/Release/*.nupkg
+        path: ./${{ env.PROJECT_NAME }}/bin/Release/*.nupkg
 
   prerelease:
     needs: build
