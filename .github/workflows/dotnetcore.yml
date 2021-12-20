@@ -1,6 +1,24 @@
-name: Build and Test
+name: .NET Core
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+  PROJECT_NAME: FluentValidationLister.Filter
+  
+  TESTS_NAME: FluentValidationLister.Tests
+
+  GITHUB_FEED: https://nuget.pkg.github.com/scandal-uk/
+
+  GITHUB_USER: scandal-uk
+
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
@@ -14,17 +32,45 @@ jobs:
       with:
         dotnet-version: '5.0.x'
 
-    - name: Restore dependencies for filter
-      run: dotnet restore FluentValidationLister.Filter/FluentValidationLister.Filter.csproj
+    - name: Restore project
+      run: dotnet restore $PROJECT_NAME/$PROJECT_NAME.csproj
 
-    - name: Restore dependencies for test
-      run: dotnet restore FluentValidationLister.Tests/FluentValidationLister.Tests.csproj
+    - name: Restore tests
+      run: dotnet restore $TESTS_NAME/$TESTS_NAME.csproj
 
-    - name: Build filter
-      run: dotnet build FluentValidationLister.Filter/FluentValidationLister.Filter.csproj --no-restore
+    - name: Build project
+      run: dotnet build $PROJECT_NAME/$PROJECT_NAME.csproj --no-restore --configuration Release
 
     - name: Build tests
-      run: dotnet build FluentValidationLister.Tests/FluentValidationLister.Tests.csproj --no-restore
+      run: dotnet build $TESTS_NAME/$TESTS_NAME.csproj --no-restore --configuration Release
 
-    - name: Test
-      run: dotnet test --no-restore --no-build
+    - name: Run tests
+      run: dotnet test --no-restore --no-build --configuration Release
+
+    - name: Pack project
+      run: dotnet pack -v normal --no-build --no-restore --include-symbols --include-source --configuration Release -p:PackageVersion=$GITHUB_RUN_ID $PROJECT_NAME/$PROJECT_NAME.*proj
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: ./${{ env.PROJECT_NAME }}/bin/Release/*.*nupkg
+
+  prerelease:
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: nupkg
+
+    # Push the current develop branch as prerelease package(s)
+    - name: Push to GitHub feed
+      run: |
+        for f in ./nupkg/*.*nupkg
+        do
+          curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+        done

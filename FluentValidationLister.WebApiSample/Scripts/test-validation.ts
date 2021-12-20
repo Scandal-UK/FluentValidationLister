@@ -1,27 +1,34 @@
-﻿interface Dictionary<T> {
-    [key: string]: T;
-}
-
+﻿// Simple definition of a range
 interface RangeValues {
     from: number;
     to: number;
 }
 
+// Simple definition of a limited range
 interface LimitValues {
     min: number;
     max: number;
 }
 
+// Simple definition of a generic dictionary using string-based keys
+interface Dictionary<T> {
+    [key: string]: T;
+}
+
+// TypeScript definition of the validation meta-data payload
 interface ValidatorRules {
     validatorList: Dictionary<Dictionary<string | boolean | number | RangeValues | LimitValues>>;
     errorList: Dictionary<Dictionary<string>>;
     typeList: Dictionary<string>;
 }
 
+// Simple jQuery application - document-ready event
 $(function () {
-    const personForm = $("#personForm"); // Form element
-    const resultPanel = $("#resultPanel"); // Div element
+    const personForm = $("#personForm"); // Defines a reference for the form element
+    const resultPanel = $("#resultPanel"); // Defines a reference for the output div element
+    let validationList: ValidatorRules; // Defines a reference for the validation meta-data
 
+    // Set the default settings for all XHR requests
     $.ajaxSetup({
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -29,6 +36,7 @@ $(function () {
         cache: false
     });
 
+    // Add a DEBUG handler for unknown errors returned from the server (>400)
     $(document).ajaxError(function (_, xhr: JQueryXHR) {
         if (xhr.status > 400) {
             if (console.error) console.error(xhr.responseText);
@@ -38,11 +46,7 @@ $(function () {
         }
     });
 
-    // Get the validation meta-data for the Person form
-    let validationList: ValidatorRules;
-    $.post("api/Person?validation=true", "{}", data => validationList = data);
-
-    // Format a value based on the declared JSON type (e.g. boolean, number, null or string)
+    // Define a method that formats a string value - based on the declared JSON type
     const getValue = function (fieldName: string, fieldValue: string) {
         switch (validationList.typeList[fieldName])
         {
@@ -52,7 +56,7 @@ $(function () {
         }
     };
 
-    // Format the form values into an object
+    // Define a method that formats the form values into an object
     const getFormValues = function (splitField?: boolean) {
         const data: Dictionary<string | number | boolean | {} | null> = {};
         personForm.serializeArray().map(function (field) {
@@ -66,7 +70,7 @@ $(function () {
             }
         });
 
-        // To include false values for checkboxes, we must add them separately from SerializeArray()
+        // To include false values for checkboxes, we must add them separately from jQuery serializeArray()
         $("input:checkbox:not(:checked)", personForm).each(function () {
             const field = this as HTMLInputElement;
             data[field.name] = false;
@@ -75,13 +79,13 @@ $(function () {
         return data;
     };
 
-    // Clear any previous error/success result
+    // Define a method that clears any previous error/success result
     const resetResult = function () {
         $(".error").removeClass("error");
         resultPanel.empty();
     };
 
-    // Populate form fields with data from the server
+    // Define a method that populates form fields with data returned from the server
     const populateFormFromJson = function ({ json, prefix = "" }: { json: unknown; prefix?: string }) {
         $.each(json, function (key: string, val) {
             if (typeof val === "object") populateFormFromJson({ json: val, prefix: key + "." });
@@ -92,7 +96,7 @@ $(function () {
         });
     };
 
-    // Validate form fields against validation meta-data
+    // Define a method that validates form fields against the validation meta-data purely on the client-side
     const validateForm = function () {
         const data = getFormValues();
         const errorList: Array<string> = [];
@@ -182,25 +186,25 @@ $(function () {
         return errorList.length === 0;
     };
 
-    // Button click event
+    // Add the button-click event that populates the form
     $("#populateFormButton").click(function () {
         resetResult();
         $.getJSON("api/Person/1", (json) => populateFormFromJson({ json }));
     });
 
-    // Form events
+    // Add the form submit/reset events via jQuery
     $("#personForm")
         .on("reset", resetResult)
         .on("submit", function (e) {
             e.preventDefault();
 
-            // If form is already submitted finish here
+            // If form is already pending submission finish here
             if (personForm.prop("disabled") === true) return;
 
             // Clear any previous results from the UI
             resetResult();
 
-            // If client-side validation fails, bail-out here (without posting the payload)
+            // If client-side validation fails, bail-out here (without proceeding to post the form)
             if ($("#performClientsideValidation").is(":checked")) {
                 if (validateForm() === false) return;
             }
@@ -208,7 +212,7 @@ $(function () {
             // Try to prevent subsequent submits(!)
             personForm.prop("disabled", true);
 
-            // Post the form payload to the server
+            // Post the form payload to the server & define the promises
             $.post("api/Person", JSON.stringify(getFormValues(true)))
                 .always(() => personForm.prop("disabled", false))
                 .done(data => resultPanel.append($("<p />").addClass("bold").text(data.message)))
@@ -226,12 +230,14 @@ $(function () {
                             $.each(validationResponse.errors[key], (_i, val) => errorList.push(val));
                         }
 
-                        // Add the array of error messages to the UI as a bullet list
+                        // Add the array of error messages to the UI as a bulleted list
                         const list = $("<ul />").addClass("error");
                         $.each(errorList, (_i, val) => list.append($("<li />").text(val)));
-
                         resultPanel.append(list);
                     }
                 });
         });
+
+    // Get the validation meta-data for the Person form
+    $.post("api/Person?validation=true", "{}", data => validationList = data);
 });
