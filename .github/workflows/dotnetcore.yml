@@ -39,13 +39,13 @@ jobs:
       run: dotnet build $PROJECT_NAME/$PROJECT_NAME.csproj --configuration Release --no-restore
 
     - name: Restore tests
-      run: dotnet restore FluentValidationLister.Tests/FluentValidationLister.Tests.csproj
+      run: dotnet restore $TESTS_NAME/$TESTS_NAME.csproj
 
     - name: Build tests
-      run: dotnet build FluentValidationLister.Tests/FluentValidationLister.Tests.csproj --configuration Release --no-restore
+      run: dotnet build $TESTS_NAME/$TESTS_NAME.csproj --configuration Release --no-restore
 
     - name: Run tests
-      run: dotnet test --no-restore --no-build --verbosity normal
+      run: dotnet test --no-restore --no-build
 
     - name: Pack project
       run: dotnet pack -v normal --no-build --no-restore --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID $PROJECT_NAME/$PROJECT_NAME.*proj
