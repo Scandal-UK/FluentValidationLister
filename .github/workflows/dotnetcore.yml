@@ -39,10 +39,10 @@ jobs:
       run: dotnet build $PROJECT_NAME/$PROJECT_NAME.csproj --configuration Release --no-restore
 
     - name: Restore tests
-      run: dotnet restore $TESTS_NAME/$TESTS_NAME.csproj
+      run: dotnet restore FluentValidationLister.Tests/FluentValidationLister.Tests.csproj
 
     - name: Build tests
-      run: dotnet build $TESTS_NAME/$TESTS_NAME.csproj --configuration Release --no-restore
+      run: dotnet build FluentValidationLister.Tests/FluentValidationLister.Tests.csproj --configuration Release --no-restore
 
     - name: Run tests
       run: dotnet test --no-restore --no-build --verbosity normal
