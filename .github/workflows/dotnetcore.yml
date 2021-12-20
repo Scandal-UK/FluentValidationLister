@@ -14,7 +14,7 @@ env:
   
   TESTS_NAME: FluentValidationLister.Tests
 
-  GITHUB_FEED: https://nuget.pkg.github.com/scandal-uk/
+  #GITHUB_FEED: https://nuget.pkg.github.com/scandal-uk/
 
   GITHUB_USER: scandal-uk
 
@@ -72,5 +72,5 @@ jobs:
       run: |
         for f in ./nupkg/*.nupkg
         do
-          curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+          curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f https://nuget.pkg.github.com/scandal-uk/
         done
