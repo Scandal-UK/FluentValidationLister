@@ -70,7 +70,7 @@ jobs:
     # Push the current develop branch as prerelease package(s)
     - name: Push to GitHub feed
       run: |
-        for f in ./nupkg/*.nupkg
+        for f in ./nupkg/*.*nupkg
         do
           curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
         done
