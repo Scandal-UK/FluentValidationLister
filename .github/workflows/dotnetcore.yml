@@ -47,30 +47,30 @@ jobs:
     - name: Run tests
       run: dotnet test --no-restore --no-build
 
-    - name: Pack project
-      run: dotnet pack -v normal --no-build --no-restore --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID FluentValidationLister.Filter/FluentValidationLister.Filter.*proj
+#   - name: Pack project
+#     run: dotnet pack -v normal --no-build --no-restore --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID FluentValidationLister.Filter/FluentValidationLister.Filter.*proj
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: nupkg
-        path: ./FluentValidationLister.Filter/bin/Release/*.nupkg
+#   - name: Upload artifact
+#     uses: actions/upload-artifact@v2
+#     with:
+#       name: nupkg
+#       path: ./FluentValidationLister.Filter/bin/Release/*.nupkg
 
-  prerelease:
-    needs: build
-    if: github.ref == 'refs/heads/develop'
-    runs-on: ubuntu-latest
+# prerelease:
+#   needs: build
+#   if: github.ref == 'refs/heads/develop'
+#   runs-on: ubuntu-latest
 
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: nupkg
+#   steps:
+#   - name: Download artifact
+#     uses: actions/download-artifact@v1
+#     with:
+#       name: nupkg
 
     # Push the current develop branch as prerelease package(s)
-    - name: Push to GitHub feed
-      run: |
-        for f in ./nupkg/*.nupkg
-        do
-          curl -vX PUT -u "scandal-uk:${{ secrets.GITHUB_TOKEN }}" -F package=@$f https://nuget.pkg.github.com/scandal-uk/
-        done
+#   - name: Push to GitHub feed
+#     run: |
+#       for f in ./nupkg/*.nupkg
+#       do
+#         curl -vX PUT -u "scandal-uk:${{ secrets.GITHUB_TOKEN }}" -F package=@$f https://nuget.pkg.github.com/scandal-uk/
+#       done
