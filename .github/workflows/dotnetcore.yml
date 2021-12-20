@@ -39,13 +39,13 @@ jobs:
       run: dotnet restore $TESTS_NAME/$TESTS_NAME.csproj
 
     - name: Build project
-      run: dotnet build $PROJECT_NAME/$PROJECT_NAME.csproj --no-restore #--configuration Release
+      run: dotnet build $PROJECT_NAME/$PROJECT_NAME.csproj --no-restore --configuration Release
 
     - name: Build tests
-      run: dotnet build $TESTS_NAME/$TESTS_NAME.csproj --no-restore #--configuration Release
+      run: dotnet build $TESTS_NAME/$TESTS_NAME.csproj --no-restore --configuration Release
 
     - name: Run tests
-      run: dotnet test --no-restore --no-build
+      run: dotnet test --no-restore --no-build --configuration Release
 
     - name: Pack project
       run: dotnet pack -v normal --no-build --no-restore --include-symbols --include-source -p:PackageVersion=$GITHUB_RUN_ID $PROJECT_NAME/$PROJECT_NAME.*proj
