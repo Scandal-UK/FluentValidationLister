@@ -21,6 +21,10 @@ env:
 
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  NUGET_FEED: https://api.nuget.org/v3/index.json
+
+  NUGET_KEY: ${{ secrets.NUGET_KEY }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -99,7 +103,10 @@ jobs:
 
       - name: Push to GitHub feed
         run: |
-          for f in ./nupkg/*.*nupkg
+          for f in ./nupkg/*.nupkg
           do
             curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
           done
+
+      - name: Push to NuGet feed
+        run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
