@@ -1,4 +1,4 @@
-name: .NET Core
+name: CI-CD Pipeline
 
 on:
   push:
@@ -8,22 +8,22 @@ on:
       - published
 
 env:
+  # Performance optimisations
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
+  # Filename shortcuts
   PROJECT_NAME: FluentValidationLister.Filter
-  
   TESTS_NAME: FluentValidationLister.Tests
 
+  # GitHub params
   GITHUB_FEED: https://nuget.pkg.github.com/scandal-uk/
-
   GITHUB_USER: scandal-uk
-
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  # NuGet params
   NUGET_FEED: https://api.nuget.org/v3/index.json
-
-  NUGET_KEY: ${{ secrets.NUGET_KEY }}
+  NUGET_TOKEN: ${{ secrets.NUGET_KEY }}
 
 jobs:
   build:
@@ -37,14 +37,15 @@ jobs:
       with:
         dotnet-version: '5.0.x'
 
+    # Build and run the unit tests
     - name: Restore project
       run: dotnet restore $PROJECT_NAME/$PROJECT_NAME.csproj
 
-    - name: Restore tests
-      run: dotnet restore $TESTS_NAME/$TESTS_NAME.csproj
-
     - name: Build project
       run: dotnet build $PROJECT_NAME/$PROJECT_NAME.csproj --no-restore --configuration Release
+
+    - name: Restore tests
+      run: dotnet restore $TESTS_NAME/$TESTS_NAME.csproj
 
     - name: Build tests
       run: dotnet build $TESTS_NAME/$TESTS_NAME.csproj --no-restore --configuration Release
@@ -52,16 +53,18 @@ jobs:
     - name: Run tests
       run: dotnet test --no-restore --no-build --configuration Release
 
-    - name: Pack project
+    # Package artifact using GitHub's run-ID as the version
+    - name: Package project
       run: dotnet pack -v normal -c Release --include-symbols --include-source --no-build --no-restore -p:PackageVersion=$GITHUB_RUN_ID $PROJECT_NAME/$PROJECT_NAME.csproj
 
-    - name: Upload artifact
+    - name: Upload package/symbols as artifact
       uses: actions/upload-artifact@v2
       with:
         name: nupkg
         path: ./${{ env.PROJECT_NAME }}/bin/Release/*.*nupkg
 
   prerelease:
+    # Push the prerelease build to the GitHub feed for anything targeting develop branch
     needs: build
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
@@ -72,7 +75,7 @@ jobs:
       with:
         name: nupkg
 
-    - name: Push to GitHub feed
+    - name: Push build to GitHub feed
       run: |
         for f in ./nupkg/*.*nupkg
         do
@@ -80,6 +83,7 @@ jobs:
         done
 
   deploy:
+    # Push a fresh build to all feeds when a new release version is applied
     needs: build
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
@@ -92,21 +96,21 @@ jobs:
         with:
           dotnet-version: '5.0.x'
 
-      - name: Create release NuGet package
+      - name: Create build with released version number
         run: |
           arrTag=(${GITHUB_REF//\// })
           VERSION="${arrTag[2]}"
           echo Version: $VERSION
           VERSION="${VERSION//v}"
           echo Clean Version: $VERSION
-          dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg $PROJECT_NAME/$PROJECT_NAME.csproj
+          dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
 
-      - name: Push to GitHub feed
+      - name: Push build to GitHub feed
         run: |
           for f in ./nupkg/*.*nupkg
           do
             curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
           done
 
-      - name: Push to NuGet feed
-        run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+      - name: Push build to NuGet feed
+        run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --api-key $NUGET_TOKEN

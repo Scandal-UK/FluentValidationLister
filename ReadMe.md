@@ -10,7 +10,9 @@ An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinne
 
 This package adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v10.3.6.
 
-There are generic TypeScript handlers for most scenarios included in the sample application.
+It also describes the expected JSON datatype for every field - regardless of whether it has any validation rule applied.  This can be very helpful for automatic generation of dynamic forms.
+
+There are generic strict TypeScript handlers for most scenarios included in the sample application.
 
 ## Table of Contents
 
@@ -26,11 +28,13 @@ There are generic TypeScript handlers for most scenarios included in the sample 
 
 If you want to use clientside validation with the FluentValidation library (you really should), then the recommended way is to use the [FluentValidation.AspNetCore](https://www.nuget.org/packages/FluentValidation.AspNetCore/) package with ASP.NET Core MVC. It integrates perfectly and there's no need for this filter at all (note that the same is true for Razor implementations).
 
-However, _sometimes_ you may not be using MVC - you might be using an SPA application, such as React or Angular, or maybe a mobile application front-end. In this case you should probably want your clientside validators to match your server-side FluentValidation validators, without having to duplicate the effort - this filter exposes the validators on the clientside!
+However, _sometimes_ you may not be using MVC - you might be using an SPA application, such as React or Angular, or maybe a mobile application front-end. In this case you should probably want your clientside validators to match your server-side FluentValidation validators, without having to duplicate the effort - this filter exposes the validators on the clientside.
 
 You still need to implement this in your front-end validation - this just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by the FluentValidation library.
 
-> In the Web API sample project I have provided a working TypeScript demonstration using jQuery. It is very basic and will require some extension for your own use, but it should be sufficient for demonstration of intention.
+In addition to the validator metadata, the expected JSON datatypes are also described for every field - even if they do not have any FluentValidation rules applied. This could allow you to ensure the correct datatype is submitted, or more likely, to ensure the correct input is displayed to end-user.
+
+> In the Web API sample project, I have provided a working TypeScript demonstration using jQuery. It is very basic and will require some extension for your own use, but it demonstrates strict-typing of the returned response and a commented sample of expected usage.
 
 ## Installation
 

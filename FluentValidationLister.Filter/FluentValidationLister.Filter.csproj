@@ -17,7 +17,7 @@
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageReleaseNotes>Removed unnecessary dependency</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
-        <Copyright>Copyright (c) Dan Ware 2021</Copyright>
+        <Copyright>Copyright (c) Dan Ware 2022</Copyright>
         <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
     </PropertyGroup>
