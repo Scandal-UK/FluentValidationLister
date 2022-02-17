@@ -1,8 +1,4 @@
-﻿// <copyright file="TestValidator.cs" company="Dan Ware">
-// Copyright (c) Dan Ware. All rights reserved.
-// </copyright>
-
-namespace FluentValidationLister.Tests.Samples
+﻿namespace FluentValidationLister.Tests.Samples
 {
     using System;
     using FluentValidation;

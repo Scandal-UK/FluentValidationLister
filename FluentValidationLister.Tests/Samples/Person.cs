@@ -1,8 +1,4 @@
-﻿// <copyright file="Person.cs" company="Dan Ware">
-// Copyright (c) Dan Ware. All rights reserved.
-// </copyright>
-
-namespace FluentValidationLister.Tests.Samples
+﻿namespace FluentValidationLister.Tests.Samples
 {
     using System;
     using System.Collections.Generic;
@@ -13,7 +9,7 @@ namespace FluentValidationLister.Tests.Samples
     /// <remarks><see href="https://github.com/JeremySkinner/FluentValidation/blob/master/src/FluentValidation.Tests/Person.cs">Original source.</see></remarks>
     public class Person
     {
-        public string NameField;
+        private string NameField;
 
         public int Id { get; set; }
 

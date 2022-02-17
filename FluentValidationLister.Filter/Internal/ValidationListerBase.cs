@@ -19,6 +19,14 @@ namespace FluentValidationLister.Filter.Internal
     /// </summary>
     public abstract class ValidationListerBase
     {
+        private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
+        {
+            typeof(int),  typeof(double), typeof(decimal),
+            typeof(long), typeof(short),  typeof(sbyte),
+            typeof(byte), typeof(ulong),  typeof(ushort),
+            typeof(uint), typeof(float),  typeof(BigInteger),
+        };
+
         private readonly IValidatorDescriptor validatorDescriptor;
         private readonly IServiceProvider serviceProvider;
         private ValidatorRules rules;
@@ -52,6 +60,70 @@ namespace FluentValidationLister.Filter.Internal
             this.AddPropertyTypes(this.ModelType);
 
             return this.rules;
+        }
+
+        /// <summary>
+        /// Override for adding a rule based on the validator type.
+        /// </summary>
+        /// <param name="rule">An instance of <see cref="IValidationRule"/>.</param>
+        /// <param name="component">An instance of <see cref="IRuleComponent"/>.</param>
+        /// <param name="propertyName">The property name.</param>
+        internal abstract void AddRuleBasedOnValidatorType(IValidationRule rule, IRuleComponent component, string propertyName);
+
+        /// <summary>
+        /// Method to add a rule using all relevant properties.
+        /// </summary>
+        /// <param name="propertyName">The property name.</param>
+        /// <param name="displayName">The display name.</param>
+        /// <param name="errorMessageTemplate">The template string, if exists.</param>
+        /// <param name="validatorType">The validator type.</param>
+        /// <param name="validatorValue">The validator value.</param>
+        /// <param name="additionalArguments">Additional argument(s) as required.</param>
+        internal void AddRule(string propertyName, string displayName, string errorMessageTemplate, string validatorType, object validatorValue, params (string, object)?[] additionalArguments)
+        {
+            this.AddValidator(propertyName, validatorType, validatorValue);
+            this.AddErrorMessage(propertyName, validatorType, displayName, errorMessageTemplate, additionalArguments);
+        }
+
+        private static bool IsDuplicatedPropertyName(string propertyName)
+        {
+            var parts = propertyName.Split('.');
+            return parts.Length > 1 && parts[^1] == parts[^2];
+        }
+
+        private static string DeriveJsonTypeFromType(Type dataType)
+        {
+            if (NumericTypes.Contains(dataType))
+            {
+                return "number";
+            }
+
+            return dataType.Name switch
+            {
+                "Boolean" => "boolean",
+                "DateTime" => "date",
+                "String" => "string",
+                _ => "object",
+            };
+        }
+
+        private static string BuildErrorMessage(string displayName, string errorMessageTemplate, params (string, object)?[] additionalArguments)
+        {
+            // Discard second sentences which rely on users input (e.g. "you entered {TotalLength} characters")
+            if (errorMessageTemplate.Contains("{TotalLength}") || errorMessageTemplate.Contains("{PropertyValue}"))
+            {
+                errorMessageTemplate = errorMessageTemplate[.. (errorMessageTemplate.IndexOf('.') + 1)];
+            }
+
+            var formatter = new MessageFormatter();
+            formatter.AppendPropertyName(displayName);
+
+            foreach (var argument in additionalArguments)
+            {
+                formatter.AppendArgument(argument.Value.Item1, argument.Value.Item2);
+            }
+
+            return formatter.BuildMessage(errorMessageTemplate);
         }
 
         private void AddPropertyTypes(Type targetType, string targetPrefix = "")
@@ -99,7 +171,7 @@ namespace FluentValidationLister.Filter.Internal
         {
             if (component.Validator is IChildValidatorAdaptor childValidatorAdaptor)
             {
-                var childValidator = FetchChildValidatorFromIoC(childValidatorAdaptor);
+                var childValidator = this.FetchChildValidatorFromIoC(childValidatorAdaptor);
                 var childDescriptor = childValidator.CreateDescriptor();
 
                 foreach (var member in childDescriptor.GetMembersWithValidators())
@@ -111,14 +183,6 @@ namespace FluentValidationLister.Filter.Internal
             {
                 this.AddRuleBasedOnValidatorType(rule, component, propertyName);
             }
-        }
-
-        internal abstract void AddRuleBasedOnValidatorType(IValidationRule rule, IRuleComponent component, string propertyName);
-
-        internal void AddRule(string propertyName, string displayName, string errorMessageTemplate, string validatorType, object validatorValue, params (string, object)?[] additionalArguments)
-        {
-            this.AddValidator(propertyName, validatorType, validatorValue);
-            this.AddErrorMessage(propertyName, validatorType, displayName, errorMessageTemplate, additionalArguments);
         }
 
         private void AddValidator(string propertyName, string validatorType, object validatorValue)
@@ -156,54 +220,5 @@ namespace FluentValidationLister.Filter.Internal
         private IValidator FetchChildValidatorFromIoC(IChildValidatorAdaptor childValidatorAdaptor) =>
             (IValidator)this.serviceProvider.GetService(typeof(IValidator<>)
                 .MakeGenericType(childValidatorAdaptor.GetType().GenericTypeArguments[1]));
-
-        private static bool IsDuplicatedPropertyName(string propertyName)
-        {
-            var parts = propertyName.Split('.');
-            return parts.Length > 1 && parts[parts.Length - 1] == parts[parts.Length - 2];
-        }
-
-        private static string DeriveJsonTypeFromType(Type dataType)
-        {
-            if (NumericTypes.Contains(dataType))
-            {
-                return "number";
-            }
-
-            switch (dataType.Name)
-            {
-                case "Boolean": return "boolean";
-                case "DateTime": return "date";
-                case "String": return "string";
-                default: return "object";
-            };
-        }
-
-        private static string BuildErrorMessage(string displayName, string errorMessageTemplate, params (string, object)?[] additionalArguments)
-        {
-            // Discard second sentences which rely on users input (e.g. "you entered {TotalLength} characters")
-            if (errorMessageTemplate.Contains("{TotalLength}") || errorMessageTemplate.Contains("{PropertyValue}"))
-            {
-                errorMessageTemplate = errorMessageTemplate.Substring(0, errorMessageTemplate.IndexOf('.') + 1);
-            }
-
-            var formatter = new MessageFormatter();
-            formatter.AppendPropertyName(displayName);
-
-            foreach (var argument in additionalArguments)
-            {
-                formatter.AppendArgument(argument.Value.Item1, argument.Value.Item2);
-            }
-
-            return formatter.BuildMessage(errorMessageTemplate);
-        }
-
-        private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
-        {
-            typeof(int),  typeof(double), typeof(decimal),
-            typeof(long), typeof(short),  typeof(sbyte),
-            typeof(byte), typeof(ulong),  typeof(ushort),
-            typeof(uint), typeof(float),  typeof(BigInteger),
-        };
     }
 }

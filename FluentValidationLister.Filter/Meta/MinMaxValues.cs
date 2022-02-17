@@ -22,8 +22,8 @@ namespace FluentValidationLister.Filter.Meta
         /// <param name="max">Value of the maximum property.</param>
         public MinMaxValues(int min, int max)
         {
-            Min = min;
-            Max = max;
+            this.Min = min;
+            this.Max = max;
         }
 
         /// <summary>Gets or sets the minimum value.</summary>

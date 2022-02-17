@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Tests
+﻿// <copyright file="TestListingTypes.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Tests
 {
     using FluentAssertions;
     using FluentValidationLister.Tests.Samples;

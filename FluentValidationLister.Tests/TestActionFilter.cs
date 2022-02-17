@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Tests
+﻿// <copyright file="TestActionFilter.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Tests
 {
     using System.Collections.Generic;
     using FluentAssertions;
