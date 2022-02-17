@@ -171,7 +171,7 @@ namespace FluentValidationLister.Filter.Internal
         {
             if (component.Validator is IChildValidatorAdaptor childValidatorAdaptor)
             {
-                var childValidator = this.FetchChildValidatorFromIoC(childValidatorAdaptor);
+                var childValidator = this.FetchChildValidatorFromIoc(childValidatorAdaptor);
                 var childDescriptor = childValidator.CreateDescriptor();
 
                 foreach (var member in childDescriptor.GetMembersWithValidators())
@@ -217,7 +217,7 @@ namespace FluentValidationLister.Filter.Internal
             this.rules.ErrorList[propertyName].Add(validatorType, BuildErrorMessage(displayName, errorMessageTemplate, additionalArguments));
         }
 
-        private IValidator FetchChildValidatorFromIoC(IChildValidatorAdaptor childValidatorAdaptor) =>
+        private IValidator FetchChildValidatorFromIoc(IChildValidatorAdaptor childValidatorAdaptor) =>
             (IValidator)this.serviceProvider.GetService(typeof(IValidator<>)
                 .MakeGenericType(childValidatorAdaptor.GetType().GenericTypeArguments[1]));
     }
