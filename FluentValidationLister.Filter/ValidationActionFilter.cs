@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Filter
+﻿// <copyright file="ValidationActionFilter.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Filter
 {
     using System;
     using System.Buffers;
@@ -11,6 +15,7 @@
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
 
+    /// <summary> Filter required to respond to requests regarding validation meta data. </summary>
     public sealed partial class ValidationActionFilter
         : IActionFilter
     {
@@ -23,7 +28,7 @@
                 return;
             }
 
-            var model = ValidationActionFilter.ActionArgumentAsModel(context);
+            var model = ActionArgumentAsModel(context);
             if (model == null)
             {
                 if (context.HttpContext.Request.Query.Keys.Any(val => val == "validate"))
@@ -53,17 +58,19 @@
             // Return list of validation rules
             if (requestingValidatorList)
             {
-                var rules = new ValidationLister(validator,
-                                                 ValidationActionFilter.GetModelType(model),
-                                                 context.HttpContext.RequestServices).GetValidatorRules();
-                ValidationActionFilter.ConvertPropertyNamesToCamelCase(rules);
+                var rules = new ValidationLister(
+                    validator,
+                    GetModelType(model),
+                    context.HttpContext.RequestServices).GetValidatorRules();
+
+                ConvertPropertyNamesToCamelCase(rules);
 
                 context.Result = new OkObjectResult(rules);
                 return;
             }
 
             // Validate the model
-            ValidationActionFilter.ValidateModel(validator, model, context.ModelState);
+            ValidateModel(validator, model, context.ModelState);
             if (!context.ModelState.IsValid)
             {
                 // Force camel-cased keys (if the model was attributed with [FromForm], the keys won't be camel-cased)
@@ -118,15 +125,21 @@
         {
             var newValidatorList = new Dictionary<string, Dictionary<string, object>>();
             foreach (var item in validatorRules.ValidatorList)
+            {
                 newValidatorList.Add(item.Key.ToCamelCase(), validatorRules.ValidatorList[item.Key]);
+            }
 
             var newErrorList = new Dictionary<string, Dictionary<string, string>>();
             foreach (var item in validatorRules.ErrorList)
+            {
                 newErrorList.Add(item.Key.ToCamelCase(), validatorRules.ErrorList[item.Key]);
+            }
 
             var newTypeList = new Dictionary<string, string>();
             foreach (var item in validatorRules.TypeList)
+            {
                 newTypeList.Add(item.Key.ToCamelCase(), validatorRules.TypeList[item.Key]);
+            }
 
             validatorRules.ValidatorList = newValidatorList;
             validatorRules.ErrorList = newErrorList;

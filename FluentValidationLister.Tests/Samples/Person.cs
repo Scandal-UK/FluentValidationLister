@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Tests.Samples
+﻿// <copyright file="Person.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Tests.Samples
 {
     using System;
     using System.Collections.Generic;
@@ -10,9 +14,13 @@
     public class Person
     {
         public string NameField;
+
         public int Id { get; set; }
+
         public string Surname { get; set; }
+
         public string Forename { get; set; }
+
         public bool IsActive { get; set; } = true;
 
         public List<Person> Children { get; set; }
@@ -33,10 +41,13 @@
         }
 
         public Address Address { get; set; }
+
         public IList<Order> Orders { get; set; }
 
         public string Email { get; set; }
+
         public decimal? Discount { get; set; }
+
         public double? Age { get; set; }
 
         public int AnotherInt { get; set; }
@@ -65,21 +76,32 @@
     public interface IAddress
     {
         string Line1 { get; set; }
+
         string Line2 { get; set; }
+
         string Town { get; set; }
+
         string County { get; set; }
+
         string Postcode { get; set; }
+
         Country Country { get; set; }
     }
 
     public class Address : IAddress
     {
         public string Line1 { get; set; }
+
         public string Line2 { get; set; }
+
         public string Town { get; set; }
+
         public string County { get; set; }
+
         public string Postcode { get; set; }
+
         public Country Country { get; set; }
+
         public int Id { get; set; }
     }
 
@@ -96,6 +118,7 @@
     public class Order : IOrder
     {
         public string ProductName { get; set; }
+
         public decimal Amount { get; set; }
     }
 

@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Filter.Meta
+﻿// <copyright file="MinMaxValues.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Filter.Meta
 {
     /// <summary>
     /// Class to hold serialisable properties for Min and Max.

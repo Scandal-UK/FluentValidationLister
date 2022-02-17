@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Filter.Internal
+﻿// <copyright file="ValidationListerBase.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Filter.Internal
 {
     using System;
     using System.Collections;

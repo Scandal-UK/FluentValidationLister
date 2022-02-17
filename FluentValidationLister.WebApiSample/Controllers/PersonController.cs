@@ -1,9 +1,16 @@
-﻿namespace FluentValidationLister.WebApiSample.Controllers
+﻿// <copyright file="PersonController.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.WebApiSample.Controllers
 {
     using System;
     using FluentValidationLister.WebApiSample.Models;
     using Microsoft.AspNetCore.Mvc;
 
+    /// <summary>
+    /// Controller for the <see cref="Person"/> entity.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class PersonController : ControllerBase
@@ -25,10 +32,10 @@
 
             if (id > 3)
             {
-                return NotFound();
+                return this.NotFound();
             }
 
-            return Ok(new Person
+            return this.Ok(new Person
             {
                 Id = id,
                 Surname = "Sample",

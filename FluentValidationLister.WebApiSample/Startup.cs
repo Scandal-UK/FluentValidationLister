@@ -1,3 +1,7 @@
+// <copyright file="Startup.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
 namespace FluentValidationLister.WebApiSample
 {
     using FluentValidation;

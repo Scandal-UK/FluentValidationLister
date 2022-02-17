@@ -1,3 +1,7 @@
+// <copyright file="Program.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
 namespace FluentValidationLister.WebApiSample
 {
     using Microsoft.AspNetCore.Hosting;
