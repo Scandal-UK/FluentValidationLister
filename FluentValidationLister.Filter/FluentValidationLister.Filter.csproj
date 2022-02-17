@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <Authors>Dan Ware</Authors>
         <Product>FluentValidationLister</Product>
         <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralised;centralized;dynamic</PackageTags>
@@ -12,7 +12,7 @@
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.2.2</Version>
+        <Version>1.3.0</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageReleaseNotes>Removed unnecessary dependency</PackageReleaseNotes>
