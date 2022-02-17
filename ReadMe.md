@@ -156,7 +156,7 @@ Should you find a more "standard" way of presenting the validation information t
 
 ## Web API Sample
 
-The included .NET 5 Web API Sample application is designed to be a minimal demonstration of how this package works (the same code will work with earlier versions of dotnet core).
+The included .NET6 Web API Sample application is designed to be a minimal demonstration of how this package works (the same code will work with earlier versions of dotnet core).
 
 > There is no Razor/MVC example because this package is unnecessary for those projects. This package is for other front-ends that need access to the validation metadata.
 
