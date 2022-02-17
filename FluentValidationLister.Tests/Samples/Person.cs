@@ -9,8 +9,6 @@
     /// <remarks><see href="https://github.com/JeremySkinner/FluentValidation/blob/master/src/FluentValidation.Tests/Person.cs">Original source.</see></remarks>
     public class Person
     {
-        private string NameField;
-
         public int Id { get; set; }
 
         public string Surname { get; set; }
