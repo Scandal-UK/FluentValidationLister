@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/Scandal-UK/FluentValidationLister/workflows/Build%20and%20Test/badge.svg)](https://github.com/Scandal-UK/QuickCompare/actions)
+[![Build Status](https://github.com/Scandal-UK/FluentValidationLister/workflows/Build%20and%20Test/badge.svg)](https://github.com/Scandal-UK/FluentValidationLister.Filter/actions)
 [![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 [![Downloads](https://img.shields.io/nuget/dt/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 # FluentValidationLister
