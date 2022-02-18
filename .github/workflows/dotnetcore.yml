@@ -102,7 +102,7 @@ jobs:
           VERSION="${arrTag[2]}"
           echo Version: $VERSION
           VERSION="${VERSION//v}"
-          echo Clean Version: $VERSION
+          echo Version Number: $VERSION
           dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
 
       - name: Push build to GitHub feed
