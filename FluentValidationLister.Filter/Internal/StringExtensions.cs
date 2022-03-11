@@ -24,7 +24,7 @@ namespace FluentValidationLister.Filter.Internal
                 return input;
             }
 
-            if (input.Contains("."))
+            if (input.Contains('.'))
             {
                 var parts = input.Split('.');
                 var camelCasedParts = new List<string>();
