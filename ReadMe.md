@@ -2,7 +2,7 @@
 [![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 [![Downloads](https://img.shields.io/nuget/dt/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 # FluentValidationLister
-#### v1.3.1
+#### v1.3.0
 
 An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
