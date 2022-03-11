@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Filter.Meta
+﻿// <copyright file="MinMaxValues.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Filter.Meta
 {
     /// <summary>
     /// Class to hold serialisable properties for Min and Max.
@@ -18,8 +22,8 @@
         /// <param name="max">Value of the maximum property.</param>
         public MinMaxValues(int min, int max)
         {
-            Min = min;
-            Max = max;
+            this.Min = min;
+            this.Max = max;
         }
 
         /// <summary>Gets or sets the minimum value.</summary>

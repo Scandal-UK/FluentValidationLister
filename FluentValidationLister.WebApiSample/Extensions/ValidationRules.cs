@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.WebApiSample.Extensions
+﻿// <copyright file="ValidationRules.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.WebApiSample.Extensions
 {
     using FluentValidation;
 

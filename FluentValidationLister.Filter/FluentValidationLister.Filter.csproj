@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <Authors>Dan Ware</Authors>
         <Product>FluentValidationLister</Product>
         <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralised;centralized;dynamic</PackageTags>
@@ -12,20 +12,28 @@
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.2.2</Version>
+        <Version>1.3.0</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>Removed unnecessary dependency</PackageReleaseNotes>
+        <PackageReleaseNotes>Updated to FluentValidation 10.4.0</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
-        <Copyright>Copyright (c) Dan Ware 2021</Copyright>
+        <Copyright>Copyright (c) Dan Ware 2022</Copyright>
         <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="10.3.6" />
+      <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="10.4.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
 </Project>

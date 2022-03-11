@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Filter.DependencyInjection
+﻿// <copyright file="ServiceCollectionExtensions.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Filter.DependencyInjection
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;

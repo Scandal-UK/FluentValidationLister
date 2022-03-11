@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Filter.Internal
+﻿// <copyright file="StringExtensions.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Filter.Internal
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -20,7 +24,7 @@
                 return input;
             }
 
-            if (input.Contains("."))
+            if (input.Contains('.'))
             {
                 var parts = input.Split('.');
                 var camelCasedParts = new List<string>();

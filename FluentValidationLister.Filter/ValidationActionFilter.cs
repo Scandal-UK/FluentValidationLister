@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Filter
+﻿// <copyright file="ValidationActionFilter.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Filter
 {
     using System;
     using System.Buffers;
@@ -11,6 +15,7 @@
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
 
+    /// <summary> Filter required to respond to requests regarding validation meta data. </summary>
     public sealed partial class ValidationActionFilter
         : IActionFilter
     {
@@ -23,7 +28,7 @@
                 return;
             }
 
-            var model = ValidationActionFilter.ActionArgumentAsModel(context);
+            var model = ActionArgumentAsModel(context);
             if (model == null)
             {
                 if (context.HttpContext.Request.Query.Keys.Any(val => val == "validate"))
@@ -50,58 +55,18 @@
                 return;
             }
 
-            // Return list of validation rules
             if (requestingValidatorList)
             {
-                var rules = new ValidationLister(validator,
-                                                 ValidationActionFilter.GetModelType(model),
-                                                 context.HttpContext.RequestServices).GetValidatorRules();
-                ValidationActionFilter.ConvertPropertyNamesToCamelCase(rules);
-
-                context.Result = new OkObjectResult(rules);
+                ReturnListOfValidationRules(context, model, validator);
                 return;
             }
 
-            // Validate the model
-            ValidationActionFilter.ValidateModel(validator, model, context.ModelState);
+            ValidateModel(validator, model, context.ModelState);
+
             if (!context.ModelState.IsValid)
             {
-                // Force camel-cased keys (if the model was attributed with [FromForm], the keys won't be camel-cased)
-                var modelState = context.ModelState.ToDictionary(
-                    p => p.Key.ToCamelCase(),
-                    p => p.Value.Errors.Select(x => x.ErrorMessage).ToArray());
-
-                // Check if single-field AJAX validation is being requested
-                if (context.HttpContext.Request.Query.TryGetValue("validate", out var validateField))
-                {
-                    // Remove all the other fields from the result
-                    foreach (var item in modelState.Where(p => p.Key.ToLowerInvariant() != validateField.ToString().ToLowerInvariant()).ToList())
-                    {
-                        modelState.Remove(item.Key);
-                    }
-
-                    // If the selected field is valid, return an empty OK result
-                    if (modelState.Count == 0)
-                    {
-                        context.Result = new EmptyResult();
-                        return;
-                    }
-                }
-                else
-                {
-                    // Remove the valid items from the dictionary
-                    foreach (var item in modelState.Where(p => p.Value.Length == 0).ToList())
-                    {
-                        modelState.Remove(item.Key);
-                    }
-                }
-
-                // Return a problem details response
-                context.HttpContext.Response.ContentType = "application/problem+json";
-                context.Result = new BadRequestObjectResult(new ValidationProblemDetails(modelState)
-                {
-                    Detail = "Model validation error",
-                });
+                var modelState = GetModelState(context);
+                ReturnProblemDetailResponse(context, modelState);
             }
         }
 
@@ -114,19 +79,82 @@
             return;
         }
 
+        private static void ReturnProblemDetailResponse(ActionExecutingContext context, Dictionary<string, string[]> modelState)
+        {
+            context.HttpContext.Response.ContentType = "application/problem+json";
+            context.Result = new BadRequestObjectResult(new ValidationProblemDetails(modelState)
+            {
+                Detail = "Model validation error",
+            });
+        }
+
+        private static Dictionary<string, string[]> GetModelState(ActionExecutingContext context)
+        {
+            // Force camel-cased keys (eg. if the model was attributed with [FromForm], the keys won't be camel-cased)
+            var modelState = context.ModelState.ToDictionary(
+                p => p.Key.ToCamelCase(),
+                p => p.Value.Errors.Select(x => x.ErrorMessage).ToArray());
+
+            if (context.HttpContext.Request.Query.TryGetValue("validate", out var validateField))
+            {
+                GetSingleFieldValidator(modelState, validateField);
+            }
+            else
+            {
+                RemoveValidItemsFromTheDictionary(modelState);
+            }
+
+            return modelState;
+        }
+
+        private static void RemoveValidItemsFromTheDictionary(Dictionary<string, string[]> modelState)
+        {
+            foreach (var item in modelState.Where(p => p.Value.Length == 0).ToList())
+            {
+                modelState.Remove(item.Key);
+            }
+        }
+
+        private static void GetSingleFieldValidator(Dictionary<string, string[]> modelState, Microsoft.Extensions.Primitives.StringValues validateField)
+        {
+            foreach (var item in modelState.Where(p => p.Key.ToLowerInvariant() != validateField.ToString().ToLowerInvariant()).ToList())
+            {
+                modelState.Remove(item.Key);
+            }
+        }
+
+        private static void ReturnListOfValidationRules(ActionExecutingContext context, object model, IValidator validator)
+        {
+            var rules = new ValidationLister(
+                validator,
+                GetModelType(model),
+                context.HttpContext.RequestServices).GetValidatorRules();
+
+            ConvertPropertyNamesToCamelCase(rules);
+
+            context.Result = new OkObjectResult(rules);
+            return;
+        }
+
         private static void ConvertPropertyNamesToCamelCase(ValidatorRules validatorRules)
         {
             var newValidatorList = new Dictionary<string, Dictionary<string, object>>();
             foreach (var item in validatorRules.ValidatorList)
+            {
                 newValidatorList.Add(item.Key.ToCamelCase(), validatorRules.ValidatorList[item.Key]);
+            }
 
             var newErrorList = new Dictionary<string, Dictionary<string, string>>();
             foreach (var item in validatorRules.ErrorList)
+            {
                 newErrorList.Add(item.Key.ToCamelCase(), validatorRules.ErrorList[item.Key]);
+            }
 
             var newTypeList = new Dictionary<string, string>();
             foreach (var item in validatorRules.TypeList)
+            {
                 newTypeList.Add(item.Key.ToCamelCase(), validatorRules.TypeList[item.Key]);
+            }
 
             validatorRules.ValidatorList = newValidatorList;
             validatorRules.ErrorList = newErrorList;

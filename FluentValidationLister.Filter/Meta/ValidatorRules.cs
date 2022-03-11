@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.Filter.Meta
+﻿// <copyright file="ValidatorRules.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.Filter.Meta
 {
     using System.Collections.Generic;
 

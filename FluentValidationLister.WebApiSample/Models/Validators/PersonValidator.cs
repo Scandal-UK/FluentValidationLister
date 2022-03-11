@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.WebApiSample.Models.Validators
+﻿// <copyright file="PersonValidator.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.WebApiSample.Models.Validators
 {
     using FluentValidation;
     using FluentValidation.Validators;

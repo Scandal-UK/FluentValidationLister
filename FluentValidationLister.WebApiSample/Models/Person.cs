@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.WebApiSample.Models
+﻿// <copyright file="Person.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.WebApiSample.Models
 {
     /// <summary>Entity to represent a person.</summary>
     public class Person

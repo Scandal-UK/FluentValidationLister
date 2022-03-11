@@ -1,3 +1,7 @@
+// <copyright file="Startup.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
 namespace FluentValidationLister.WebApiSample
 {
     using FluentValidation;
@@ -9,8 +13,11 @@ namespace FluentValidationLister.WebApiSample
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
+    /// <summary> Standard Startup class. </summary>
     public sealed class Startup
     {
+        /// <summary> Configures the services in the container. </summary>
+        /// <param name="services">Service collection.</param>
         public static void ConfigureServices(IServiceCollection services) =>
             services
                 .AddFluentValidationLister()
@@ -18,6 +25,9 @@ namespace FluentValidationLister.WebApiSample
                 .AddTransient<IValidator<Address>, AddressValidator>()
                 .AddControllers();
 
+        /// <summary> Configures the application. </summary>
+        /// <param name="app">Application builder.</param>
+        /// <param name="env">Host environment.</param>
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

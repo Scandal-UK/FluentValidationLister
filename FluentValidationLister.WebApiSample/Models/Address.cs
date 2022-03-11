@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.WebApiSample.Models
+﻿// <copyright file="Address.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.WebApiSample.Models
 {
     /// <summary>Simple class to represent the address.</summary>
     public class Address

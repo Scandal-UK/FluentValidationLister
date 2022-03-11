@@ -1,4 +1,8 @@
-﻿namespace FluentValidationLister.WebApiSample.Models.Validators
+﻿// <copyright file="AddressValidator.cs" company="Dan Ware">
+// Copyright (c) Dan Ware. All rights reserved.
+// </copyright>
+
+namespace FluentValidationLister.WebApiSample.Models.Validators
 {
     using FluentValidation;
     using FluentValidationLister.WebApiSample.Extensions;
