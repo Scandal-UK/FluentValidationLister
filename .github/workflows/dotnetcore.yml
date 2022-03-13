@@ -105,18 +105,5 @@ jobs:
           echo Version Number: $VERSION
           dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
 
-      - name: Upload package/symbols as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: nupkg
-          path: ./${{ env.PROJECT_NAME }}/bin/Release/*.*nupkg
-
-      - name: Push build to GitHub feed
-        run: |
-          for f in ./nupkg/*.*nupkg
-          do
-            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
-          done
-
       - name: Push build to NuGet feed
-        run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --api-key $NUGET_TOKEN
+        run: dotnet nuget push ./${{ env.PROJECT_NAME }}/bin/Release/*.nupkg --source $NUGET_FEED --api-key $NUGET_TOKEN
