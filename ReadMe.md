@@ -2,13 +2,13 @@
 [![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 [![Downloads](https://img.shields.io/nuget/dt/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 # FluentValidationLister
-#### v1.3.0
+#### v1.4.0
 
 An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
 > Execute your server-side FluentValidation rules automatically in the front-end!
 
-This package adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v10.4.0.
+This package adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v11.0.0.
 
 It also describes the expected JSON datatype for every field - regardless of whether it has any validation rule applied.  This can be very helpful for automatic generation of dynamic forms.
 
