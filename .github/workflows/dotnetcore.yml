@@ -57,8 +57,8 @@ jobs:
     - name: Package project
       run: |
         echo Ref: $GITHUB_REF
-        arrTag=(${GITHUB_REF//\//\//})
-        VERSION="${arrTag[2]}"
+        arrTag=(${GITHUB_REF//\// })
+        VERSION="${arrTag[3]}"
         echo Version: $VERSION
         VERSION="${VERSION//v}"
         echo Version Number: $VERSION
