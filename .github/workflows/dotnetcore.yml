@@ -53,12 +53,11 @@ jobs:
     - name: Run tests
       run: dotnet test --no-restore --no-build --configuration Release
 
-    # Determine version
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y.%m.%d')"
 
-    # Package artifact using the rc version suffix (release candidate)
+    # Package artifact using the date and rc (release candidate) version suffix
     - name: Package project
       run: |
         VERSION=${{ steps.date.outputs.date }}-rc
@@ -90,7 +89,7 @@ jobs:
         done
 
   deploy:
-    # Push a fresh build to all feeds when a new release version is applied
+    # Push a fresh build to Nuget when a new release version is applied
     needs: build
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
