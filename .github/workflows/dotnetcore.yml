@@ -54,22 +54,16 @@ jobs:
       run: dotnet test --no-restore --no-build --configuration Release
 
     # Determine version
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0.9.7
-      with:
-        versionSpec: '5.x'
-
-    - name: Determine Version
-      uses: gittools/actions/gitversion/execute@v0.9.7
-
-    - name: Display SemVer
-      run: |
-        echo "SemVer: $GITVERSION_SEMVER"
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
     # Package artifact using the rc version suffix (release candidate)
     - name: Package project
       run: |
-        VERSION="$GITVERSION_SEMVER-rc"
+        echo GitHubRunId: $GITHUB_RUN_ID
+        VERSION=${{ steps.date.outputs.date }}-rc
+        echo Version: $VERSION
         dotnet pack -v normal -c Release --include-symbols --include-source --no-build --no-restore -p:PackageVersion=$VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
 
     - name: Upload package/symbols as artifact
