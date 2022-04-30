@@ -59,9 +59,9 @@ jobs:
         echo Ref: $GITHUB_REF
         arrTag=(${GITHUB_REF//\// })
         VERSION="${arrTag[2]}"
-        VERSION="${VERSION//v}"
-        VERSION="$VERSION-rc"
         echo Version: $VERSION
+        VERSION="${VERSION//v}"
+        echo Version Number: $VERSION
         dotnet pack -v normal -c Release --include-symbols --include-source --no-build --no-restore -p:PackageVersion=$VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
 
     - name: Upload package/symbols as artifact
