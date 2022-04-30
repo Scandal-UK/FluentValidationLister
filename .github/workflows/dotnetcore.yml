@@ -56,6 +56,7 @@ jobs:
     # Package artifact using the rc version suffix (release candidate)
     - name: Package project
       run: |
+        echo Ref: $GITHUB_REF
         arrTag=(${GITHUB_REF//\// })
         VERSION="${arrTag[2]}"
         VERSION="${VERSION//v}"
