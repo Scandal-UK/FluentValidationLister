@@ -12,10 +12,10 @@
     <PropertyGroup>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.4.0</Version>
+        <Version>1.4.1</Version>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>Updated to FluentValidation 11.0.0</PackageReleaseNotes>
+        <PackageReleaseNotes>Updated to FluentValidation 11.4.0</PackageReleaseNotes>
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright (c) Dan Ware 2022</Copyright>
         <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
