@@ -2,7 +2,7 @@
 [![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 [![Downloads](https://img.shields.io/nuget/dt/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 # FluentValidationLister
-#### v1.4.0
+#### v1.5.0
 
 An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
@@ -22,7 +22,7 @@ There are generic strict TypeScript handlers for most scenarios included in the 
   - [Rules](#how-to-use---rules)
   - [AJAX validation](#how-to-use---ajax-validation)
   - [Advanced customisation](#how-to-use---advanced-customisation)
-- [.NET 5 Web API Sample](#web-api-sample)
+- [net8.0 Web API Sample](#web-api-sample)
 
 ## Purpose
 
