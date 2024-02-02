@@ -102,6 +102,7 @@ public abstract class ValidationListerBase
         {
             "Boolean" => "boolean",
             "DateTime" => "date",
+            "DateTimeOffset" => "date",
             "String" => "string",
             _ => "object",
         };
