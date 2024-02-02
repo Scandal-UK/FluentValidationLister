@@ -1,39 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <Authors>Dan Ware</Authors>
-        <Product>FluentValidationLister</Product>
-        <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralised;centralized;dynamic</PackageTags>
-        <Description>ASP.NET Core extension for FluentValidation to provide additional endpoints that describe validator metadata for a Web API project.</Description>
-        <RepositoryUrl>https://github.com/scandal-uk/fluentvalidationlister</RepositoryUrl>
-    </PropertyGroup>
-    
-    <PropertyGroup>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.4.1</Version>
-        <PackageLicenseFile></PackageLicenseFile>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageReleaseNotes>Updated to FluentValidation 11.4.0</PackageReleaseNotes>
-        <RepositoryType>git</RepositoryType>
-        <Copyright>Copyright (c) Dan Ware 2022</Copyright>
-        <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
-        <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    </PropertyGroup>
-    
-    <ItemGroup>
-      <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
-    </ItemGroup>
-    
-    <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="11.4.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
-        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Authors>Dan Ware</Authors>
+    <Product>FluentValidationLister</Product>
+    <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralised;centralized;dynamic</PackageTags>
+    <Description>ASP.NET Core extension for FluentValidation to provide additional endpoints that describe validator metadata for a Web API project.</Description>
+    <RepositoryUrl>https://github.com/scandal-uk/fluentvalidationlister</RepositoryUrl>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Version>1.5.0</Version>
+    <PackageLicenseFile></PackageLicenseFile>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReleaseNotes>Updated to FluentValidation 11.4.0</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <Copyright>Copyright (c) Dan Ware 2024</Copyright>
+    <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
 </Project>
