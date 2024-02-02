@@ -1,16 +1,16 @@
-﻿// Simple definition of a range
+﻿// Definition of a range
 interface RangeValues {
     from: number;
     to: number;
 }
 
-// Simple definition of a limited range
+// Definition of a limited range
 interface LimitValues {
     min: number;
     max: number;
 }
 
-// Simple definition of a generic dictionary using string-based keys
+// Definition of a generic dictionary using string-based keys
 interface Dictionary<T> {
     [key: string]: T;
 }

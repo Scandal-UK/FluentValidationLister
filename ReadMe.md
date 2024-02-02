@@ -8,11 +8,11 @@ An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinne
 
 > Execute your server-side FluentValidation rules automatically in the front-end!
 
-This package adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v11.0.0.
+This package adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v11.9.0.
 
 It also describes the expected JSON datatype for every field - regardless of whether it has any validation rule applied.  This can be very helpful for automatic generation of dynamic forms.
 
-There are generic strict TypeScript handlers for most scenarios included in the sample application.
+There are generic strict TypeScript handlers for most scenarios included in the sample application. Feel free to copy and modify as required.
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ There are generic strict TypeScript handlers for most scenarios included in the 
   - [Rules](#how-to-use---rules)
   - [AJAX validation](#how-to-use---ajax-validation)
   - [Advanced customisation](#how-to-use---advanced-customisation)
-- [net8.0 Web API Sample](#web-api-sample)
+- [WebAPI/TypeScript Sample (net8.0)](#web-api-sample)
 
 ## Purpose
 
@@ -32,7 +32,7 @@ However, _sometimes_ you may not be using MVC - you might be using an SPA applic
 
 You still need to implement this in your front-end validation - this just provides a nice way to access the validator information for any endpoint, exposing and formatting the metadata provided by the FluentValidation library.
 
-In addition to the validator metadata, the expected JSON datatypes are also described for every field - even if they do not have any FluentValidation rules applied. This could allow you to ensure the correct datatype is submitted, or more likely, to ensure the correct input is displayed to end-user.
+In addition to the validator metadata, the expected JSON datatypes are also described for every field - even if they do not have any FluentValidation rules applied. This could allow you to ensure the correct datatype is submitted, or more likely, to ensure the correct input is displayed to the end-user.
 
 > In the Web API sample project, I have provided a working TypeScript demonstration using jQuery. It is very basic and will require some extension for your own use, but it demonstrates strict-typing of the returned response and a commented sample of expected usage.
 
@@ -156,7 +156,7 @@ Should you find a more "standard" way of presenting the validation information t
 
 ## Web API Sample
 
-The included .NET6 Web API Sample application is designed to be a minimal demonstration of how this package works (the same code will work with earlier versions of dotnet core).
+The included net8.0 Web API Sample application is designed to be a minimal demonstration of how this package works (the same code will work with earlier versions of dotnet core).
 
 > There is no Razor/MVC example because this package is unnecessary for those projects. This package is for other front-ends that need access to the validation metadata.
 

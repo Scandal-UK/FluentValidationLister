@@ -8,11 +8,10 @@ using System;
 using FluentValidationLister.WebApiSample.Models;
 using Microsoft.AspNetCore.Mvc;
 
-/// <summary>
-/// Controller for the <see cref="Person"/> entity.
-/// </summary>
-[Route("api/[controller]")]
+/// <summary> Controller for the <see cref="Person"/> entity. </summary>
 [ApiController]
+[Produces("application/json", "application/problem+json")]
+[Route("api/[controller]")]
 public class PersonController : ControllerBase
 {
     /// <summary>Gets a person based on the supplied ID.</summary>
@@ -25,10 +24,7 @@ public class PersonController : ControllerBase
     [ProducesResponseType(typeof(NotFoundResult), 404)]
     public IActionResult Get(int id)
     {
-        if (id < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(id));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(id, 1);
 
         if (id > 3)
         {
@@ -63,10 +59,7 @@ public class PersonController : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), 400)]
     public IActionResult Post(Person person)
     {
-        if (person == null)
-        {
-            throw new ArgumentNullException(nameof(person));
-        }
+        ArgumentNullException.ThrowIfNull(person);
 
         return this.Ok(new { Message = $"Person ({person.Forename} {person.Surname}) has been validated successfully!" });
     }
