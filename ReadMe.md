@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/Scandal-UK/FluentValidationLister/workflows/Build%20and%20Test/badge.svg)](https://github.com/Scandal-UK/FluentValidationLister/actions?query=workflow%3A%22CI-CD%20Pipeline%22)
+[![Build Status](https://github.com/Scandal-UK/FluentValidationLister/workflows/CI-CD%20Pipeline/badge.svg)](https://github.com/Scandal-UK/FluentValidationLister/actions?query=workflow%3A%22CI-CD%20Pipeline%22)
 [![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 [![Downloads](https://img.shields.io/nuget/dt/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 # FluentValidationLister
