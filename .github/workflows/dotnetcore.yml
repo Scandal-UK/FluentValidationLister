@@ -75,7 +75,7 @@ jobs:
       - name: Package project
         run: |
           VERSION=${{ steps.date.outputs.date }}-rc
-          dotnet pack -v normal -c Debug --include-symbols --include-source -p:PackageVersion=$VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
+          dotnet pack -v normal -c Debug --include-symbols --include-source --skip-duplicate -p:PackageVersion=$VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
 
       - name: Push build to GitHub feed
         run: |
