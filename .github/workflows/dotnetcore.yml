@@ -30,10 +30,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.x'
 
@@ -64,7 +64,7 @@ jobs:
         dotnet pack -v normal -c Release --include-symbols --include-source --no-build --no-restore -p:PackageVersion=$VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
 
     - name: Upload package/symbols as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: nupkg
         path: ./${{ env.PROJECT_NAME }}/bin/Release/*.*nupkg
@@ -77,9 +77,9 @@ jobs:
 
     steps:
     - name: Download artifact
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v4
       with:
-        name: nupkg
+        pattern: '*.*nupkg'
 
     - name: Push build to GitHub feed
       run: |
@@ -95,10 +95,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
 
