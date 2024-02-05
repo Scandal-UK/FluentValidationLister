@@ -76,17 +76,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        pattern: '*.*nupkg'
+      - uses: actions/checkout@v3
 
-    - name: Push build to GitHub feed
-      run: |
-        for f in ./nupkg/*.*nupkg
-        do
-          curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
-        done
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+
+      - name: Create prerelease build for GitHub feed
+        run: |
+          dotnet pack -v normal -c Debug --include-symbols --include-source $PROJECT_NAME/$PROJECT_NAME.csproj
+
+      - name: Push build to GitHub feed
+        run: dotnet nuget push ./${{ env.PROJECT_NAME }}/bin/Debug/*.nupkg --source "github" --api-key $GITHUB_TOKEN
 
   deploy:
     # Push a fresh build to Nuget when a new release version is applied
