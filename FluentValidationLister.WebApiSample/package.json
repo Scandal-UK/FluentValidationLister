@@ -2,6 +2,7 @@
   "version": "1.0.0",
   "name": "asp.net",
   "private": true,
+  "type": "module",
   "devDependencies": {
     "@types/jquery": "^3.5.32",
     "del": "8.0.0",
