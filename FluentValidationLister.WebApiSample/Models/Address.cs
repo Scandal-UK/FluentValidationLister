@@ -10,7 +10,7 @@ public class Address
     /// <summary>Gets or sets address line 1.</summary>
     public string Line1 { get; set; }
 
-    /// <summary>Gets or sets address line 2.</summary>
+    /// <summary>Gets or sets optional address line 2.</summary>
     public string Line2 { get; set; }
 
     /// <summary>Gets or sets the town.</summary>

@@ -6,14 +6,10 @@ namespace FluentValidationLister.WebApiSample.Extensions;
 
 using FluentValidation;
 
-/// <summary>
-/// A class to extend the <see cref="IRuleBuilder{T, TProperty}"/> with extra custom properties.
-/// </summary>
+/// <summary> A class to extend the <see cref="IRuleBuilder{T, TProperty}"/> with extra custom properties. </summary>
 public static class ValidationRules
 {
-    /// <summary>
-    /// Validate UK postal code format.
-    /// </summary>
+    /// <summary> Validate UK postal code format. </summary>
     /// <typeparam name="T">Entity for validation.</typeparam>
     /// <param name="ruleBuilder">Instance of <see cref="IRuleBuilder{T, TProperty}"/>.</param>
     /// <returns>Instance of <see cref="IRuleBuilderOptions{T, TProperty}"/>.</returns>

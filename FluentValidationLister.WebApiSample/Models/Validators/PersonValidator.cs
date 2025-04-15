@@ -32,7 +32,9 @@ internal class PersonValidator : AbstractValidator<Person>
             .EmailAddress(EmailValidationMode.AspNetCoreCompatible);
 
         this.RuleFor(p => p.SaleOfSoulAgreed)
-            .NotNull();
+            .NotNull()
+            .Must(x => x.Value == true)
+            .WithMessage("Agreement for '{PropertyName}' is required.");
 
         this.RuleFor(p => p.Address)
             .NotNull()
