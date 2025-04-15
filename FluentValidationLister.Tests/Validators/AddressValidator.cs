@@ -8,14 +8,8 @@ using System;
 using FluentValidation;
 using FluentValidationLister.Tests.Models;
 
-/// <summary>
-/// Validator for <see cref="Address"/> that supports rule setup at runtime.
-/// </summary>
 public class AddressValidator : InlineValidator<Address>
 {
-    /// <summary>
-    /// Initialises a new instance of the <see cref="AddressValidator"/> class.
-    /// </summary>
     public AddressValidator()
         : this(v => v.RuleFor(x => x.Line1).NotEmpty())
     {
@@ -25,10 +19,6 @@ public class AddressValidator : InlineValidator<Address>
         });
     }
 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="AddressValidator"/> class.
-    /// </summary>
-    /// <param name="actions">Initial action(s) to configure validator.</param>
     public AddressValidator(params Action<AddressValidator>[] actions)
     {
         foreach (var action in actions)

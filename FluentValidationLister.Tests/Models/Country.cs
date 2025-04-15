@@ -4,7 +4,6 @@
 
 namespace FluentValidationLister.Tests.Models;
 
-/// <summary> Country entity object. </summary>
 public class Country
 {
     /// <summary> Gets or sets the name. </summary>

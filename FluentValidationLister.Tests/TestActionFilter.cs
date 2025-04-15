@@ -17,9 +17,6 @@ using Microsoft.Extensions.Primitives;
 using Moq;
 using Xunit;
 
-/// <summary>
-/// Unit tests for the action filter.
-/// </summary>
 public class TestActionFilter
 {
     /// <summary>
@@ -54,7 +51,7 @@ public class TestActionFilter
 
         var actionExecutingContext = new ActionExecutingContext(
             actionContext,
-            new List<IFilterMetadata>(),
+            [],
             new Dictionary<string, object>(),
             Mock.Of<Controller>());
 
