@@ -27,7 +27,7 @@ public abstract class ValidationListerBase(IValidator validator, Type modelType,
         typeof(uint), typeof(float),  typeof(BigInteger),
     ];
 
-    private readonly IValidatorDescriptor validatorDescriptor = validator?.CreateDescriptor() ?? throw new ArgumentNullException(nameof(validator));
+    private readonly IValidatorDescriptor validatorDescriptor = validator?.CreateDescriptor();
     private readonly IServiceProvider serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     private ValidatorRules rules;
 
@@ -39,9 +39,12 @@ public abstract class ValidationListerBase(IValidator validator, Type modelType,
     public ValidatorRules GetValidatorRules()
     {
         this.rules = new ValidatorRules();
-        foreach (var member in this.validatorDescriptor?.GetMembersWithValidators())
+        if (this.validatorDescriptor != null)
         {
-            this.AddRulesForMember(this.validatorDescriptor, member.Key);
+            foreach (var member in this.validatorDescriptor?.GetMembersWithValidators())
+            {
+                this.AddRulesForMember(this.validatorDescriptor, member.Key);
+            }
         }
 
         this.AddPropertyTypes(this.ModelType);
