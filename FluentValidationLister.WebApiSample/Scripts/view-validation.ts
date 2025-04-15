@@ -33,9 +33,7 @@
 
     const getValidationDetails = function (controller: string) {
         toggleButtons(false);
-        if (resultPanel.hasChildNodes()) {
-            resultPanel.removeChild(resultPanel.childNodes[0]);
-        }
+        if (resultPanel.hasChildNodes()) resultPanel.removeChild(resultPanel.childNodes[0]);
 
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = displayValidationResponse;
@@ -54,12 +52,7 @@
         getTypes = document.getElementById("getTypes") as HTMLButtonElement;
         resultPanel = document.getElementById("resultPanel") as HTMLDivElement;
 
-        getValidation.addEventListener("click", function () {
-            getValidationDetails("Person");
-        });
-
-        getTypes.addEventListener("click", function () {
-            getValidationDetails("Optional");
-        });
+        getValidation.addEventListener("click", () => getValidationDetails("Person"));
+        getTypes.addEventListener("click", () => getValidationDetails("Optional"));
     });
 })(window, document);
