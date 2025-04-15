@@ -1,10 +1,12 @@
 ﻿(function (window, document) {
-    let getValidation: HTMLButtonElement = document.getElementById("getValidation") as HTMLButtonElement;
-    let resultPanel: HTMLDivElement = document.getElementById("resultPanel") as HTMLDivElement;
+    let getValidation: HTMLButtonElement;
+    let getTypes: HTMLButtonElement;
+    let resultPanel: HTMLDivElement;
 
     const displayValidationResponse = function (this: XMLHttpRequest) {
         if (this.readyState === 4) {
-            getValidation.disabled = false;
+            toggleButtons(true);
+
             if (this.status === 200) showResponse(this.responseText);
             else showError(this.responseText);
         }
@@ -21,7 +23,7 @@
     };
 
     const showError = function (responseText: string) {
-        if (console.error) console.error(responseText);
+        if (console?.error) console.error(responseText);
 
         const error = document.createElement("pre");
         error.classList.add("error");
@@ -29,18 +31,35 @@
         resultPanel.appendChild(error);
     };
 
-    window.addEventListener("load", function () {
-        getValidation.addEventListener("click", function () {
-            getValidation.disabled = true;
-            if (resultPanel.hasChildNodes()) {
-                resultPanel.removeChild(resultPanel.childNodes[0]);
-            }
+    const getValidationDetails = function (controller: string) {
+        toggleButtons(false);
+        if (resultPanel.hasChildNodes()) {
+            resultPanel.removeChild(resultPanel.childNodes[0]);
+        }
 
-            const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = displayValidationResponse;
-            xhr.open("POST", "api/Person?validation=true", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send("{}"); // (any old body; it's ignored anyway)
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = displayValidationResponse;
+        xhr.open("POST", "api/" + controller + "?validation=true", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send("{}"); // (any old body; it's ignored anyway)
+    };
+
+    const toggleButtons = function (enabled: boolean) {
+        getValidation.disabled = !enabled;
+        getTypes.disabled = !enabled;
+    };
+
+    window.addEventListener("load", function () {
+        getValidation = document.getElementById("getValidation") as HTMLButtonElement;
+        getTypes = document.getElementById("getTypes") as HTMLButtonElement;
+        resultPanel = document.getElementById("resultPanel") as HTMLDivElement;
+
+        getValidation.addEventListener("click", function () {
+            getValidationDetails("Person");
+        });
+
+        getTypes.addEventListener("click", function () {
+            getValidationDetails("Optional");
         });
     });
 })(window, document);

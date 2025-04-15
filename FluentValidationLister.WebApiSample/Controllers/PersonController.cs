@@ -5,6 +5,7 @@
 namespace FluentValidationLister.WebApiSample.Controllers;
 
 using System;
+using System.Web;
 using FluentValidationLister.WebApiSample.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ public class PersonController : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(Person), 200)]
     [ProducesResponseType(typeof(NotFoundResult), 404)]
-    public IActionResult Get(int id)
+    public ActionResult<Person> Get(int id)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(id, 1);
 
@@ -39,7 +40,7 @@ public class PersonController : ControllerBase
             Email = "bob.sample@email.com",
             Age = 21,
             SaleOfSoulAgreed = true,
-            Address = new Address
+            Address = new()
             {
                 Line1 = "123 Sample Street",
                 Town = "Sample Town",
@@ -61,6 +62,7 @@ public class PersonController : ControllerBase
     {
         ArgumentNullException.ThrowIfNull(person);
 
-        return this.Ok(new { Message = $"Person ({person.Forename} {person.Surname}) has been validated successfully!" });
+        var fullName = $"{person.Forename} {person.Surname}";
+        return this.Ok(new { Message = $"Person ({HttpUtility.HtmlEncode(fullName)}) has been validated successfully!" });
     }
 }
