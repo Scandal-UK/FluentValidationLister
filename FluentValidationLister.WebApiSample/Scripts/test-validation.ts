@@ -70,10 +70,10 @@ $(function () {
             }
         });
 
-        // To include false values for checkboxes, we must add them separately from jQuery serializeArray()
-        $("input:checkbox:not(:checked)", personForm).each(function () {
+        // Include checkbox values as Booleans, as jQuery serializeArray() only uses "on" or excludes them
+        $("input:checkbox", personForm).each(function () {
             const field = this as HTMLInputElement;
-            data[field.name] = false;
+            data[field.name] = field.checked;
         });
 
         return data;

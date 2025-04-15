@@ -17,7 +17,7 @@ using FluentValidationLister.Filter.Meta;
 /// A base class to inspect an instance of <see cref="IValidator"/> and produce a list of
 /// rules, types and failure messages based on the types specified in the derivatives.
 /// </summary>
-public abstract class ValidationListerBase
+public abstract class ValidationListerBase(IValidator validator, Type modelType, IServiceProvider serviceProvider)
 {
     private static readonly HashSet<Type> NumericTypes =
     [
@@ -27,25 +27,12 @@ public abstract class ValidationListerBase
         typeof(uint), typeof(float),  typeof(BigInteger),
     ];
 
-    private readonly IValidatorDescriptor validatorDescriptor;
-    private readonly IServiceProvider serviceProvider;
+    private readonly IValidatorDescriptor validatorDescriptor = validator?.CreateDescriptor() ?? throw new ArgumentNullException(nameof(validator));
+    private readonly IServiceProvider serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     private ValidatorRules rules;
 
-    /// <summary>
-    /// Initialises a new instance of the <see cref="ValidationListerBase"/> class with a specified <see cref="IValidator"/>.
-    /// </summary>
-    /// <param name="validator">An instance of a FluentValidation <see cref="IValidator"/>.</param>
-    /// <param name="modelType">The <see cref="Type"/> of the model being validated.</param>
-    /// <param name="serviceProvider">Current IoC for the application.</param>
-    protected ValidationListerBase(IValidator validator, Type modelType, IServiceProvider serviceProvider)
-    {
-        this.validatorDescriptor = validator?.CreateDescriptor() ?? throw new ArgumentNullException(nameof(validator));
-        this.ModelType = modelType ?? throw new ArgumentNullException(nameof(modelType));
-        this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-    }
-
-    /// <summary>Gets the <see cref="Type"/> of the model that is being validated.</summary>
-    public Type ModelType { get; }
+    /// <summary> Gets the <see cref="Type"/> of the model that is being validated. </summary>
+    public Type ModelType { get; } = modelType ?? throw new ArgumentNullException(nameof(modelType));
 
     /// <summary>Instantiates an instance of the <see cref="ValidatorRules"/> class.</summary>
     /// <returns>Instance of <see cref="ValidatorRules"/>.</returns>
@@ -62,17 +49,13 @@ public abstract class ValidationListerBase
         return this.rules;
     }
 
-    /// <summary>
-    /// Override for adding a rule based on the validator type.
-    /// </summary>
+    /// <summary> Override for adding a rule based on the validator type. </summary>
     /// <param name="rule">An instance of <see cref="IValidationRule"/>.</param>
     /// <param name="component">An instance of <see cref="IRuleComponent"/>.</param>
     /// <param name="propertyName">The property name.</param>
     internal abstract void AddRuleBasedOnValidatorType(IValidationRule rule, IRuleComponent component, string propertyName);
 
-    /// <summary>
-    /// Method to add a rule using all relevant properties.
-    /// </summary>
+    /// <summary> Method to add a rule using all relevant properties. </summary>
     /// <param name="propertyName">The property name.</param>
     /// <param name="displayName">The display name.</param>
     /// <param name="errorMessageTemplate">The template string, if exists.</param>

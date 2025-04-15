@@ -1,14 +1,13 @@
 [![Build Status](https://github.com/Scandal-UK/FluentValidationLister/workflows/CI-CD%20Pipeline/badge.svg)](https://github.com/Scandal-UK/FluentValidationLister/actions?query=workflow%3A%22CI-CD%20Pipeline%22)
 [![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 [![Downloads](https://img.shields.io/nuget/dt/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
-# FluentValidationLister
-#### v1.5.0
+# FluentValidationLister  v1.6.0
 
 An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
 > Execute your server-side FluentValidation rules automatically in the front-end!
 
-This package adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation) v11.9.0.
+This package adds an ActionFilter which will describe the rules and messages defined for any validator. It has been developed using [FluentValidation](https://github.com/JeremySkinner/FluentValidation).
 
 It also describes the expected JSON datatype for every field - regardless of whether it has any validation rule applied.  This can be very helpful for automatic generation of dynamic forms.
 
@@ -22,7 +21,7 @@ There are generic strict TypeScript handlers for most scenarios included in the 
   - [Rules](#how-to-use---rules)
   - [AJAX validation](#how-to-use---ajax-validation)
   - [Advanced customisation](#how-to-use---advanced-customisation)
-- [WebAPI/TypeScript Sample (net8.0)](#web-api-sample)
+- [WebAPI/TypeScript Sample (net9.0)](#web-api-sample)
 
 ## Purpose
 
@@ -156,7 +155,7 @@ Should you find a more "standard" way of presenting the validation information t
 
 ## Web API Sample
 
-The included net8.0 Web API Sample application is designed to be a minimal demonstration of how this package works (the same code will work with earlier versions of dotnet core).
+The included dotnet Web API Sample application is designed to be a minimal demonstration of how this package works (the same code will work with earlier versions of dotnet core).
 
 > There is no Razor/MVC example because this package is unnecessary for those projects. This package is for other front-ends that need access to the validation metadata.
 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Authors>Dan Ware</Authors>
     <Product>FluentValidationLister</Product>
     <PackageTags>remote validation;fluentvalidation;clientside;javascript;lister;metadata;meta-data;centralised;centralized;dynamic</PackageTags>
@@ -13,12 +13,12 @@
   <PropertyGroup>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>1.5.0</Version>
+    <Version>1.6.0</Version>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>Updated to FluentValidation 11.4.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated to FluentValidation 11.11.0</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
-    <Copyright>Copyright (c) Dan Ware 2024</Copyright>
+    <Copyright>Copyright (c) Dan Ware 2025</Copyright>
     <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
   </PropertyGroup>
@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.9.0" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

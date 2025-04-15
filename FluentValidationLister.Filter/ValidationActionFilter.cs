@@ -19,8 +19,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 public sealed partial class ValidationActionFilter
     : IActionFilter
 {
-    /// <summary>Execution of an action on any controller.</summary>
-    /// <param name="context">Current executing context.</param>
+    /// <inheritdoc/>
     public void OnActionExecuting(ActionExecutingContext context)
     {
         if (context == null || context.HttpContext.Request.Method == "GET")
@@ -70,10 +69,7 @@ public sealed partial class ValidationActionFilter
         }
     }
 
-    /// <summary>
-    /// Event that fires after an action has finished execution.
-    /// </summary>
-    /// <param name="context">Context of executed action.</param>
+    /// <inheritdoc/>
     public void OnActionExecuted(ActionExecutedContext context)
     {
         return;
@@ -90,7 +86,7 @@ public sealed partial class ValidationActionFilter
 
     private static Dictionary<string, string[]> GetModelState(ActionExecutingContext context)
     {
-        // Force camel-cased keys (eg. if the model was attributed with [FromForm], the keys won't be camel-cased)
+        // Force camel-cased keys (e.g. if the model attribute was decorated with [FromForm], the keys won't be camel-cased)
         var modelState = context.ModelState.ToDictionary(
             p => p.Key.ToCamelCase(),
             p => p.Value.Errors.Select(x => x.ErrorMessage).ToArray());
@@ -117,7 +113,7 @@ public sealed partial class ValidationActionFilter
 
     private static void GetSingleFieldValidator(Dictionary<string, string[]> modelState, Microsoft.Extensions.Primitives.StringValues validateField)
     {
-        foreach (var item in modelState.Where(p => p.Key.ToLowerInvariant() != validateField.ToString().ToLowerInvariant()).ToList())
+        foreach (var item in modelState.Where(p => !p.Key.Equals(validateField.ToString(), StringComparison.OrdinalIgnoreCase)).ToList())
         {
             modelState.Remove(item.Key);
         }
