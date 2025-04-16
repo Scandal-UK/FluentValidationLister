@@ -92,7 +92,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin
           git checkout develop
-          git merge origin/main --no-edit
+          git merge origin/master --no-edit
           git push origin develop
 
       - name: Append NuGet badge to release notes
