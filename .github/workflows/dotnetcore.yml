@@ -1,4 +1,4 @@
-name: CI-CD Pipeline
+﻿name: CI-CD Pipeline
 
 on:
   push:
@@ -129,9 +129,10 @@ jobs:
       - name: Append NuGet badge to release notes
         run: |
           release_tag="v${{ env.PACKAGE_VERSION }}"
-          nuget_badge="[![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter.svg?label=NuGet)](https://www.nuget.org/packages/FluentValidationLister.Filter/${{ env.PACKAGE_VERSION }})"
+          nuget_link="Binary can be downloaded from NuGet;"$'\n'"📦 https://www.nuget.org/packages/FluentValidationLister.Filter/${{ env.PACKAGE_VERSION }}"
+          nuget_badge="![NuGet Downloads](https://img.shields.io/nuget/dt/FluentValidationLister.Filter?style=plastic&logo=nuget)"
     
           existing_notes=$(gh release view "$release_tag" --json body -q ".body")
-          updated_notes="$existing_notes"$'\n\n'"$nuget_badge"
+          updated_notes="$existing_notes"$'\n\n'"$nuget_link"$'\n\n'"$nuget_badge"
     
           gh release edit "$release_tag" --notes "$updated_notes"
