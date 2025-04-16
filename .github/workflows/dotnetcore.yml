@@ -56,7 +56,7 @@ jobs:
   deploy:
     # Release a fresh build to Nuget when pushed to main
     needs: build
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
@@ -92,7 +92,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin
           git checkout develop
-          git merge origin/master --no-edit
+          git merge origin/main --no-edit
           git push origin develop
 
       - name: Append NuGet badge to release notes
