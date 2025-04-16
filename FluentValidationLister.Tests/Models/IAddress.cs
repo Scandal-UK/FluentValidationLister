@@ -4,7 +4,6 @@
 
 namespace FluentValidationLister.Tests.Models;
 
-/// <summary> Interface defining fields required for the address object. </summary>
 public interface IAddress
 {
     /// <summary> Gets or sets line 1. </summary>

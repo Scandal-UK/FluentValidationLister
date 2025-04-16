@@ -4,7 +4,6 @@
 
 namespace FluentValidationLister.Tests.Models;
 
-/// <summary> Gender enumerable. </summary>
 public enum EnumGender
 {
     /// <summary> Female gender. </summary>

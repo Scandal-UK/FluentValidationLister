@@ -1,7 +1,7 @@
 [![Build Status](https://github.com/Scandal-UK/FluentValidationLister/workflows/CI-CD%20Pipeline/badge.svg)](https://github.com/Scandal-UK/FluentValidationLister/actions?query=workflow%3A%22CI-CD%20Pipeline%22)
 [![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
 [![Downloads](https://img.shields.io/nuget/dt/FluentValidationLister.Filter)](https://www.nuget.org/packages/FluentValidationLister.Filter)
-# FluentValidationLister  v1.6.0
+# FluentValidationLister  v1.6.1
 
 An ASP.NET Core extension for [FluentValidation](https://github.com/JeremySkinner/FluentValidation) to provide additional endpoints that describe validator metadata for a Web API project.
 
@@ -65,7 +65,7 @@ For any given endpoint, add the query-string `?validation=1` to the endpoint URL
 
 > **XML is only supported in versions prior to v1.2** but the documentation/examples will be using JSON. XML support was deprecated because none of the consumers of this package seemed to be using XML anyway(!)
 
-Along with the ``validatorList`` you are also presented with an ``errorList`` of potential messages and a ``typeList`` that describes the JSON type for each form element.
+Along with the ``validatorList`` you are also presented with an ``errorList`` of potential messages and a ``typeList`` that describes the JSON type for each form element. If the model has no validator, only the ``typeList`` will be populated with values.
 
 Example output for JSON:
 

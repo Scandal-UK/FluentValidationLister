@@ -4,7 +4,6 @@
 
 namespace FluentValidationLister.Tests.Models;
 
-/// <summary> Order entity object. </summary>
 public class Order : IOrder
 {
     /// <summary> Gets or sets the product name. </summary>

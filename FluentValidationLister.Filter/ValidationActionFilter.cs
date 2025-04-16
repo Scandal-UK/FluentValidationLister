@@ -16,8 +16,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 /// <summary> Filter required to respond to requests regarding validation meta data. </summary>
-public sealed partial class ValidationActionFilter
-    : IActionFilter
+public sealed partial class ValidationActionFilter : IActionFilter
 {
     /// <inheritdoc/>
     public void OnActionExecuting(ActionExecutingContext context)
@@ -40,23 +39,23 @@ public sealed partial class ValidationActionFilter
 
         bool requestingValidatorList = context.HttpContext.Request.Query.Keys.Any(val => val == "validation");
 
-        if (!(context.HttpContext.RequestServices
+        if (context.HttpContext.RequestServices
             .GetService(typeof(IValidator<>)
-            .MakeGenericType(GetModelType(model))) is IValidator validator))
+            .MakeGenericType(GetModelType(model))) is not IValidator validator)
         {
-            // No validator is applicable for this endpoint
             if (requestingValidatorList)
             {
-                // todo: consider returning applicable JSON datatypes anyway..?
-                context.Result = new EmptyResult();
+                validator = null;
             }
-
-            return;
+            else
+            {
+                return;
+            }
         }
 
         if (requestingValidatorList)
         {
-            ReturnListOfValidationRules(context, model, validator);
+            ReturnValidationLister(context, model, validator);
             return;
         }
 
@@ -119,7 +118,7 @@ public sealed partial class ValidationActionFilter
         }
     }
 
-    private static void ReturnListOfValidationRules(ActionExecutingContext context, object model, IValidator validator)
+    private static void ReturnValidationLister(ActionExecutingContext context, object model, IValidator validator)
     {
         var rules = new ValidationLister(
             validator,

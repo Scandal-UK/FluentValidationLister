@@ -4,7 +4,6 @@
 
 namespace FluentValidationLister.Tests.Models;
 
-/// <summary> Address entity object. </summary>
 public class Address : IAddress
 {
     /// <inheritdoc/>
