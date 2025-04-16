@@ -77,7 +77,7 @@ jobs:
         run: dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$PACKAGE_VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
 
       - name: Push build to NuGet including symbols
-        run: dotnet nuget push ./${{ env.PROJECT_NAME }}/bin/Release/*.nupk --skip-duplicate  --source $NUGET_FEED --api-key $NUGET_TOKEN
+        run: dotnet nuget push ./${{ env.PROJECT_NAME }}/bin/Release/*.nupkg --skip-duplicate  --source $NUGET_FEED --api-key $NUGET_TOKEN
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
