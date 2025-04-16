@@ -86,15 +86,6 @@ jobs:
           name: v${{ env.PACKAGE_VERSION }}
           generate_release_notes: true
 
-      - name: Merge main into develop
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin
-          git checkout develop
-          git merge main --no-edit
-          git push origin develop
-
       - name: Append NuGet badge to release notes
         run: |
           release_tag="v${{ env.PACKAGE_VERSION }}"
