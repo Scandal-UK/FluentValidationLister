@@ -129,7 +129,7 @@ jobs:
       - name: Append NuGet badge to release notes
         run: |
           release_tag="v${{ env.PACKAGE_VERSION }}"
-          nuget_badge="[![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.svg?label=NuGet)](https://www.nuget.org/packages/FluentValidationLister/${{ env.PACKAGE_VERSION }})"
+          nuget_badge="[![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.Filter.svg?label=NuGet)](https://www.nuget.org/packages/FluentValidationLister.Filter/${{ env.PACKAGE_VERSION }})"
     
           existing_notes=$(gh release view "$release_tag" --json body -q ".body")
           updated_notes="$existing_notes"$'\n\n'"$nuget_badge"
