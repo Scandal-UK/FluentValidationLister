@@ -70,7 +70,7 @@ jobs:
       - name: Set package version from .csproj
         id: set_version
         run: |
-          version=$(grep -oPm1 "(?<=<Version>)[^<]+" FluentValidationLister/FluentValidationLister.csproj)
+          version=$(grep -oPm1 "(?<=<Version>)[^<]+" $PROJECT_NAME/$PROJECT_NAME.csproj)
           echo "PACKAGE_VERSION=$version" >> $GITHUB_ENV
 
       - name: Pack the project
