@@ -25,6 +25,9 @@ env:
   NUGET_FEED: https://api.nuget.org/v3/index.json
   NUGET_TOKEN: ${{ secrets.NUGET_KEY }}
 
+permissions:
+  contents: write # Required to push tags and merge branches
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -60,10 +63,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
 
@@ -82,27 +85,53 @@ jobs:
           dotnet nuget push ./${{ env.PROJECT_NAME }}/bin/Debug/*.nupkg --skip-duplicate --source $GITHUB_FEED --api-key $GITHUB_TOKEN
 
   deploy:
-    # Push a fresh build to Nuget when a new release version is applied
+    # Release a fresh build to Nuget when pushed to main
     needs: build
-    if: github.event_name == 'release'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
 
-      - name: Create build with released version number
+      - name: Set package version from .csproj
+        id: set_version
         run: |
-          arrTag=(${GITHUB_REF//\// })
-          VERSION="${arrTag[2]}"
-          echo Version: $VERSION
-          VERSION="${VERSION//v}"
-          echo Version Number: $VERSION
-          dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
+          version=$(grep -oPm1 "(?<=<Version>)[^<]+" FluentValidationLister/FluentValidationLister.csproj)
+          echo "PACKAGE_VERSION=$version" >> $GITHUB_ENV
 
-      - name: Push build to NuGet feed
-        run: dotnet nuget push ./${{ env.PROJECT_NAME }}/bin/Release/*.nupkg --source $NUGET_FEED --api-key $NUGET_TOKEN
+      - name: Pack the project
+        run: dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$PACKAGE_VERSION $PROJECT_NAME/$PROJECT_NAME.csproj
+
+      - name: Push build to NuGet including symbols
+        run: dotnet nuget push ./**/*.nupkg --skip-duplicate  --source $NUGET_FEED --api-key $NUGET_TOKEN
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.PACKAGE_VERSION }}
+          name: v${{ env.PACKAGE_VERSION }}
+          generate_release_notes: true
+
+      - name: Merge main into develop
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin
+          git checkout develop
+          git merge origin/main --no-edit
+          git push origin develop
+
+      - name: Append NuGet badge to release notes
+        run: |
+          release_tag="v${{ env.PACKAGE_VERSION }}"
+          nuget_badge="[![NuGet](https://img.shields.io/nuget/v/FluentValidationLister.svg?label=NuGet)](https://www.nuget.org/packages/FluentValidationLister/${{ env.PACKAGE_VERSION }})"
+    
+          existing_notes=$(gh release view "$release_tag" --json body -q ".body")
+          updated_notes="$existing_notes"$'\n\n'"$nuget_badge"
+    
+          gh release edit "$release_tag" --notes "$updated_notes"

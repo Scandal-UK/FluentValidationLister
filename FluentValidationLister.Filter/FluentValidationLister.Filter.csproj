@@ -13,10 +13,10 @@
   <PropertyGroup>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>1.6.0</Version>
+    <Version>1.6.1</Version>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>Updated to FluentValidation 11.11.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Allow models with no validator</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <Copyright>Copyright (c) Dan Ware 2025</Copyright>
     <PackageProjectUrl>https://coderware.co.uk</PackageProjectUrl>

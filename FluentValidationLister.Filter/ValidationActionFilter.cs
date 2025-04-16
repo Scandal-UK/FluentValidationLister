@@ -16,8 +16,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 /// <summary> Filter required to respond to requests regarding validation meta data. </summary>
-public sealed partial class ValidationActionFilter
-    : IActionFilter
+public sealed partial class ValidationActionFilter : IActionFilter
 {
     /// <inheritdoc/>
     public void OnActionExecuting(ActionExecutingContext context)
@@ -46,7 +45,6 @@ public sealed partial class ValidationActionFilter
         {
             if (requestingValidatorList)
             {
-                context.Result = new EmptyResult();
                 validator = null;
             }
             else
