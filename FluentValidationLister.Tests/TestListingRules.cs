@@ -23,11 +23,13 @@ public class TestListingRules
 
     [Fact(DisplayName = "Null modelType throws ArgumentNullException")]
     public void NullModelType_ThrowsArgumentNullException() =>
-        Assert.Throws<ArgumentNullException>(() => new ValidationLister(new TestValidator(), modelType: null, new ServiceCollection().BuildServiceProvider()));
+        Assert.Throws<ArgumentNullException>(() =>
+        new ValidationLister(new TestValidator(), modelType: null, new ServiceCollection().BuildServiceProvider()));
 
     [Fact(DisplayName = "Null serviceProvider throws ArgumentNullException")]
     public void NullServiceProvider_ThrowsArgumentNullException() =>
-        Assert.Throws<ArgumentNullException>(() => new ValidationLister(new TestValidator(), typeof(Person), serviceProvider: null));
+        Assert.Throws<ArgumentNullException>(() =>
+        new ValidationLister(new TestValidator(), typeof(Person), serviceProvider: null));
 
     [Fact(DisplayName = "NotEmpty() returns required rule")]
     public void NotEmpty_ReturnsRequiredRule() =>

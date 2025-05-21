@@ -6,24 +6,17 @@ import { deleteAsync } from "del";
 import terser from "gulp-terser";
 import rename from "gulp-rename";
 
-var paths = {
-    source: ["Scripts/**/*.ts"],
-    scripts: ["Scripts/**/*.js"],
-    deployedScripts: ["wwwroot/js/**/*"],
-    deployTarget: "wwwroot/js"
-};
-
 task("clean", function () {
-    return deleteAsync(paths.deployedScripts);
+    return deleteAsync(["wwwroot/js/**/*"]);
 });
 
 task("watch", function () {
-    watch(paths.source, series("default"));
+    watch(["Scripts/**/*.ts"], series("default"));
 });
 
 task("default", function () {
-    return src(paths.scripts)
+    return src(["Scripts/**/*.js"])
         .pipe(terser())
         .pipe(rename({ suffix: ".min" }))
-        .pipe(dest(paths.deployTarget));
+        .pipe(dest("wwwroot/js"));
 });
